@@ -41,4 +41,5 @@ public class User {
     private String key; //登录时候标识
 
 
+
 }
