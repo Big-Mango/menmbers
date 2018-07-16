@@ -1,4 +1,4 @@
-package com.haffee.menmbers.Utils;
+package com.haffee.menmbers.utils;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
