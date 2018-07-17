@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * create by jacktong
  * date ${date}
  **/
-public interface UserRepositroy extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Long> {
 
 }
