@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -23,12 +24,12 @@ import javax.persistence.Id;
 public class SysCode {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
     private String code;  //代码 如：SEX
     private String code_value; //值：1
     private String code_str; //展示：男
-    private String desc; // 如：性别
+    private String content; // 如：性别
     private int order_index; //排序字段
 
 }

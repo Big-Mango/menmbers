@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
 
@@ -24,7 +25,7 @@ import java.util.Date;
 public class AdminUser {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String user_phone; //手机号
     private String password;
@@ -36,7 +37,7 @@ public class AdminUser {
     private int status; //用户状态 1：正常 -1 冻结
     private String remark;
     private Date last_login_time;//最近登录时间
-    private String key; //登录标识
+    private String login_key; //登录标识
 
 
 }
