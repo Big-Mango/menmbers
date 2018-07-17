@@ -30,7 +30,7 @@ public class ResponseMessage {
     private Object data;
 
     public static ResponseMessage success() {
-        return new ResponseMessage(1, "success", null);
+        return new ResponseMessage(0, "success", null);
     }
 
     public static ResponseMessage success(Object data) {
