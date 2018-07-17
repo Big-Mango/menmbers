@@ -1,7 +1,6 @@
 package com.haffee.menmbers.service.impl;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.haffee.menmbers.repository.UserRepositroy;
+import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,5 +16,5 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepositroy userRepositroy;
+    private UserRepository userRepository;
 }
