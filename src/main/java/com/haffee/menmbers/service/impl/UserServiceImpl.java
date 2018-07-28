@@ -5,6 +5,8 @@ import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.AdminUserRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.UserService;
+import com.haffee.menmbers.utils.Md5Utils;
+import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -108,5 +110,35 @@ public class UserServiceImpl implements UserService {
             userRepository.updateUser("",null,c_user.getId());
         }
         return true;
+    }
+
+    /**
+     * 新增系统管理员
+     * @param user_phone
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int doAddAdmin(String user_phone) throws Exception {
+        //0:校验是否存在
+        //1.生成密码
+        //2.插入AdminUser
+        //3.短信通知
+        AdminUser a_user = adminUserRepository.findAdminUser(user_phone,"9");
+        if(null!=a_user){
+            return -1;
+        }
+        int pre_psw = (int)((Math.random()*9+1)*100000);
+        String password = Md5Utils.getMD5(pre_psw+"");
+        AdminUser a_user_new = new AdminUser();
+        a_user_new.setUser_phone(user_phone);
+        a_user.setPassword(password);
+        a_user.setType(9);
+        adminUserRepository.save(a_user);
+        //发短信
+        String sms_content = "聚巷客栈会员系统管理员"+user_phone+"您好：您的账户已经创建成功，登录用户名："+user_phone+",密码："+pre_psw+",请妥善保管！";
+        SmsUtils.singleSend(user_phone,sms_content);
+
+        return 0;
     }
 }

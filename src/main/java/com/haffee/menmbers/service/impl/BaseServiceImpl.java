@@ -28,7 +28,7 @@ public class BaseServiceImpl implements BaseService {
      * @throws Exception
      */
     @Override
-    public List<SysCode> findByCode(String code) throws Exception {
-        return sysCodeRepository.findbyCode(code);
+    public List<SysCode> selectByCode(String code) throws Exception {
+        return sysCodeRepository.selectbyCode(code);
     }
 }

@@ -18,6 +18,6 @@ public interface SysCodeRepository extends JpaRepository<SysCode,Long> {
      * @param code
      * @return
      */
-    @Query(value="select * from SysCode where code = ?1")
-    List<SysCode> findbyCode(String code);
+    @Query(value="select sc from SysCode sc where sc.code = ?1")
+    List<SysCode> selectbyCode(String code);
 }

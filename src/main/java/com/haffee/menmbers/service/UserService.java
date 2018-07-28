@@ -18,4 +18,6 @@ public interface UserService {
 
     boolean doLogoutForCustomer(String user_phone) throws Exception;
 
+    int doAddAdmin(String user_phone) throws Exception;
+
 }

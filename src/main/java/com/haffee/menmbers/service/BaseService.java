@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface BaseService {
 
-    List<SysCode> findByCode(String code) throws Exception;
+    List<SysCode> selectByCode(String code) throws Exception;
 }

@@ -30,7 +30,7 @@ public class BaseController {
     @GetMapping("/findByCode")
     public ResponseMessage findByCode(String code){
         try {
-            List<SysCode> code_list = baseService.findByCode(code);
+            List<SysCode> code_list = baseService.selectByCode(code);
             return ResponseMessage.success(code_list);
         } catch (Exception e) {
             e.printStackTrace();
