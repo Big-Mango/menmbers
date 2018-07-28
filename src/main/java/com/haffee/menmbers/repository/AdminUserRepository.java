@@ -36,4 +36,5 @@ public interface AdminUserRepository extends JpaRepository<AdminUser,Long> {
     @Query(value = "update AdminUser set login_key = ?1 , last_login_time = ?2 where id = ?3")
     int updateAdminUser(String login_key,Date last_login_time,int id);
 
+
 }

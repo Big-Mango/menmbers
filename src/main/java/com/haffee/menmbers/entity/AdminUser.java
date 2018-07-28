@@ -29,7 +29,7 @@ public class AdminUser {
     private int id;
     private String user_phone; //手机号
     private String password;
-    private int type; //1:店铺，9：系统管理员
+    private int type; //2:店铺，9：系统管理员
     private int if_chain; //是否连锁 1：是 0：否
     private int if_boss; //是否总店
     private int parent_user_id; //上级店铺ID；
