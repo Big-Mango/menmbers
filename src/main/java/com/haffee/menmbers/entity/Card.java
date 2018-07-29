@@ -27,9 +27,9 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private String card_no;
-    private Date card_create_time; //发卡时间
-    private int card_status; //卡状态 1：正常，0：挂失，-1 删除，-2 损坏
+    private String cardNo;
+    private Date cardCreateTime; //发卡时间
+    private int cardStatus; //卡状态 1：正常，0：挂失，-1 删除，-2 损坏
     private String remark;
 
 }

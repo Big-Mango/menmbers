@@ -40,7 +40,13 @@ public class ResponseMessage {
     public static ResponseMessage error() {
         return new ResponseMessage(-1, "error", null);
     }
-
+    public static ResponseMessage getResponseMessage(Object data){
+        if (data!=null) {
+            return success(data);
+        }else{
+            return error();
+        }
+    }
 
 
 }
