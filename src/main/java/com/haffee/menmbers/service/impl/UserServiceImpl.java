@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
-    public AdminUser doLoginForAdmin(String user_phone, String password, String type) throws Exception{
+    public AdminUser doLoginForAdmin(String user_phone, String password, String type){
         //1.根据用户ID查询，是否存在
         //2.密码加密后判断是否一致
         //3.更新登录状态
@@ -64,7 +64,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public User doLoginForCustomer(String user_phone, String password) throws Exception {
+    public User doLoginForCustomer(String user_phone, String password){
 
         User c_user = userRepository.findByUser_phone(user_phone);
         if(null!=c_user&&c_user.getPassword().equals(password)&&c_user.getStatus()==1){
@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public boolean doLogoutForAdmin(String user_phone, String type) throws Exception {
+    public boolean doLogoutForAdmin(String user_phone, String type){
         AdminUser a_user = adminUserRepository.findAdminUser(user_phone,type);
         if(null!=a_user){
             a_user.setLogin_key("");
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public boolean doLogoutForCustomer(String user_phone) throws Exception {
+    public boolean doLogoutForCustomer(String user_phone){
         User c_user = userRepository.findByUser_phone(user_phone);
         if(null!=c_user){
             userRepository.updateUser("",null,c_user.getId());
@@ -119,7 +119,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public int doAddAdmin(String user_phone) throws Exception {
+    public int doAddAdmin(String user_phone){
         //0:校验是否存在
         //1.生成密码
         //2.插入AdminUser
