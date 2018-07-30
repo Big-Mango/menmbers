@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User doLoginForCustomer(String user_phone, String password) throws Exception {
 
-        User c_user = userRepository.findUserByUser_phone(user_phone);
+        User c_user = userRepository.findByUser_phone(user_phone);
         if(null!=c_user&&c_user.getPassword().equals(password)){
             c_user.setPassword(null);
             String login_key = UuidUtils.getUUID32();
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean doLogoutForCustomer(String user_phone) throws Exception {
-        User c_user = userRepository.findUserByUser_phone(user_phone);
+        User c_user = userRepository.findByUser_phone(user_phone);
         if(null!=c_user){
             userRepository.updateUser("",null,c_user.getId());
         }
