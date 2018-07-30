@@ -29,7 +29,7 @@ public class UserController {
      * @param type
      * @return
      */
-    @PostMapping("/adminLogin")
+    @PostMapping("/admin/login")
     public ResponseMessage doLoginForA(String user_phone,String password,String type){
         try {
             AdminUser a_user = userService.doLoginForAdmin(user_phone,password,type);
@@ -50,7 +50,7 @@ public class UserController {
      * @param password
      * @return
      */
-    @PostMapping("/customerLogin")
+    @PostMapping("/customer/login")
     public ResponseMessage doLoginForC(String user_phone,String password){
         try {
             User c_user = userService.doLoginForCustomer(user_phone,password);
@@ -71,7 +71,7 @@ public class UserController {
      * @param type
      * @return
      */
-    @PostMapping("/adminLogout")
+    @PostMapping("/admin/logout")
     public ResponseMessage doLogoutForA(String user_phone,String type){
         try {
             userService.doLogoutForAdmin(user_phone,type);
@@ -88,7 +88,7 @@ public class UserController {
      * @param user_phone
      * @return
      */
-    @PostMapping("/customerLogout")
+    @PostMapping("/customer/logout")
     public ResponseMessage doLogoutForC(String user_phone){
         try {
             userService.doLogoutForCustomer(user_phone);
@@ -97,6 +97,23 @@ public class UserController {
             e.printStackTrace();
             return ResponseMessage.error();
         }
+    }
+
+    /**
+     * 新增系统管理员
+     * @param a_user
+     * @return
+     */
+    @PostMapping("/admin/add")
+    public ResponseMessage addAdminUser(AdminUser a_user){
+        try {
+            userService.doAddAdmin(a_user.getUser_phone());
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+
     }
 
 

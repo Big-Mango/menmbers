@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         //2.密码加密后判断是否一致
         //3.更新登录状态
         AdminUser a_user = adminUserRepository.findAdminUser(user_phone,type);
-        if(null!=a_user&&a_user.getPassword().equals(password)){
+        if(null!=a_user&&a_user.getPassword().equals(password)&&a_user.getStatus()==1){
             a_user.setPassword(null);
             String login_key =UuidUtils.getUUID32();
             a_user.setLogin_key(login_key);
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     public User doLoginForCustomer(String user_phone, String password) throws Exception {
 
         User c_user = userRepository.findByUser_phone(user_phone);
-        if(null!=c_user&&c_user.getPassword().equals(password)){
+        if(null!=c_user&&c_user.getPassword().equals(password)&&c_user.getStatus()==1){
             c_user.setPassword(null);
             String login_key = UuidUtils.getUUID32();
             c_user.setLogin_key(login_key);
@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
         a_user_new.setUser_phone(user_phone);
         a_user.setPassword(password);
         a_user.setType(9);
+        a_user.setStatus(1);
         adminUserRepository.save(a_user);
         //发短信
         String sms_content = "聚巷客栈会员系统管理员"+user_phone+"您好：您的账户已经创建成功，登录用户名："+user_phone+",密码："+pre_psw+",请妥善保管！";
