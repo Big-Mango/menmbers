@@ -27,19 +27,19 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private String user_phone; //手机号
+    private String userPhone; //手机号
     private String password;
-    private String wechat_id; //微信唯一标识
-    private String wechat_nickname; //微信昵称
-    private String wechat_icon; //微信头像
-    private String payment_way; //支付方式 多个字符串逗号拼接 1:手机验证，2：指纹，3：人脸，4：声波，5：其他
+    private String wechatId; //微信唯一标识
+    private String wechatNickname; //微信昵称
+    private String wechatIcon; //微信头像
+    private String paymentWay; //支付方式 多个字符串逗号拼接 1:手机验证，2：指纹，3：人脸，4：声波，5：其他
     private float balance; //余额
     private int status; //状态 1：正常 -1 冻结
     private String remark; //备注
-    private int person_id;
-    private int card_id; //会员卡ID
-    private Date last_login_time;
-    private String login_key; //登录时候标识
+    private int personId;
+    private int cardId; //会员卡ID
+    private Date lastLoginTime;
+    private String loginKey; //登录时候标识
 
 
 

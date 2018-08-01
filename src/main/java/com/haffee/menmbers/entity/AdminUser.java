@@ -27,17 +27,17 @@ public class AdminUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String user_phone; //手机号
+    private String userPhone; //手机号
     private String password;
     private int type; //2:店铺，9：系统管理员
-    private int if_chain; //是否连锁 1：是 0：否
-    private int if_boss; //是否总店
-    private int parent_user_id; //上级店铺ID；
-    private int shop_id;
+    private int ifChain; //是否连锁 1：是 0：否
+    private int ifBoss; //是否总店
+    private int parentUserId; //上级店铺ID；
+    private int shopId;
     private int status; //用户状态 1：正常 -1 冻结
     private String remark;
-    private Date last_login_time;//最近登录时间
-    private String login_key; //登录标识
+    private Date lastLoginTime;//最近登录时间
+    private String loginKey; //登录标识
 
 
 }

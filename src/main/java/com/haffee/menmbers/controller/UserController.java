@@ -107,7 +107,7 @@ public class UserController {
     @PostMapping("/admin/add")
     public ResponseMessage addAdminUser(AdminUser a_user){
         try {
-            userService.doAddAdmin(a_user.getUser_phone());
+            userService.doAddAdmin(a_user.getUserPhone());
             return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,13 +26,13 @@ public class SmsRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private String send_uuid;//发送唯一标识
-    private String valid_code; //验证码
+    private String sendUuid;//发送唯一标识
+    private String validCode; //验证码
     private String phone;
     private String content;
     private int status; //0:发送中，1：成功
-    private Date create_time;
-    private Date success_time;
+    private Date createTime;
+    private Date successTime;
 
 
 }

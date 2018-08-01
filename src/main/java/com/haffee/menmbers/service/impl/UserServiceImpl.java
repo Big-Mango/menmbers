@@ -46,9 +46,9 @@ public class UserServiceImpl implements UserService {
         if(null!=a_user&&a_user.getPassword().equals(password)&&a_user.getStatus()==1){
             a_user.setPassword(null);
             String login_key =UuidUtils.getUUID32();
-            a_user.setLogin_key(login_key);
+            a_user.setLoginKey(login_key);
             Date now = new Date();
-            a_user.setLast_login_time(now);
+            a_user.setLastLoginTime(now);
             adminUserRepository.updateAdminUser(login_key,now,a_user.getId());
             return a_user;
         }
@@ -66,11 +66,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User doLoginForCustomer(String user_phone, String password){
 
-        User c_user = userRepository.findByUser_phone(user_phone);
+        User c_user = userRepository.findByUserPhone(user_phone);
         if(null!=c_user&&c_user.getPassword().equals(password)&&c_user.getStatus()==1){
             c_user.setPassword(null);
             String login_key = UuidUtils.getUUID32();
-            c_user.setLogin_key(login_key);
+            c_user.setLoginKey(login_key);
             Date now = new Date();
             userRepository.updateUser(login_key,now,c_user.getId());
             return c_user;
@@ -90,8 +90,8 @@ public class UserServiceImpl implements UserService {
     public boolean doLogoutForAdmin(String user_phone, String type){
         AdminUser a_user = adminUserRepository.findAdminUser(user_phone,type);
         if(null!=a_user){
-            a_user.setLogin_key("");
-            a_user.setLast_login_time(null);
+            a_user.setLoginKey("");
+            a_user.setLastLoginTime(null);
             adminUserRepository.updateAdminUser("",null,a_user.getId());
         }
         return true;
@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public boolean doLogoutForCustomer(String user_phone){
-        User c_user = userRepository.findByUser_phone(user_phone);
+        User c_user = userRepository.findByUserPhone(user_phone);
         if(null!=c_user){
             userRepository.updateUser("",null,c_user.getId());
         }
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
         int pre_psw = (int)((Math.random()*9+1)*100000);
         String password = Md5Utils.getMD5(pre_psw+"");
         AdminUser a_user_new = new AdminUser();
-        a_user_new.setUser_phone(user_phone);
+        a_user_new.setUserPhone(user_phone);
         a_user.setPassword(password);
         a_user.setType(9);
         a_user.setStatus(1);

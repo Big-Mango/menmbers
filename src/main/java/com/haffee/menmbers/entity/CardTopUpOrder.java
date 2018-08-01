@@ -27,17 +27,17 @@ public class CardTopUpOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private int user_id;
-    private int card_id;
-    private int shop_id;
+    private int userId;
+    private int cardId;
+    private int shopId;
     private float fee;
-    private Date create_time;
-    private Date payment_time;
-    private int payment_status; //支付状态 1：支付成功 0：待支付，-1：支付失败
-    private String order_desc;
-    private int discount_id;//折扣方案 关联config
-    private float discount_fee; //折扣金额
-    private String discount_desc; //折扣描述
+    private Date createTime;
+    private Date paymentTime;
+    private int paymentStatus; //支付状态 1：支付成功 0：待支付，-1：支付失败
+    private String orderDesc;
+    private int discountId;//折扣方案 关联config
+    private float discountFee; //折扣金额
+    private String discountDesc; //折扣描述
 
 
 }
