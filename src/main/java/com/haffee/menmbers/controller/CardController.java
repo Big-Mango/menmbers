@@ -4,6 +4,8 @@ import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.service.CardService;
 import com.haffee.menmbers.utils.ResponseMessage;
 import com.haffee.menmbers.utils.UuidUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,8 +34,8 @@ public class CardController {
     @GetMapping("/findAll")
     public ResponseMessage findAll(){
         try {
-            List<Card> list = cardService.findAll(Sort.by(Sort.Direction.DESC,"cardCreateTime"));
-            return ResponseMessage.getResponseMessage(list);
+            Page<Card> page = cardService.findAll(PageRequest.of(1,10,Sort.by(Sort.Direction.DESC,"cardCreateTime")));
+            return ResponseMessage.getResponseMessage(page);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

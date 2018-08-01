@@ -3,6 +3,8 @@ package com.haffee.menmbers.service;
 import com.haffee.menmbers.entity.AdminUser;
 import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import java.util.Optional;
 * @Version:        1.0
 */
 public interface CardService {
-    List<Card> findAll(Sort sort);
+    Page<Card> findAll(Pageable pageable);
     Card findByCardNo(String cardNo);
     Optional<Card> findById(long id);
     Card add(Card card);

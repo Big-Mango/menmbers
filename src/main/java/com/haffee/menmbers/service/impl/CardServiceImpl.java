@@ -7,6 +7,9 @@ import com.haffee.menmbers.repository.SysCodeRepository;
 import com.haffee.menmbers.service.BaseService;
 import com.haffee.menmbers.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +29,8 @@ public class CardServiceImpl implements CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public List<Card> findAll(Sort sort){
-        return cardRepository.findAll(sort);
+    public Page<Card> findAll(Pageable pageable){
+        return cardRepository.findAll(pageable);
     }
     public Card findByCardNo(String cardNo){
         return cardRepository.findByCardNo(cardNo);
