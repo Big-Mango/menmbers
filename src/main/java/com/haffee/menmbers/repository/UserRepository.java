@@ -25,13 +25,13 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     /**
      * 登录更新
-     * @param login_key
-     * @param last_login_time
+     * @param loginKey
+     * @param lastLoginTime
      * @param id
      * @return
      */
     @Modifying(clearAutomatically = true)
-    @Query(value="update User set loginKeyey = ?1 , lastLoginTime = ?2 where id = ?3")
-    int updateUser(String login_key, Date last_login_time, int id);
+    @Query(value="update User set loginKey = ?1 , lastLoginTime = ?2 where id = ?3")
+    int updateUser(String loginKey, Date lastLoginTime, int id);
 
 }
