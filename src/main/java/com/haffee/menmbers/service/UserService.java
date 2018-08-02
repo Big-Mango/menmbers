@@ -20,4 +20,8 @@ public interface UserService {
 
     int doAddAdmin(String user_phone) throws Exception;
 
+    int changeUserStatus(String id,int status) throws Exception;
+
+    int changeAdminUserStatus(String id,int status) throws Exception;
+
 }

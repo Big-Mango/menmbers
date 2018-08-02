@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * create by jacktong
@@ -142,4 +143,42 @@ public class UserServiceImpl implements UserService {
 
         return 0;
     }
+
+    /**
+     * 冻结、解冻会员用户
+     * @param id
+     * @param status
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int changeUserStatus(String id, int status) {
+        Optional<User> o = userRepository.findById(Long.valueOf(id));
+        if(o.isPresent()){
+            User u = o.get();
+            u.setStatus(status);
+            userRepository.save(u);
+        }
+        return 0;
+    }
+
+    /**
+     * 冻结、解冻管理员用户
+     * @param id
+     * @param status
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int changeAdminUserStatus(String id, int status) {
+        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        if(o.isPresent()){
+            AdminUser a = o.get();
+            a.setStatus(status);
+            adminUserRepository.save(a);
+        }
+        return 0;
+    }
+
+
 }
