@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.Date;
 import java.util.Optional;
 
@@ -175,6 +176,57 @@ public class UserServiceImpl implements UserService {
             AdminUser a = o.get();
             a.setStatus(status);
             adminUserRepository.save(a);
+        }
+        return 0;
+    }
+
+    /**
+     * 管理员密码--admin
+     * @param id
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int changePasswordForAdminUser(String id, String password,int type){
+        String msg = "";
+        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        if(o.isPresent()){
+            AdminUser a = o.get();
+            if(type==2){ //店铺用户---自己找回密码
+                a.setPassword(Md5Utils.getMD5(password));
+                msg = "系统管理用户："+a.getUserPhone()+"您好，您的密码已更新为："+password+",请妥善保管！";
+            }
+            if(type == 9){ //系统管理员--系统生成密码
+                int pre_psw = (int)((Math.random()*9+1)*100000);
+                String pws = Md5Utils.getMD5(pre_psw+"");
+                a.setPassword(pws);
+                msg = "尊敬的商家用户"+a.getUserPhone()+"您好，您的密码已更新为："+pws+",请妥善保管！";
+            }
+            adminUserRepository.save(a);
+            SmsUtils.singleSend(a.getUserPhone(),msg);
+        }
+
+
+        return 0;
+    }
+
+    /**
+     * 重置密码--会员用户
+     * @param id
+     * @param password
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public int changePasswordForUser(String id, String password){
+        Optional<User> o = userRepository.findById(Long.valueOf(id));
+        if(o.isPresent()){
+            User u = o.get();
+            u.setPassword(Md5Utils.getMD5(password));
+            userRepository.save(u);
+            String msg = "尊敬的用户"+u.getUserPhone()+"您好，您的密码已更新为："+password+",请妥善保管！";
+            SmsUtils.singleSend(u.getUserPhone(),msg);
         }
         return 0;
     }

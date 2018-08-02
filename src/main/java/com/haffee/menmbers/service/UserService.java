@@ -24,4 +24,8 @@ public interface UserService {
 
     int changeAdminUserStatus(String id,int status) throws Exception;
 
+    int changePasswordForAdminUser(String id,String password,int type) throws Exception;
+
+    int changePasswordForUser(String id,String password) throws Exception;
+
 }

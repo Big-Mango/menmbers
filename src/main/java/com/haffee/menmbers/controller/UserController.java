@@ -107,7 +107,7 @@ public class UserController {
     @PostMapping("/admin/add")
     public ResponseMessage addAdminUser(AdminUser a_user){
         try {
-            userService.doAddAdmin(a_user.getUser_phone());
+            userService.doAddAdmin(a_user.getUserPhone());
             return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();
@@ -115,6 +115,76 @@ public class UserController {
         }
 
     }
+
+    /**
+     * 冻结、解冻 会员用户
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/customer/changeStatus")
+    public ResponseMessage changeUserStatus(String id,int status){
+        try {
+            userService.changeUserStatus(id,status);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 冻结、解冻 管理用户
+     * @param id
+     * @param status
+     * @return
+     */
+    @PostMapping("/admin/changeStatus")
+    public ResponseMessage changeAdminUserStatus(String id,int status){
+        try {
+            userService.changeAdminUserStatus(id,status);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 修改密码 --admin
+     * @param id
+     * @param password
+     * @param type
+     * @return
+     */
+    @PostMapping("/admin/changePsw")
+    public ResponseMessage changePaswordForAdmin(String id,String password,int type){
+        try {
+            userService.changePasswordForAdminUser(id,password,type);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 修改密码 -- 会员用户
+     * @param id
+     * @param password
+     * @return
+     */
+    @PostMapping("/customer/changePsw")
+    public ResponseMessage changePasswordForCustomer(String id,String password){
+        try {
+            userService.changePasswordForUser(id,password);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
 
 
 }
