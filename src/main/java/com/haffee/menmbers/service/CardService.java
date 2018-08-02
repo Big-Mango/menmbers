@@ -19,8 +19,8 @@ import java.util.Optional;
 public interface CardService {
     Page<Card> findAll(Pageable pageable);
     Card findByCardNo(String cardNo);
-    Optional<Card> findById(long id);
+    Optional<Card> findById(int id);
     Card add(Card card);
     Card update(Card card);
-    void delete(long id);
+    void delete(int id);
 }

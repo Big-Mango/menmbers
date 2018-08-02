@@ -13,33 +13,31 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ResponseMessage {
-
     /**
      * 返回状态
      */
-    private int code;
-
+    private String code;
     /**
      * 提示信息
      */
     private String msg;
-
     /**
      * 返回数据
      */
     private Object data;
 
     public static ResponseMessage success() {
-        return new ResponseMessage(0, "success", null);
+        return new ResponseMessage(Constant.SUCCESS_CODE, Constant.SUCCESS_MESSAGE, null);
     }
 
     public static ResponseMessage success(Object data) {
-        return new ResponseMessage(0, "success", data);
+        return new ResponseMessage(Constant.SUCCESS_CODE, Constant.SUCCESS_MESSAGE, data);
     }
 
     public static ResponseMessage error() {
-        return new ResponseMessage(-1, "error", null);
+        return new ResponseMessage(Constant.ERROR_CODE, Constant.ERROR_MESSAGE, null);
     }
+
     public static ResponseMessage getResponseMessage(Object data){
         if (data!=null) {
             return success(data);
@@ -47,6 +45,4 @@ public class ResponseMessage {
             return error();
         }
     }
-
-
 }

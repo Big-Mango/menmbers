@@ -35,7 +35,7 @@ public class CardServiceImpl implements CardService {
     public Card findByCardNo(String cardNo){
         return cardRepository.findByCardNo(cardNo);
     }
-    public Optional<Card> findById(long id){
+    public Optional<Card> findById(int id){
         return cardRepository.findById(id);
     }
     public Card add(Card card){
@@ -44,7 +44,7 @@ public class CardServiceImpl implements CardService {
     public Card update (Card card){
         return cardRepository.save(card);
     }
-    public void delete(long id){
+    public void delete(int id){
         cardRepository.deleteById(id);
     }
 }
