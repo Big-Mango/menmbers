@@ -23,20 +23,15 @@ import java.util.Date;
 @NoArgsConstructor
 @Serialization
 public class DiscountConfig {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private int shop_id;
-    private float full_money; //满
-    private float add_money; //送
-    private Date create_time;
+    private int shopId;
+    private float fullMoney; //满
+    private float addMoney; //送
+    private Date createTime;
     private int status; //1：生效，-1 不生效
-    private int valid_type; //1:一直有效，2：时间段有效
-    private Date start_date; //开始时间
-    private Date end_date; //结束时间
-
-
-
-
+    private int validType; //1:一直有效，2：时间段有效
+    private Date startDate; //开始时间
+    private Date endDate; //结束时间
 }

@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * date 2018/7/17 下午7:43
  **/
 
-public interface DiscountConfigRepository extends JpaRepository<DiscountConfig,Long> {
+public interface DiscountConfigRepository extends JpaRepository<DiscountConfig,Integer> {
 }

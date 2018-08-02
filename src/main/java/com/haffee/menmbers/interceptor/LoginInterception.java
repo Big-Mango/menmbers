@@ -49,7 +49,7 @@ public class LoginInterception implements HandlerInterceptor {
         } else {
             if (user_type.equals("2") || user_type.equals("9")) {
                 Optional<AdminUser> a_user = adminUserRepository.findById(Long.valueOf(id));
-                if (!a_user.isPresent() || a_user.get().getType() != Integer.valueOf(user_type) || !a_user.get().getLogin_key().equals(login_key)) {
+                if (!a_user.isPresent() || a_user.get().getType() != Integer.valueOf(user_type) || !a_user.get().getLoginKey().equals(login_key)) {
                     response.setContentType("text/html;charset=utf-8");
                     try {
                         response.getWriter().write("1003");
@@ -60,7 +60,7 @@ public class LoginInterception implements HandlerInterceptor {
                     return false;
                 } else {
                     Date date = new Date();
-                    long ms = date.getTime() - a_user.get().getLast_login_time().getTime();
+                    long ms = date.getTime() - a_user.get().getLastLoginTime().getTime();
                     long min = ms / (1000 * 60);
                     if (min > 30) {
                         response.setContentType("text/html;charset=utf-8");
@@ -79,7 +79,7 @@ public class LoginInterception implements HandlerInterceptor {
                 }
             } else if (user_type.equals("1")) {
                 Optional<User> c_user = userRepository.findById(Long.valueOf(id));
-                if (!c_user.isPresent() || !c_user.get().getLogin_key().equals(login_key)) {
+                if (!c_user.isPresent() || !c_user.get().getLoginKey().equals(login_key)) {
                     response.setContentType("text/html;charset=utf-8");
                     try {
                         response.getWriter().write("1003");
@@ -90,7 +90,7 @@ public class LoginInterception implements HandlerInterceptor {
                     return false;
                 } else {
                     Date date = new Date();
-                    long ms = date.getTime() - c_user.get().getLast_login_time().getTime();
+                    long ms = date.getTime() - c_user.get().getLastLoginTime().getTime();
                     long min = ms / (1000 * 60);
                     if (min > 30) {
                         response.setContentType("text/html;charset=utf-8");

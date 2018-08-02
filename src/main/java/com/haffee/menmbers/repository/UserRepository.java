@@ -19,19 +19,19 @@ public interface UserRepository extends JpaRepository<User,Long> {
      * @param user_phone
      * @return
      */
-    @Query(value="select u from User u where u.user_phone = ?1")
-    User findByUser_phone(String user_phone);
+    @Query(value="select u from User u where u.userPhone = ?1")
+    User findByUserPhone(String user_phone);
 
 
     /**
      * 登录更新
-     * @param login_key
-     * @param last_login_time
+     * @param loginKey
+     * @param lastLoginTime
      * @param id
      * @return
      */
     @Modifying(clearAutomatically = true)
-    @Query(value="update User set login_key = ?1 , last_login_time = ?2 where id = ?3")
-    int updateUser(String login_key, Date last_login_time, int id);
+    @Query(value="update User set loginKey = ?1 , lastLoginTime = ?2 where id = ?3")
+    int updateUser(String loginKey, Date lastLoginTime, int id);
 
 }

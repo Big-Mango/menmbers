@@ -10,15 +10,15 @@ import com.haffee.menmbers.entity.User;
 
 public interface UserService {
 
-    AdminUser doLoginForAdmin(String user_phone, String password, String type) throws Exception;
+    AdminUser doLoginForAdmin(String userPhone, String password, String type) throws Exception;
 
-    User doLoginForCustomer(String user_phone,String password) throws Exception;
+    User doLoginForCustomer(String userPhone,String password) throws Exception;
 
-    boolean doLogoutForAdmin(String user_phone,String type) throws Exception;
+    boolean doLogoutForAdmin(String userPhone,String type) throws Exception;
 
-    boolean doLogoutForCustomer(String user_phone) throws Exception;
+    boolean doLogoutForCustomer(String userPhone) throws Exception;
 
-    int doAddAdmin(String user_phone) throws Exception;
+    int doAddAdmin(String userPhone) throws Exception;
 
     int changeUserStatus(String id,int status) throws Exception;
 

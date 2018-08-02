@@ -26,9 +26,9 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private String real_name;
+    private String realName;
     private int sex;
-    private String phone_no;
+    private String phoneNo;
     private String address;
     private int label; //待定
     private int job; //待定

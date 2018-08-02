@@ -27,9 +27,9 @@ public class SysCode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
     private String code;  //代码 如：SEX
-    private String code_value; //值：1
-    private String code_str; //展示：男
+    private String codeValue; //值：1
+    private String codeStr; //展示：男
     private String content; // 如：性别
-    private int order_index; //排序字段
+    private int orderIndex; //排序字段
 
 }

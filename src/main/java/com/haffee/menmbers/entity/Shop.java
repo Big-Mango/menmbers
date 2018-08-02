@@ -26,15 +26,15 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
-    private String shop_name;
-    private String shop_addr;
+    private String shopName;
+    private String shopAddr;
     private int area;//营业面积
     private String contanct; //联系电话
-    private String owner_name;
-    private String owner_phone;
-    private String open_time; //营业时间
-    private String close_time; //关店时间
-    private int table_count; //卓台数
+    private String ownerName;
+    private String ownerPhone;
+    private String openTime; //营业时间
+    private String closeTime; //关店时间
+    private int tableCount; //卓台数
 
 
 

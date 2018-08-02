@@ -113,42 +113,8 @@ public class UserController {
             e.printStackTrace();
             return ResponseMessage.error();
         }
-    }
 
-    /**
-     * 冻结、解冻 会员用户
-     * @param id
-     * @param status
-     * @return
-     */
-    @PostMapping("/customer/changeStatus")
-    public ResponseMessage changeUserStatus(String id,int status){
-        try {
-            userService.changeUserStatus(id,status);
-            return ResponseMessage.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseMessage.error();
-        }
     }
-
-    /**
-     * 冻结、解冻 管理用户
-     * @param id
-     * @param status
-     * @return
-     */
-    @PostMapping("/admin/changeStatus")
-    public ResponseMessage changeAdminUserStatus(String id,int status){
-        try {
-            userService.changeAdminUserStatus(id,status);
-            return ResponseMessage.success();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseMessage.error();
-        }
-    }
-
 
 
 }
