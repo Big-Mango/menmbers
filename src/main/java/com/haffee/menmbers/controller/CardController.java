@@ -119,16 +119,16 @@ public class CardController {
     }
 
     /**
-    * 方法实现说明 根据id删除会员卡信息 ，删除后id不会恢复，如此次删除的是5，那么下次add会从6开始
+    * 方法实现说明 删除会员卡信息 ，删除后id不会恢复，如此次删除的是5，那么下次add会从6开始
     * @author      liujia
     * @return ResponseMessage
     * @exception
     * @date        2018/7/29 11:09
     */
     @PostMapping("/delete")
-    public ResponseMessage delete(int id){
+    public ResponseMessage delete(@RequestBody Card card){
         try {
-            cardService.delete(id);
+            cardService.delete(card);
             return ResponseMessage.success();
         }catch (Exception e) {
             e.printStackTrace();

@@ -23,7 +23,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Serialization
 public class DiscountConfig {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
@@ -35,8 +34,4 @@ public class DiscountConfig {
     private int validType; //1:一直有效，2：时间段有效
     private Date startDate; //开始时间
     private Date endDate; //结束时间
-
-
-
-
 }

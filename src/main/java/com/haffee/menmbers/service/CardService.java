@@ -22,5 +22,5 @@ public interface CardService {
     Optional<Card> findById(int id);
     Card add(Card card);
     Card update(Card card);
-    void delete(int id);
+    void delete(Card card);
 }
