@@ -22,8 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Serialization
-public class CardTopUpOrder {
-
+public class CardRecharge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
@@ -38,6 +37,4 @@ public class CardTopUpOrder {
     private int discountId;//折扣方案 关联config
     private float discountFee; //折扣金额
     private String discountDesc; //折扣描述
-
-
 }
