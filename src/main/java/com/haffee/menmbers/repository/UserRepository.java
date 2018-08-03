@@ -34,4 +34,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value="update User set loginKey = ?1 , lastLoginTime = ?2 where id = ?3")
     int updateUser(String loginKey, Date lastLoginTime, int id);
 
+    /**
+     * 根据卡号查询用户
+     * @param cardNo
+     * @return
+     */
+    @Query(value="select u from User u,Card c where u.cardId = c.id and c.cardNo = ?1")
+    User getUserByCardNo(String cardNo);
 }

@@ -4,6 +4,9 @@ import com.haffee.menmbers.entity.CardRecharge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
 * @Description:    java类作用描述
 * @Author:         liujia
@@ -12,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 */
 public interface CardRechargeService {
     Page<CardRecharge> findAll(Pageable pageable);
-    CardRecharge findByCardNo(String cardNo);
+    Page<CardRecharge> findByCardNo(String cardNo,Pageable pageable);
     CardRecharge add(CardRecharge cardRecharge);
+    Optional<CardRecharge> findById(int id);
 }

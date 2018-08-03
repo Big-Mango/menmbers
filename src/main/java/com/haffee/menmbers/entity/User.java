@@ -33,14 +33,12 @@ public class User {
     private String wechatNickname; //微信昵称
     private String wechatIcon; //微信头像
     private String paymentWay; //支付方式 多个字符串逗号拼接 1:手机验证，2：指纹，3：人脸，4：声波，5：其他
-    private float balance; //余额
+    private float balance = 0; //余额
     private int status; //状态 1：正常 -1 冻结
     private String remark; //备注
     private int personId;
     private int cardId; //会员卡ID
+    private int shopId;//商户id
     private Date lastLoginTime;
     private String loginKey; //登录时候标识
-
-
-
 }

@@ -2,9 +2,13 @@ package com.haffee.menmbers.controller;
 
 import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.CardRecharge;
+import com.haffee.menmbers.entity.CardRecord;
 import com.haffee.menmbers.entity.DiscountConfig;
 import com.haffee.menmbers.service.CardRechargeService;
+import com.haffee.menmbers.service.CardRecordService;
+import com.haffee.menmbers.service.CardService;
 import com.haffee.menmbers.service.DiscountConfigService;
+import com.haffee.menmbers.service.impl.CardRecordServiceImpl;
 import com.haffee.menmbers.utils.ResponseMessage;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
 
 /**
 * @Description:    充值卡管理
@@ -53,7 +59,6 @@ public class CardRechargeController {
     public ResponseMessage add(@RequestBody CardRecharge cardRecharge){
         try {
             CardRecharge responseCardRecharge = cardRechargeService.add(cardRecharge);
-            //生成cardRecord记录
             return ResponseMessage.getResponseMessage(responseCardRecharge);
         }catch (Exception e) {
             e.printStackTrace();
@@ -69,10 +74,31 @@ public class CardRechargeController {
      * @date        2018/7/29 10:54
      */
     @PostMapping("/findByCardNo")
-    public ResponseMessage findByCardNo(String cardNo){
+    public ResponseMessage findByCardNo(@RequestParam String cardNo,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
-            CardRecharge cardRecharge = cardRechargeService.findByCardNo(cardNo);
+            Page<CardRecharge> cardRecharge = cardRechargeService.findByCardNo(cardNo,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
             return ResponseMessage.getResponseMessage(cardRecharge);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+    /**
+     * 方法实现说明  根据id查询一条记录
+     * @author      liujia
+     * @return  ResponseMessage
+     * @exception
+     * @date        2018/7/29 10:54
+     */
+    @PostMapping("/findById")
+    public ResponseMessage findById(@RequestParam int id){
+        try {
+            Optional<CardRecharge> cardRecharge = cardRechargeService.findById(id);
+            if(cardRecharge.isPresent()){
+                return ResponseMessage.getResponseMessage(cardRecharge.get());
+            }else{
+                return ResponseMessage.error();
+            }
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
