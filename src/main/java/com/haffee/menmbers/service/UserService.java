@@ -2,6 +2,8 @@ package com.haffee.menmbers.service;
 
 import com.haffee.menmbers.entity.AdminUser;
 import com.haffee.menmbers.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * create by jacktong
@@ -27,5 +29,9 @@ public interface UserService {
     int changePasswordForAdminUser(String id,String password,int type) throws Exception;
 
     int changePasswordForUser(String id,String password) throws Exception;
+
+    AdminUser findOneAdminUserForShop(String id) throws Exception;
+
+    Page<AdminUser> findAdminUser(Pageable pageable,int type) throws Exception;
 
 }

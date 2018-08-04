@@ -1,6 +1,9 @@
 package com.haffee.menmbers.repository;
 
+import com.haffee.menmbers.entity.AdminUser;
 import com.haffee.menmbers.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -10,7 +13,7 @@ import java.util.Date;
 
 /**
  * create by jacktong
- * date ${date}
+ * date  2018/7/17 下午7:46
  **/
 public interface UserRepository extends JpaRepository<User,Long> {
 
@@ -41,4 +44,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
      */
     @Query(value="select u from User u,Card c where u.cardId = c.id and c.cardNo = ?1")
     User getUserByCardNo(String cardNo);
+
 }

@@ -29,15 +29,16 @@ public class AdminUser {
     private int id;
     private String userPhone; //手机号
     private String password;
-    private int type; //2:店铺，9：系统管理员
-    private int ifChain; //是否连锁 1：是 0：否
-    private int ifBoss; //是否总店
-    private int parentUserId; //上级店铺ID；
-    private int shopId;
-    private int status; //用户状态 1：正常 -1 冻结
+    private int type = 0; //2:店铺，9：系统管理员
+    private int ifChain = 0; //是否连锁 1：是 0：否
+    private int ifBoss = 0; //是否总店
+    private int parentUserId = 0; //上级店铺ID；
+    private int shopId = 0;
+    private int status = 1; //用户状态 1：正常 -1 冻结
     private String remark;
     private Date lastLoginTime;//最近登录时间
     private String loginKey; //登录标识
+    private Shop shop; //关联店铺信息
 
 
 }

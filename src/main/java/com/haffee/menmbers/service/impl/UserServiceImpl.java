@@ -1,19 +1,23 @@
 package com.haffee.menmbers.service.impl;
 
 import com.haffee.menmbers.entity.AdminUser;
+import com.haffee.menmbers.entity.Shop;
 import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.AdminUserRepository;
+import com.haffee.menmbers.repository.ShopRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.UserService;
 import com.haffee.menmbers.utils.Md5Utils;
 import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private AdminUserRepository adminUserRepository;
+
+    @Autowired
+    private ShopRepository shopRepository;
 
 
     /**
@@ -229,6 +236,49 @@ public class UserServiceImpl implements UserService {
             SmsUtils.singleSend(u.getUserPhone(),msg);
         }
         return 0;
+    }
+
+    /**
+     * 查询单个店铺用户信息
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public AdminUser findOneAdminUserForShop(String id){
+        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        if(o.isPresent()){
+            AdminUser a_user = o.get();
+            Optional<Shop> o_s = shopRepository.findById(Long.valueOf(a_user.getShopId()));
+            if(o_s.isPresent()){
+                a_user.setShop(o_s.get());
+            }
+            return a_user;
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 查询管理用户分页
+     * @param pageable
+     * @param type
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Page<AdminUser> findAdminUser(Pageable pageable, int type){
+        Page<AdminUser> page = adminUserRepository.findByType(type,pageable);
+        if(type==2){
+            List<AdminUser> list = page.getContent();
+            for(AdminUser a_u : list){
+                Optional<Shop> o = shopRepository.findById(new Long((long)a_u.getShopId()));
+                if(o.isPresent()){
+                    a_u.setShop(o.get());
+                }
+            }
+        }
+        return page;
     }
 
 
