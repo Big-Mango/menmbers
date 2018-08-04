@@ -26,7 +26,7 @@ public class PersonController {
      * @param user_id
      * @return
      */
-    @GetMapping("/findOnePerson")
+    @GetMapping("/findOne")
     public ResponseMessage findOnePerson(String user_id){
         try {
             User user = personService.findOneUser(user_id);
