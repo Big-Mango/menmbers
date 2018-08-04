@@ -40,9 +40,9 @@ public class LoginInterception implements HandlerInterceptor {
         if (StringUtils.isEmpty(login_key) || StringUtils.isEmpty(id) || StringUtils.isEmpty(user_type)) {
             response.setContentType("text/html;charset=utf-8");
             try {
-                response.getWriter().write("not login");
+                response.getWriter().write("1003");
             } catch (IOException e) {
-                response.getWriter().write("not login");
+                response.getWriter().write("1003");
                 e.printStackTrace();
             }
             return false;
