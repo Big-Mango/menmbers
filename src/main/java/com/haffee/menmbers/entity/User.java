@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -41,6 +38,8 @@ public class User {
     private int shopId = 0;//商户id
     private Date lastLoginTime;
     private String loginKey; //登录时候标识
+    @Transient
     private Person person;
+    @Transient
     private Card card;
 }

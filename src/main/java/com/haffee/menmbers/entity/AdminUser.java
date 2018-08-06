@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -38,6 +35,7 @@ public class AdminUser {
     private String remark;
     private Date lastLoginTime;//最近登录时间
     private String loginKey; //登录标识
+    @Transient
     private Shop shop; //关联店铺信息
 
 

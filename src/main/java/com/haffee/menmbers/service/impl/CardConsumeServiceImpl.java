@@ -43,6 +43,10 @@ public class CardConsumeServiceImpl implements CardConsumeService {
         User user = userRepository.getUserByCardNo(cardConsume.getCardNo());
         if(user!=null){
             //保存消费记录
+            cardConsume.setCardId(user.getCardId());
+            cardConsume.setShopId(user.getShopId());
+            cardConsume.setUserId(user.getId());
+            cardConsume.setUserPhone(user.getUserPhone());
             responseCardConsume = cardConsumeRepository.save(cardConsume);
             //更新用户卡余额
             user.setBalance(user.getBalance()-cardConsume.getPayFee());

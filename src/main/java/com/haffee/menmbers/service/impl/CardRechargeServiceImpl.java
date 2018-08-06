@@ -43,6 +43,9 @@ public class CardRechargeServiceImpl implements CardRechargeService {
         User user = userRepository.getUserByCardNo(cardRecharge.getCardNo());
         if(user!=null){
             //保存充值记录
+            cardRecharge.setCardId(user.getCardId());
+            cardRecharge.setUserId(user.getId());
+            cardRecharge.setShopId(user.getShopId());
             responseCardRecharge = cardRechargeRepository.save(cardRecharge);
             //保存卡历史记录
 //            CardConsume cardConsume = new CardConsume();
