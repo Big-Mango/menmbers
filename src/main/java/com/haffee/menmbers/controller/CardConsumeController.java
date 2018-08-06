@@ -1,6 +1,8 @@
 package com.haffee.menmbers.controller;
 
+import com.haffee.menmbers.entity.CardConsume;
 import com.haffee.menmbers.entity.CardRecharge;
+import com.haffee.menmbers.service.CardConsumeService;
 import com.haffee.menmbers.service.CardRechargeService;
 import com.haffee.menmbers.utils.ResponseMessage;
 import org.springframework.data.domain.Page;
@@ -12,28 +14,28 @@ import javax.annotation.Resource;
 import java.util.Optional;
 
 /**
-* @Description:    充值卡管理
+* @Description:    卡消费管理
 * @Author:         liujia
-* @CreateDate:     2018/7/29 10:25
+* @CreateDate:     2018/8/6 10:25
 * @Version:        1.0
 */
 @RestController
-@RequestMapping("/recharge")
-public class CardRechargeController {
+@RequestMapping("/consume")
+public class CardConsumeController {
     @Resource
-    private CardRechargeService cardRechargeService;
+    private CardConsumeService cardConsumeService;
     /**
     * 方法实现说明 按照创建时间倒序排列查询所有记录
     * @author      liujia
     * @return  ResponseMessage
     * @exception   
-    * @date        2018/7/29 10:47
+    * @date        2018/8/6 10:47
     */
     @PostMapping("/findAll")
     public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
-            Page<CardRecharge> pageRecharge= cardRechargeService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
-            return ResponseMessage.getResponseMessage(pageRecharge);
+            Page<CardConsume> pageConsume= cardConsumeService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(pageConsume);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
@@ -45,13 +47,13 @@ public class CardRechargeController {
     * @author      liujia
     * @return  ResponseMessage
     * @exception   
-    * @date        2018/7/29 11:00
+    * @date        2018/8/6 11:00
     */
     @PostMapping("/add")
-    public ResponseMessage add(@RequestBody CardRecharge cardRecharge){
+    public ResponseMessage add(@RequestBody CardConsume cardConsume){
         try {
-            CardRecharge responseCardRecharge = cardRechargeService.add(cardRecharge);
-            return ResponseMessage.getResponseMessage(responseCardRecharge);
+            CardConsume responseCardConsume = cardConsumeService.add(cardConsume);
+            return ResponseMessage.getResponseMessage(responseCardConsume);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
@@ -63,13 +65,13 @@ public class CardRechargeController {
      * @author      liujia
      * @return  ResponseMessage
      * @exception
-     * @date        2018/7/29 10:54
+     * @date        2018/8/6 10:54
      */
     @PostMapping("/findByCardNo")
     public ResponseMessage findByCardNo(@RequestParam String cardNo,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
-            Page<CardRecharge> cardRecharge = cardRechargeService.findByCardNo(cardNo,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
-            return ResponseMessage.getResponseMessage(cardRecharge);
+            Page<CardConsume> cardRConsume = cardConsumeService.findByCardNo(cardNo,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(cardRConsume);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
@@ -80,14 +82,14 @@ public class CardRechargeController {
      * @author      liujia
      * @return  ResponseMessage
      * @exception
-     * @date        2018/7/29 10:54
+     * @date        2018/8/6 10:54
      */
     @PostMapping("/findById")
     public ResponseMessage findById(@RequestParam int id){
         try {
-            Optional<CardRecharge> cardRecharge = cardRechargeService.findById(id);
-            if(cardRecharge.isPresent()){
-                return ResponseMessage.getResponseMessage(cardRecharge.get());
+            Optional<CardConsume> cardConsume = cardConsumeService.findById(id);
+            if(cardConsume.isPresent()){
+                return ResponseMessage.getResponseMessage(cardConsume.get());
             }else{
                 return ResponseMessage.error();
             }

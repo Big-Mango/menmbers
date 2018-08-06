@@ -22,7 +22,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Serialization
-public class CardRecord {
+public class CardConsume {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
