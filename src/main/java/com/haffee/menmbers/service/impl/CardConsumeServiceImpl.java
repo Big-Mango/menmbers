@@ -44,13 +44,13 @@ public class CardConsumeServiceImpl implements CardConsumeService {
         if(user!=null){
             //保存消费记录
             cardConsume.setCardId(user.getCardId());
-            cardConsume.setShopId(user.getShopId());
+//            cardConsume.setShopId(user.getShopId()); 可以在连锁家消费，不一定是开卡家
             cardConsume.setUserId(user.getId());
             cardConsume.setUserPhone(user.getUserPhone());
             responseCardConsume = cardConsumeRepository.save(cardConsume);
             //更新用户卡余额
-            user.setBalance(user.getBalance()-cardConsume.getPayFee());
-            userRepository.save(user);
+//            user.setBalance(user.getBalance()-cardConsume.getPayFee());
+//            userRepository.save(user);
         }
         return responseCardConsume;
     }
