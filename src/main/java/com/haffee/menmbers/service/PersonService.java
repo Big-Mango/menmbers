@@ -1,5 +1,6 @@
 package com.haffee.menmbers.service;
 
+import com.haffee.menmbers.entity.Person;
 import com.haffee.menmbers.entity.User;
 
 /**
@@ -11,5 +12,7 @@ import com.haffee.menmbers.entity.User;
 public interface PersonService {
 
     User findOneUser(String id) throws Exception;
+
+    void updateUserInfo(User user,Person person) throws Exception;
 
 }

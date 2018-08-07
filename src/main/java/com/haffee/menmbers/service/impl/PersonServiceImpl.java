@@ -7,10 +7,12 @@ import com.haffee.menmbers.repository.CardRepository;
 import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.PersonService;
+import com.haffee.menmbers.utils.CopyProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 /**
@@ -55,6 +57,33 @@ public class PersonServiceImpl implements PersonService {
         }else{
             return null;
         }
+
+    }
+
+    /**
+     * 更新个人信息
+     * @param user
+     * @param person
+     * @throws Exception
+     */
+    @Override
+    public void updateUserInfo(User user, Person person){
+        //更新用户表
+        Optional<User> o = userRepository.findById(new Long((long)user.getId()));
+        if(o.isPresent()){
+            User u_db = o.get();
+            CopyProperties.copyPropertiesIgnoreNull(user,u_db);
+            userRepository.save(u_db);
+        }
+        //更新个人信息表
+        Optional<Person> o_p =  personRepository.findById(new Long((long)person.getId()));
+        if(o_p.isPresent()){
+            Person p = o_p.get();
+            CopyProperties.copyPropertiesIgnoreNull(person,p);
+            personRepository.save(p);
+        }
+
+
 
     }
 }
