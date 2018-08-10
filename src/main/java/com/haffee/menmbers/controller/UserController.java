@@ -214,5 +214,39 @@ public class UserController {
         }
     }
 
+    /**
+     * 查询所有会员用户
+     *
+     * @param page
+     * @param size
+     * @param sort
+     * @return
+     */
+    @GetMapping("/customer/findAllUser")
+    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort) {
+        try {
+            Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+            return ResponseMessage.getResponseMessage(pageUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
 
+    /**
+     * 查询一条会员用户
+     *
+     * @param userId
+     * @return
+     */
+    @PostMapping("/customer/findOneUser")
+    public ResponseMessage findOneUser(int userId) {
+        try {
+            User user = userService.findOneUser(userId);
+            return ResponseMessage.getResponseMessage(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
 }
