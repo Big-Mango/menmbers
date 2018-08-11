@@ -328,7 +328,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public Page<User> findAllByUserPhone(Pageable pageable,String userPhone) {
+    public Page<User> findOneUserByUserPhone(Pageable pageable,String userPhone) {
         Page<User> page = userRepository.findAllByUserPhone(pageable,userPhone);
         if (page != null) {
             List<User> list = page.getContent();

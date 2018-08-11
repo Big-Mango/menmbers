@@ -39,7 +39,7 @@ public interface UserService {
 
     Page<User> findAllUser(Pageable pageable) throws Exception;
 
-    Page<User> findAllByUserPhone(Pageable pageable,String userPhone) throws Exception;
+    Page<User> findOneUserByUserPhone(Pageable pageable,String userPhone) throws Exception;
 
     User findOneUser(int userId) throws Exception;
 

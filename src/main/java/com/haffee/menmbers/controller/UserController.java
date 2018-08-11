@@ -242,10 +242,10 @@ public class UserController {
      * @param userPhone
      * @return
      */
-    @PostMapping("/customer/findAllUserByUserPhone")
-    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone) {
+    @PostMapping("/customer/findOneByUserPhone")
+    public ResponseMessage findOneByUserPhone(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone) {
         try {
-            Page<User> pageUser = userService.findAllByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone);
+            Page<User> pageUser = userService.findOneUserByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone);
             return ResponseMessage.getResponseMessage(pageUser);
         } catch (Exception e) {
             e.printStackTrace();
@@ -258,8 +258,8 @@ public class UserController {
      * @param userId
      * @return
      */
-    @PostMapping("/customer/findOneUser")
-    public ResponseMessage findOneUser(int userId) {
+    @PostMapping("/customer/findOneById")
+    public ResponseMessage findOneById(int userId) {
         try {
             User user = userService.findOneUser(userId);
             return ResponseMessage.getResponseMessage(user);
