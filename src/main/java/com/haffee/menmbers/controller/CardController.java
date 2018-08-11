@@ -135,4 +135,38 @@ public class CardController {
             return ResponseMessage.error();
         }
     }
+    /**
+     * 方法实现说明 会员卡冻结，解冻
+     * @author      liujia
+     * @return ResponseMessage
+     * @exception
+     * @date        2018/8/11 11:09
+     */
+    @PostMapping("/changeStatus")
+    public ResponseMessage changeStatus(String cardNo,int cardStatus){
+        try {
+            Card card = cardService.changeCardStatus(cardNo,cardStatus);
+            return ResponseMessage.getResponseMessage(card);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+    /**
+     * 方法实现说明 会员卡补卡
+     * @author      liujia
+     * @return ResponseMessage
+     * @exception
+     * @date        2018/8/11 11:15
+     */
+    @PostMapping("/replace")
+    public ResponseMessage replace(String oldCardNo,String newCardNo){
+        try {
+            cardService.replace(oldCardNo,newCardNo);
+            return ResponseMessage.success();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
 }

@@ -1,6 +1,8 @@
 package com.haffee.menmbers.controller;
 
 import com.haffee.menmbers.entity.AdminUser;
+import com.haffee.menmbers.entity.Card;
+import com.haffee.menmbers.entity.Person;
 import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.service.UserService;
 import com.haffee.menmbers.utils.ResponseMessage;
@@ -216,13 +218,12 @@ public class UserController {
 
     /**
      * 查询所有会员用户
-     *
      * @param page
      * @param size
      * @param sort
      * @return
      */
-    @GetMapping("/customer/findAllUser")
+    @PostMapping("/customer/findAllUser")
     public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort) {
         try {
             Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
@@ -234,8 +235,26 @@ public class UserController {
     }
 
     /**
+     * 查询所有会员用户
+     * @param page
+     * @param size
+     * @param sort
+     * @param userPhone
+     * @return
+     */
+    @PostMapping("/customer/findAllUserByUserPhone")
+    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone) {
+        try {
+            Page<User> pageUser = userService.findAllByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone);
+            return ResponseMessage.getResponseMessage(pageUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
      * 查询一条会员用户
-     *
      * @param userId
      * @return
      */
@@ -249,4 +268,39 @@ public class UserController {
             return ResponseMessage.error();
         }
     }
+
+    /**
+     * 新增会员用户
+     * @param person
+     * @param card
+     * @return
+     */
+    @PostMapping("/customer/add")
+    public ResponseMessage addUser(@RequestBody Person person, @RequestBody Card card) {
+        try {
+            User user = userService.add(person,card);
+            return ResponseMessage.getResponseMessage(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+    /**
+     * 修改会员用户信息
+     * @param person
+     * @param card
+     * @param user
+     * @return
+     */
+    @PostMapping("/customer/update")
+    public ResponseMessage updateUser(@RequestBody Person person, @RequestBody Card card,@RequestBody User user) {
+        try {
+            User responseUser = userService.update(person,card,user);
+            return ResponseMessage.getResponseMessage(responseUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
 }

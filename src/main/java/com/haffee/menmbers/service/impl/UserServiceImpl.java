@@ -306,7 +306,34 @@ public class UserServiceImpl implements UserService {
         if (page != null) {
             List<User> list = page.getContent();
             for (User user : list) {
-                Optional<Person> optionalPerson = personRepository.findById(new Long((long) user.getPersonId()));
+                Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
+                if (optionalPerson.isPresent()) {
+                    user.setPerson(optionalPerson.get());
+                }
+                Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+                if (optionalCard.isPresent()) {
+                    user.setCard(optionalCard.get());
+                }
+            }
+        }
+        return page;
+    }
+
+
+    /**
+     * 查询会员用户分页
+     *
+     * @param pageable
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Page<User> findAllByUserPhone(Pageable pageable,String userPhone) {
+        Page<User> page = userRepository.findAllByUserPhone(pageable,userPhone);
+        if (page != null) {
+            List<User> list = page.getContent();
+            for (User user : list) {
+                Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                 if (optionalPerson.isPresent()) {
                     user.setPerson(optionalPerson.get());
                 }
@@ -330,7 +357,7 @@ public class UserServiceImpl implements UserService {
     public User findOneUser(int userId){
         Optional<User> user = userRepository.findById(new Long(userId));
         if (user.isPresent()) {
-            Optional<Person> optionalPerson = personRepository.findById(new Long((long) user.get().getPersonId()));
+            Optional<Person> optionalPerson = personRepository.findById(user.get().getPersonId());
             if (optionalPerson.isPresent()) {
                 user.get().setPerson(optionalPerson.get());
             }
@@ -341,5 +368,61 @@ public class UserServiceImpl implements UserService {
         }
         return user.get();
     }
-
+    /**
+     * 新增会员信息
+     * @param person
+     * @param card
+     * @return
+     * @throws Exception
+     */
+    public User add(Person person, Card card) throws Exception{
+        //保存person信息
+        Person responsePerson = personRepository.save(person);
+        //保存card信息
+        Card responseCard = cardRepository.save(card);
+        //保存user信息
+        User user = null;
+        if (responsePerson!=null&&responseCard!=null){
+            int pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
+            String password = Md5Utils.getMD5(pre_psw + "");
+            user.setPassword(password);
+            user.setUserPhone(responsePerson.getPhoneNo());
+            user.setBalance(0);
+            user.setStatus(1);
+            user.setPersonId(responsePerson.getId());
+            user.setCardId(responseCard.getId());
+            user.setShopId(responseCard.getShopId());
+            User responseUser = userRepository.save(user);
+//            if(responseUser!=null){
+//                String sms_content = "聚巷客栈会员用户" + person.getPhoneNo() + "您好：您的账户已经创建成功，登录用户名：" + person.getPhoneNo() + ",密码：" + pre_psw + ",请妥善保管！";
+//                SmsUtils.singleSend(person.getPhoneNo(), sms_content);
+//            }
+            return responseUser;
+        }else{
+            return user;
+        }
+    }
+    /**
+     * 修改会员信息
+     * @param person
+     * @param card
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    public User update(Person person, Card card, User user) throws Exception{
+        //保存person信息
+        Person responsePerson = personRepository.save(person);
+        //保存card信息
+        Card responseCard = cardRepository.save(card);
+        //保存user信息
+        if (responsePerson!=null&&responseCard!=null){
+            user.setUserPhone(responsePerson.getPhoneNo());
+            user.setShopId(responseCard.getShopId());
+            User responseUser = userRepository.save(user);
+            return responseUser;
+        }else{
+            return user;
+        }
+    }
 }

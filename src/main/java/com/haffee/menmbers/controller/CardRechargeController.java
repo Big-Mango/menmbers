@@ -75,6 +75,24 @@ public class CardRechargeController {
             return ResponseMessage.error();
         }
     }
+
+    /**
+     * 方法实现说明  根据手机号查询一条记录
+     * @author      liujia
+     * @return  ResponseMessage
+     * @exception
+     * @date        2018/7/29 10:54
+     */
+    @PostMapping("/findByUserPhone")
+    public ResponseMessage findByUserPhone(@RequestParam String userPhone,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
+        try {
+            Page<CardRecharge> cardRecharge = cardRechargeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(cardRecharge);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
     /**
      * 方法实现说明  根据id查询一条记录
      * @author      liujia

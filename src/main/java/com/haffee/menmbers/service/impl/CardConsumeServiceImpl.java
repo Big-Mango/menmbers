@@ -37,6 +37,10 @@ public class CardConsumeServiceImpl implements CardConsumeService {
         return cardConsumeRepository.findByCardNo(cardNo,pageable);
     }
 
+    public Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable){
+        return cardConsumeRepository.findByUserPhone(userPhone,pageable);
+    }
+
     public CardConsume add(CardConsume cardConsume) {
         CardConsume responseCardConsume = null;
         //根据cardNo获取user信息

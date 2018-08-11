@@ -12,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CardConsumeRepository extends JpaRepository<CardConsume,Integer> {
     Page<CardConsume> findByCardNo(String cardNo, Pageable pageable);
+    Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable);
 }

@@ -16,6 +16,7 @@ import java.util.Optional;
 public interface CardConsumeService {
     Page<CardConsume> findAll(Pageable pageable);
     Page<CardConsume> findByCardNo(String cardNo, Pageable pageable);
+    Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable);
     CardConsume add(CardConsume cardConsume);
     Optional<CardConsume> findById(int id);
 }
