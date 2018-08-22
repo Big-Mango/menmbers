@@ -45,7 +45,7 @@ public class PersonServiceImpl implements PersonService {
         Optional<User> o = userRepository.findById(Long.valueOf(id));
         if(o.isPresent()){
             User u = o.get();
-            Optional<Person> o_p = personRepository.findById(new Long((long)u.getPersonId()));
+            Optional<Person> o_p = personRepository.findById(u.getPersonId());
             if(o_p.isPresent()){
                 u.setPerson(o_p.get());
             }
@@ -76,7 +76,7 @@ public class PersonServiceImpl implements PersonService {
             userRepository.save(u_db);
         }
         //更新个人信息表
-        Optional<Person> o_p =  personRepository.findById(new Long((long)person.getId()));
+        Optional<Person> o_p =  personRepository.findById(person.getId());
         if(o_p.isPresent()){
             Person p = o_p.get();
             CopyProperties.copyPropertiesIgnoreNull(person,p);

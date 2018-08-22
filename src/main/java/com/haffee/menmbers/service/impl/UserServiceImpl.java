@@ -52,13 +52,13 @@ public class UserServiceImpl implements UserService {
         //2.密码加密后判断是否一致
         //3.更新登录状态
         AdminUser a_user = adminUserRepository.findAdminUser(userPhone,type);
-        if(null!=a_user&&a_user.getPassword().equals(Md5Utils.getMD5(password))&&a_user.getStatus()==1){
+        if(null!=a_user&&a_user.getPassword().equals(password)&&a_user.getStatus()==1){
+            a_user.setPassword(null);
             String loginKey =UuidUtils.getUUID32();
             a_user.setLoginKey(loginKey);
             Date now = new Date();
             a_user.setLastLoginTime(now);
             adminUserRepository.updateAdminUser(loginKey,now,a_user.getId());
-            a_user.setPassword(null);
             return a_user;
         }
         return null;

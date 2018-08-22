@@ -45,4 +45,12 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(value="select u from User u,Card c where u.cardId = c.id and c.cardNo = ?1")
     User getUserByCardNo(String cardNo);
 
+    /**
+     * 根据手机号查询用户
+     * @param userPhone
+     * @return
+     */
+    @Query(value="select u from User u where u.userPhone = ?1")
+    Page<User> findAllByUserPhone(Pageable pageable,String userPhone);
+
 }

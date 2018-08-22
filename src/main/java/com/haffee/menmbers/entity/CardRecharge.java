@@ -27,6 +27,7 @@ public class CardRecharge {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
     private int userId;
+    private String userPhone;
     private int cardId;
     private String cardNo;
     private int shopId;

@@ -2,8 +2,10 @@ package com.haffee.menmbers.service.impl;
 
 import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.SysCode;
+import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.CardRepository;
 import com.haffee.menmbers.repository.SysCodeRepository;
+import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.BaseService;
 import com.haffee.menmbers.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +30,9 @@ public class CardServiceImpl implements CardService {
 
     @Resource
     private CardRepository cardRepository;
+
+    @Resource
+    private UserRepository userRepository;
 
     public Page<Card> findAll(Pageable pageable) {
         return cardRepository.findAll(pageable);
@@ -54,5 +60,35 @@ public class CardServiceImpl implements CardService {
 
     public void delete(Card card) {
         cardRepository.delete(card);
+    }
+
+    public Card changeCardStatus(String cardNo,int cardStatus){
+        Card card = cardRepository.findByCardNo(cardNo);
+        if(card!=null){
+            card.setCardStatus(cardStatus);
+            return cardRepository.save(card);
+        } else{
+            return null;
+        }
+    }
+
+    public void replace(String oldCardNo,String newCardNo){
+        //将老卡置为 0：挂失
+        Card oldCard = cardRepository.findByCardNo(oldCardNo);
+        oldCard.setCardStatus(0);
+        cardRepository.save(oldCard);
+
+        //保存新卡信息,status为1：正常,shop为老卡的shopId
+        Card newCard = new Card();
+        newCard.setCardNo(newCardNo);
+        newCard.setCardStatus(1);
+        newCard.setCardCreateTime(new Date());
+        newCard.setShopId(oldCard.getShopId());
+        Card finalCard = cardRepository.save(newCard);
+
+        //更新用户的关联卡信息
+        User user = userRepository.getUserByCardNo(oldCardNo);
+        user.setCardId(finalCard.getId());
+        userRepository.save(user);
     }
 }

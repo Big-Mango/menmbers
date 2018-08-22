@@ -77,6 +77,24 @@ public class CardConsumeController {
             return ResponseMessage.error();
         }
     }
+
+    /**
+     * 方法实现说明  根据卡号查询一条记录
+     * @author      liujia
+     * @return  ResponseMessage
+     * @exception
+     * @date        2018/8/6 10:54
+     */
+    @PostMapping("/findByUserPhone")
+    public ResponseMessage findByUserPhone(@RequestParam String userPhone,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
+        try {
+            Page<CardConsume> cardRConsume = cardConsumeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(cardRConsume);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
     /**
      * 方法实现说明  根据id查询一条记录
      * @author      liujia

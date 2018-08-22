@@ -1,9 +1,12 @@
 package com.haffee.menmbers.service;
 
 import com.haffee.menmbers.entity.AdminUser;
+import com.haffee.menmbers.entity.Card;
+import com.haffee.menmbers.entity.Person;
 import com.haffee.menmbers.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * create by jacktong
@@ -34,4 +37,13 @@ public interface UserService {
 
     Page<AdminUser> findAdminUser(Pageable pageable,int type) throws Exception;
 
+    Page<User> findAllUser(Pageable pageable) throws Exception;
+
+    Page<User> findOneUserByUserPhone(Pageable pageable,String userPhone) throws Exception;
+
+    User findOneUser(int userId) throws Exception;
+
+    User add(Person person, Card card) throws Exception;
+
+    User update(Person person, Card card, User user) throws Exception;
 }

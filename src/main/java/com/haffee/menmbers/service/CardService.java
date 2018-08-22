@@ -23,4 +23,6 @@ public interface CardService {
     Card add(Card card);
     Card update(Card card);
     void delete(Card card);
+    Card changeCardStatus(String cardNo,int cardStatus);
+    void replace(String oldCardNo,String newCardNo);
 }
