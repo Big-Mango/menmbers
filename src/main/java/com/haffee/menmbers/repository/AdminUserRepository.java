@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
  * date 2018/7/17 下午7:39
  **/
 
-public interface AdminUserRepository extends JpaRepository<AdminUser,Long> {
+public interface AdminUserRepository extends JpaRepository<AdminUser,Integer> {
 
 
     /**
@@ -36,6 +37,7 @@ public interface AdminUserRepository extends JpaRepository<AdminUser,Long> {
      * @param id
      * @return
      */
+    @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update admin_user set login_key = :loginkey , last_login_time = :lastLoginTime where id = :id",nativeQuery = true)
     int updateAdminUser(@Param("loginkey")String loginKey, @Param("lastLoginTime")Date lastLoginTime, @Param("id")int id);

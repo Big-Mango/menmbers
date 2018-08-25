@@ -32,6 +32,7 @@ public class LoginInterception implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("********************进入权限拦截器******************");
         //待处理
         String login_key = request.getHeader("key");
         String id = request.getHeader("id");
@@ -48,7 +49,7 @@ public class LoginInterception implements HandlerInterceptor {
             return false;
         } else {
             if (user_type.equals("2") || user_type.equals("9")) {
-                Optional<AdminUser> a_user = adminUserRepository.findById(Long.valueOf(id));
+                Optional<AdminUser> a_user = adminUserRepository.findById(Integer.valueOf(id));
                 if (!a_user.isPresent() || a_user.get().getType() != Integer.valueOf(user_type) || !a_user.get().getLoginKey().equals(login_key)) {
                     response.setContentType("text/html;charset=utf-8");
                     try {
@@ -78,7 +79,7 @@ public class LoginInterception implements HandlerInterceptor {
                     }
                 }
             } else if (user_type.equals("1")) {
-                Optional<User> c_user = userRepository.findById(Long.valueOf(id));
+                Optional<User> c_user = userRepository.findById(Integer.valueOf(id));
                 if (!c_user.isPresent() || !c_user.get().getLoginKey().equals(login_key)) {
                     response.setContentType("text/html;charset=utf-8");
                     try {

@@ -33,7 +33,7 @@ public class ShopServiceImpl implements ShopService {
     public int updateShopInfo(AdminUser a_user, Shop shop){
 
         //更新账户
-        Optional<AdminUser> o_a_u = adminUserRepository.findById(Long.valueOf(a_user.getId()));
+        Optional<AdminUser> o_a_u = adminUserRepository.findById(Integer.valueOf(a_user.getId()));
         if(o_a_u.isPresent()){
             AdminUser a_u = o_a_u.get();
             CopyProperties.copyPropertiesIgnoreNull(a_user,a_u);

@@ -46,4 +46,6 @@ public interface UserService {
     User add(Person person, Card card) throws Exception;
 
     User update(Person person, Card card, User user) throws Exception;
+
+    AdminUser findAdminUser(String userPhone) throws Exception;
 }

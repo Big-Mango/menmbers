@@ -115,8 +115,13 @@ public class UserController {
     @PostMapping("/admin/add")
     public ResponseMessage addAdminUser(AdminUser a_user) {
         try {
-            userService.doAddAdmin(a_user.getUserPhone());
-            return ResponseMessage.success();
+            AdminUser a_user_db = userService.findAdminUser(a_user.getUserPhone());
+            if(null==a_user_db){
+                userService.doAddAdmin(a_user.getUserPhone());
+                return ResponseMessage.success();
+            }else{
+                return ResponseMessage.errorWithMsg("手机号已存在，请重新输入");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

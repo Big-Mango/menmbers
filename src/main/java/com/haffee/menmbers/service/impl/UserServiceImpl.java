@@ -143,10 +143,10 @@ public class UserServiceImpl implements UserService {
         String password = Md5Utils.getMD5(pre_psw+"");
         AdminUser a_user_new = new AdminUser();
         a_user_new.setUserPhone(userPhone);
-        a_user.setPassword(password);
-        a_user.setType(9);
-        a_user.setStatus(1);
-        adminUserRepository.save(a_user);
+        a_user_new.setPassword(password);
+        a_user_new.setType(9);
+        a_user_new.setStatus(1);
+        adminUserRepository.save(a_user_new);
         //发短信
         String sms_content = "聚巷客栈会员系统管理员"+userPhone+"您好：您的账户已经创建成功，登录用户名："+userPhone+",密码："+pre_psw+",请妥善保管！";
         SmsUtils.singleSend(userPhone,sms_content);
@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int changeUserStatus(String id, int status) {
-        Optional<User> o = userRepository.findById(Long.valueOf(id));
+        Optional<User> o = userRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             User u = o.get();
             u.setStatus(status);
@@ -180,7 +180,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int changeAdminUserStatus(String id, int status) {
-        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        Optional<AdminUser> o = adminUserRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             AdminUser a = o.get();
             a.setStatus(status);
@@ -199,7 +199,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public int changePasswordForAdminUser(String id, String password,int type){
         String msg = "";
-        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        Optional<AdminUser> o = adminUserRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             AdminUser a = o.get();
             if(type==2){ //店铺用户---自己找回密码
@@ -229,7 +229,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public int changePasswordForUser(String id, String password){
-        Optional<User> o = userRepository.findById(Long.valueOf(id));
+        Optional<User> o = userRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             User u = o.get();
             u.setPassword(Md5Utils.getMD5(password));
@@ -248,7 +248,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public AdminUser findOneAdminUserForShop(String id){
-        Optional<AdminUser> o = adminUserRepository.findById(Long.valueOf(id));
+        Optional<AdminUser> o = adminUserRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             AdminUser a_user = o.get();
             Optional<Shop> o_s = shopRepository.findById(Long.valueOf(a_user.getShopId()));
@@ -345,7 +345,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findOneUser(int userId){
-        Optional<User> user = userRepository.findById(new Long(userId));
+        Optional<User> user = userRepository.findById(Integer.valueOf(userId));
         if (user.isPresent()) {
             Optional<Person> optionalPerson = personRepository.findById(user.get().getPersonId());
             if (optionalPerson.isPresent()) {
@@ -414,6 +414,17 @@ public class UserServiceImpl implements UserService {
         }else{
             return user;
         }
+    }
+
+    /**
+     * 根据手机号查询超级管理员
+     * @param userPhone
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public AdminUser findAdminUser(String userPhone) throws Exception {
+        return adminUserRepository.findAdminUser(userPhone,"9");
     }
 
 

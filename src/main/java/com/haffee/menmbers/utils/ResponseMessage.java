@@ -38,6 +38,10 @@ public class ResponseMessage {
         return new ResponseMessage(Constant.ERROR_CODE, Constant.ERROR_MESSAGE, null);
     }
 
+    public static ResponseMessage errorWithMsg(String msg) {
+        return new ResponseMessage(Constant.ERROR_CODE, msg, null);
+    }
+
     public static ResponseMessage getResponseMessage(Object data){
         if (data!=null) {
             return success(data);

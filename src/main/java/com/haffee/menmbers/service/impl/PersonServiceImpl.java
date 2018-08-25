@@ -42,7 +42,7 @@ public class PersonServiceImpl implements PersonService {
      */
     @Override
     public User findOneUser(String id) {
-        Optional<User> o = userRepository.findById(Long.valueOf(id));
+        Optional<User> o = userRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             User u = o.get();
             Optional<Person> o_p = personRepository.findById(u.getPersonId());
@@ -69,7 +69,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public void updateUserInfo(User user, Person person){
         //更新用户表
-        Optional<User> o = userRepository.findById(new Long((long)user.getId()));
+        Optional<User> o = userRepository.findById(user.getId());
         if(o.isPresent()){
             User u_db = o.get();
             CopyProperties.copyPropertiesIgnoreNull(user,u_db);

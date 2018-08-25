@@ -15,7 +15,7 @@ import java.util.Date;
  * create by jacktong
  * date  2018/7/17 下午7:46
  **/
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User,Integer> {
 
     /**
      * 根据手机号查询用户
