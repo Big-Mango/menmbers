@@ -72,7 +72,7 @@ public class ShopController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseMessage addShop(@RequestBody Shop shop, @RequestBody AdminUser a_user) {
+    public ResponseMessage addShop( Shop shop,  AdminUser a_user) {
         try {
             shopService.addShop(a_user, shop);
             return ResponseMessage.success();
