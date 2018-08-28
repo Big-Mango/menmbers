@@ -42,7 +42,7 @@ public class DiscountConfigServiceImpl implements DiscountConfigService {
     public DiscountConfig update(DiscountConfig discountConfig){
         return discountConfigRepository.save(discountConfig);
     }
-    public void delete(DiscountConfig discountConfig){
-        discountConfigRepository.delete(discountConfig);
+    public void delete(int id){
+        discountConfigRepository.deleteById(id);
     }
 }

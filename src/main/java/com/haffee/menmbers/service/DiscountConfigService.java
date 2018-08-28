@@ -17,5 +17,5 @@ public interface DiscountConfigService {
     Page<DiscountConfig> findAll(Pageable pageable);
     DiscountConfig add(DiscountConfig discountConfigiscountConfig);
     DiscountConfig update(DiscountConfig discountConfig);
-    void delete(DiscountConfig discountConfig);
+    void delete(int id);
 }

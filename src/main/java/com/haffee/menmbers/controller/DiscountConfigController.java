@@ -1,8 +1,6 @@
 package com.haffee.menmbers.controller;
 
-import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.DiscountConfig;
-import com.haffee.menmbers.service.CardService;
 import com.haffee.menmbers.service.DiscountConfigService;
 import com.haffee.menmbers.utils.ResponseMessage;
 import org.springframework.data.domain.Page;
@@ -11,7 +9,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Optional;
 
 /**
 * @Description:    优惠管理
@@ -34,8 +31,14 @@ public class DiscountConfigController {
     @PostMapping("/findAll")
     public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
-            Page<DiscountConfig> pageCard = discountConfigService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
-            return ResponseMessage.getResponseMessage(pageCard);
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
+            Page<DiscountConfig> pageDiscount = discountConfigService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(pageDiscount);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
@@ -87,9 +90,9 @@ public class DiscountConfigController {
     * @date        2018/7/29 11:09
     */
     @PostMapping("/delete")
-    public ResponseMessage delete(@RequestBody DiscountConfig discountConfig){
+    public ResponseMessage delete(int id){
         try {
-            discountConfigService.delete(discountConfig);
+            discountConfigService.delete(id);
             return ResponseMessage.success();
         }catch (Exception e) {
             e.printStackTrace();
