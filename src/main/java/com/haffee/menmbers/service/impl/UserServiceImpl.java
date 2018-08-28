@@ -270,7 +270,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Page<AdminUser> findAdminUser(Pageable pageable, int type){
-        Page<AdminUser> page = adminUserRepository.findByType(type,pageable);
+        Page<AdminUser> page = adminUserRepository.findAllByType(type,pageable);
         if(type==2){
             List<AdminUser> list = page.getContent();
             for(AdminUser a_u : list){
@@ -425,6 +425,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public AdminUser findAdminUser(String userPhone) throws Exception {
         return adminUserRepository.findAdminUser(userPhone,"9");
+    }
+
+    /**
+     * 删除管理账户
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void deleteAdmin(int id) throws Exception {
+        adminUserRepository.deleteById(id);
     }
 
 

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -210,10 +211,19 @@ public class UserController {
      * @param sort
      * @return
      */
-    @GetMapping("/admin/findAll")
-    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort) {
+    @PostMapping("/admin/findAll")
+    public ResponseMessage findAll(int page, int size, String sort) {
         try {
-            Page<AdminUser> p = userService.findAdminUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)), 9);
+//            if(StringUtils.isEmpty(sort)){
+//                sort = "id";
+//            }
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
+            Page<AdminUser> p = userService.findAdminUser(PageRequest.of(page, size), 9);
             return ResponseMessage.success(p);
         } catch (Exception e) {
             e.printStackTrace();
@@ -302,6 +312,22 @@ public class UserController {
         try {
             User responseUser = userService.update(person,card,user);
             return ResponseMessage.getResponseMessage(responseUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 删除管理账户
+     * @param id
+     * @return
+     */
+    @PostMapping("/admin/delete")
+    public ResponseMessage deleteAdmin(int id){
+        try {
+            userService.deleteAdmin(id);
+            return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

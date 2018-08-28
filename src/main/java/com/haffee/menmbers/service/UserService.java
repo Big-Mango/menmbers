@@ -48,4 +48,6 @@ public interface UserService {
     User update(Person person, Card card, User user) throws Exception;
 
     AdminUser findAdminUser(String userPhone) throws Exception;
+
+    void deleteAdmin(int id) throws Exception;
 }

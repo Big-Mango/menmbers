@@ -48,7 +48,10 @@ public interface AdminUserRepository extends JpaRepository<AdminUser,Integer> {
      * @param pageable
      * @return
      */
-    Page<AdminUser> findByType(int type, Pageable pageable);
+    @Query(value = "SELECT * FROM admin_user WHERE type = ?1",
+            countQuery = "SELECT count(*) FROM admin_user WHERE type = ?1",
+            nativeQuery = true)
+    Page<AdminUser> findAllByType(int type, Pageable pageable);
 
 
 }
