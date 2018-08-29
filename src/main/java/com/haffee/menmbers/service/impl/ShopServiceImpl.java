@@ -41,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
         }
 
         //更新店铺信息
-        Optional<Shop> o_s = shopRepository.findById(Long.valueOf(shop.getId()));
+        Optional<Shop> o_s = shopRepository.findById(Integer.valueOf(shop.getId()));
         if(o_s.isPresent()){
             Shop s = o_s.get();
             CopyProperties.copyPropertiesIgnoreNull(shop,s);
@@ -71,5 +71,22 @@ public class ShopServiceImpl implements ShopService {
         adminUserRepository.save(a_user);
         SmsUtils.singleSend(a_user.getUserPhone(),msg);
 
+    }
+
+    /**
+     * 删除店铺
+     * @param shop_id
+     * @param a_user_id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void deleteShop(int shop_id, int a_user_id){
+            Shop s = new Shop();
+            s.setId(shop_id);
+            shopRepository.delete(s);
+            AdminUser a = new AdminUser();
+            a.setId(a_user_id);
+            adminUserRepository.delete(a);
     }
 }

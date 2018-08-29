@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * date 2018/7/17 下午7:45
  **/
 
-public interface ShopRepository extends JpaRepository<Shop,Long> {
+public interface ShopRepository extends JpaRepository<Shop,Integer> {
 }

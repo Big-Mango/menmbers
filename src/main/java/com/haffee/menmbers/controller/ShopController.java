@@ -87,14 +87,36 @@ public class ShopController {
      * 查询所有店铺
      * @param page
      * @param size
-     * @param sort
      * @return
      */
-    @GetMapping("/findAll")
-    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort){
+    @PostMapping("/findAll")
+    public ResponseMessage findAll(int page, int size){
         try {
-            Page<AdminUser> p = userService.findAdminUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)), 2);
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
+            Page<AdminUser> p = userService.findAdminUser(PageRequest.of(page, size), 2);
             return ResponseMessage.success(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 删除
+     * @param a_user_id
+     * @param shop_id
+     * @return
+     */
+    @PostMapping("/delete")
+    public ResponseMessage delete(int a_user_id,int shop_id){
+        try {
+            shopService.deleteShop(shop_id,a_user_id);
+            return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

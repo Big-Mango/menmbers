@@ -251,7 +251,7 @@ public class UserServiceImpl implements UserService {
         Optional<AdminUser> o = adminUserRepository.findById(Integer.valueOf(id));
         if(o.isPresent()){
             AdminUser a_user = o.get();
-            Optional<Shop> o_s = shopRepository.findById(Long.valueOf(a_user.getShopId()));
+            Optional<Shop> o_s = shopRepository.findById(Integer.valueOf(a_user.getShopId()));
             if(o_s.isPresent()){
                 a_user.setShop(o_s.get());
             }
@@ -274,7 +274,7 @@ public class UserServiceImpl implements UserService {
         if(type==2){
             List<AdminUser> list = page.getContent();
             for(AdminUser a_u : list){
-                Optional<Shop> o = shopRepository.findById(new Long((long)a_u.getShopId()));
+                Optional<Shop> o = shopRepository.findById(Integer.valueOf(a_u.getShopId()));
                 if(o.isPresent()){
                     a_u.setShop(o.get());
                 }
