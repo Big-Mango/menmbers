@@ -32,6 +32,12 @@ public class CardRechargeController {
     @PostMapping("/findAll")
     public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
             Page<CardRecharge> pageRecharge= cardRechargeService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
             return ResponseMessage.getResponseMessage(pageRecharge);
         }catch (Exception e) {

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
 * @Description:    优惠管理
@@ -53,8 +54,9 @@ public class DiscountConfigController {
     * @date        2018/7/29 11:00
     */
     @PostMapping("/add")
-    public ResponseMessage add(@RequestBody DiscountConfig discountConfig){
+    public ResponseMessage add(DiscountConfig discountConfig){
         try {
+            discountConfig.setCreateTime(new Date());
             DiscountConfig responseDiscountConfig = discountConfigService.add(discountConfig);
             return ResponseMessage.getResponseMessage(responseDiscountConfig);
         }catch (Exception e) {
