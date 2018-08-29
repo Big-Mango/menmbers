@@ -34,6 +34,12 @@ public class CardConsumeController {
     @PostMapping("/findAll")
     public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
             Page<CardConsume> pageConsume= cardConsumeService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
             return ResponseMessage.getResponseMessage(pageConsume);
         }catch (Exception e) {
@@ -88,6 +94,12 @@ public class CardConsumeController {
     @PostMapping("/findByUserPhone")
     public ResponseMessage findByUserPhone(@RequestParam String userPhone,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
             Page<CardConsume> cardRConsume = cardConsumeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
             return ResponseMessage.getResponseMessage(cardRConsume);
         }catch (Exception e) {

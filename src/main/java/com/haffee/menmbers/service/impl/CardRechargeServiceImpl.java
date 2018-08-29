@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -47,9 +49,14 @@ public class CardRechargeServiceImpl implements CardRechargeService {
         User user = userRepository.getUserByCardNo(cardRecharge.getCardNo());
         if(user!=null){
             //保存充值记录
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(new Date());
+            cardRecharge.setCreateTime(createTime);
+            cardRecharge.setPaymentTime(createTime);
             cardRecharge.setCardId(user.getCardId());
             cardRecharge.setUserId(user.getId());
             cardRecharge.setShopId(user.getShopId());
+            cardRecharge.setUserPhone(user.getUserPhone());
             responseCardRecharge = cardRechargeRepository.save(cardRecharge);
             //更新用户冻结状态，更新用户卡余额
             user.setStatus(1);

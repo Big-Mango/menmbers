@@ -9,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -54,7 +56,7 @@ public class CardRechargeController {
     * @date        2018/7/29 11:00
     */
     @PostMapping("/add")
-    public ResponseMessage add(@RequestBody CardRecharge cardRecharge){
+    public ResponseMessage add(CardRecharge cardRecharge){
         try {
             CardRecharge responseCardRecharge = cardRechargeService.add(cardRecharge);
             return ResponseMessage.getResponseMessage(responseCardRecharge);
@@ -92,6 +94,12 @@ public class CardRechargeController {
     @PostMapping("/findByUserPhone")
     public ResponseMessage findByUserPhone(@RequestParam String userPhone,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
         try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
             Page<CardRecharge> cardRecharge = cardRechargeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
             return ResponseMessage.getResponseMessage(cardRecharge);
         }catch (Exception e) {

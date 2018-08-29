@@ -32,11 +32,11 @@ public class CardRecharge {
     private String cardNo;
     private int shopId;
     private float fee;
-    private Date createTime;
-    private Date paymentTime;
-    private int paymentStatus; //支付状态 1：支付成功 0：待支付，-1：支付失败
+    private String createTime;
+    private String paymentTime;
+    private int paymentStatus=1; //支付状态 1：支付成功 0：待支付，-1：支付失败
     private String orderDesc;
     private int discountId=0;//折扣方案 关联config
-    private float discountFee; //折扣金额
+    private float discountFee=0; //折扣金额
     private String discountDesc; //折扣描述
 }
