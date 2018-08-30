@@ -241,6 +241,12 @@ public class UserController {
     @PostMapping("/customer/findAllUser")
     public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort) {
         try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
             Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
             return ResponseMessage.getResponseMessage(pageUser);
         } catch (Exception e) {

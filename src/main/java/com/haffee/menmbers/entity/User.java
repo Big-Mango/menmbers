@@ -36,6 +36,7 @@ public class User {
     private int personId = 0 ;
     private int cardId = 0; //会员卡ID
     private int shopId = 0;//商户id
+    private String createTime;//创建时间
     private Date lastLoginTime;
     private String loginKey; //登录时候标识
     @Transient
