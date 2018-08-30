@@ -33,7 +33,7 @@ public class ShopServiceImpl implements ShopService {
     public int updateShopInfo(AdminUser a_user, Shop shop){
 
         //更新账户
-        Optional<AdminUser> o_a_u = adminUserRepository.findById(Integer.valueOf(a_user.getId()));
+        Optional<AdminUser> o_a_u = adminUserRepository.findById(a_user.getId());
         if(o_a_u.isPresent()){
             AdminUser a_u = o_a_u.get();
             CopyProperties.copyPropertiesIgnoreNull(a_user,a_u);
@@ -41,7 +41,7 @@ public class ShopServiceImpl implements ShopService {
         }
 
         //更新店铺信息
-        Optional<Shop> o_s = shopRepository.findById(Integer.valueOf(shop.getId()));
+        Optional<Shop> o_s = shopRepository.findById(shop.getId());
         if(o_s.isPresent()){
             Shop s = o_s.get();
             CopyProperties.copyPropertiesIgnoreNull(shop,s);
