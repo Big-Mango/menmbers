@@ -52,10 +52,12 @@ public class ShopController {
      * @return
      */
     @PostMapping("/update")
-    public ResponseMessage updateShop(@RequestBody Shop shop, @RequestBody AdminUser a_user, int a_user_id, int shop_id) {
+    public ResponseMessage updateShop(Shop shop, AdminUser a_user, int a_user_id, int shop_id) {
         try {
             shop.setId(shop_id);
             a_user.setId(a_user_id);
+            a_user.setType(2);
+            a_user.setShopId(shop_id);
             shopService.updateShopInfo(a_user, shop);
             return ResponseMessage.success();
         } catch (Exception e) {
