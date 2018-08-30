@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private CardRechargeRepository cardRechargeRepository;
 
     @Autowired
     private PersonRepository personRepository;
@@ -360,33 +364,76 @@ public class UserServiceImpl implements UserService {
     }
     /**
      * 新增会员信息
-     * @param person
-     * @param card
+     * @param realName
+     * @param phoneNo
+     * @param cardNo
+     * @param cardType
+     * @param fee
+     * @param ifDiscount
+     * @param shopId
      * @return
      * @throws Exception
      */
-    public User add(Person person, Card card) throws Exception{
+    public User add(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) throws Exception{
+        float discountFee = 0;
+        if("1".equals(ifDiscount)){
+            discountFee = 0;
+        }else{
+            discountFee = 0;
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = sdf.format(new Date());
         //保存person信息
+        Person person = new Person();
+        person.setRealName(realName);
+        person.setPhoneNo(phoneNo);
         Person responsePerson = personRepository.save(person);
         //保存card信息
+        Card card = new Card();
+        card.setCardStatus(1);
+        card.setCardNo(cardNo);
+        card.setCardType(cardType);
+        card.setCardCreateTime(new Date());
+        card.setShopId(shopId);
         Card responseCard = cardRepository.save(card);
         //保存user信息
-        User user = null;
+        User user = new User();
         if (responsePerson!=null&&responseCard!=null){
             int pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
             String password = Md5Utils.getMD5(pre_psw + "");
             user.setPassword(password);
             user.setUserPhone(responsePerson.getPhoneNo());
-            user.setBalance(0);
+            user.setBalance(fee+discountFee);
             user.setStatus(1);
             user.setPersonId(responsePerson.getId());
             user.setCardId(responseCard.getId());
             user.setShopId(responseCard.getShopId());
+            user.setCreateTime(createTime);
             User responseUser = userRepository.save(user);
-//            if(responseUser!=null){
+            if(responseUser!=null){
+                //保存充值信息
+                CardRecharge recharge = new CardRecharge();
+                recharge.setCardId(responseCard.getId());
+                recharge.setUserPhone(phoneNo);
+                recharge.setUserId(responseUser.getId());
+                recharge.setShopId(shopId);
+                recharge.setFee(fee);
+                recharge.setCardNo(cardNo);
+                recharge.setCreateTime(createTime);
+                recharge.setPaymentStatus(1);
+                //有优惠
+                if("1".equals(ifDiscount)){
+                    //此处待讨论
+                    recharge.setDiscountId(0);
+                    recharge.setDiscountFee(discountFee);
+                }else{
+                    recharge.setDiscountId(0);
+                    recharge.setDiscountFee(0);
+                }
+                cardRechargeRepository.save(recharge);
 //                String sms_content = "聚巷客栈会员用户" + person.getPhoneNo() + "您好：您的账户已经创建成功，登录用户名：" + person.getPhoneNo() + ",密码：" + pre_psw + ",请妥善保管！";
 //                SmsUtils.singleSend(person.getPhoneNo(), sms_content);
-//            }
+            }
             return responseUser;
         }else{
             return user;
@@ -436,6 +483,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAdmin(int id) throws Exception {
         adminUserRepository.deleteById(id);
+    }
+
+    /**
+     * 删除会员
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public void deleteCustomer(int id) throws Exception {
+        userRepository.deleteById(id);
     }
 
 
