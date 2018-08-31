@@ -73,7 +73,7 @@ public class DiscountConfigController {
      * @date        2018/7/29 11:00
      */
     @PostMapping("/update")
-    public ResponseMessage update(@RequestBody DiscountConfig discountConfig){
+    public ResponseMessage update(DiscountConfig discountConfig){
         try {
             DiscountConfig responseDiscountConfig = discountConfigService.update(discountConfig);
             return ResponseMessage.getResponseMessage(responseDiscountConfig);
