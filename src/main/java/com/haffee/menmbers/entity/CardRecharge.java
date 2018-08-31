@@ -37,9 +37,5 @@ public class CardRecharge {
     private float discountFee=0; //折扣金额
     private String discountDesc; //折扣描述
     @Transient
-    private Person person;
-    @Transient
-    private Card card;
-    @Transient
     private User user;
 }
