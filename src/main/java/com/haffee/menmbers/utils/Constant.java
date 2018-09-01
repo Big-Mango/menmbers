@@ -23,5 +23,15 @@ public class Constant {
 	 * 失败描述
 	 */
 	public static final String ERROR_MESSAGE = "error";
+
+	/**
+	 * 微信公众号 app_id
+	 */
+	public static final String WECHAT_APP_ID = "app_id";
+
+	/**
+	 * 微信公众号 秘钥
+	 */
+	public static final String WECHAT_SECRET = "secret";
 	
 }

@@ -470,7 +470,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public AdminUser findAdminUser(String userPhone) throws Exception {
+    public AdminUser findAdminUser(String userPhone){
         return adminUserRepository.findAdminUser(userPhone,"9");
     }
 
@@ -481,7 +481,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public void deleteAdmin(int id) throws Exception {
+    public void deleteAdmin(int id){
         adminUserRepository.deleteById(id);
     }
 
