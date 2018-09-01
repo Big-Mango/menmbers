@@ -43,11 +43,13 @@ public interface UserService {
 
     User findOneUser(int userId) throws Exception;
 
-    User add(Person person, Card card) throws Exception;
+    User add(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) throws Exception;
 
     User update(Person person, Card card, User user) throws Exception;
 
     AdminUser findAdminUser(String userPhone) throws Exception;
 
     void deleteAdmin(int id) throws Exception;
+
+    void deleteCustomer(int id) throws Exception;
 }

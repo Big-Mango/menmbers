@@ -292,14 +292,19 @@ public class UserController {
 
     /**
      * 新增会员用户
-     * @param person
-     * @param card
+     * @param realName
+     * @param phoneNo
+     * @param cardNo
+     * @param cardType
+     * @param fee
+     * @param ifDiscount
+     * @param shopId
      * @return
      */
     @PostMapping("/customer/add")
-    public ResponseMessage addUser(@RequestBody Person person, @RequestBody Card card) {
+    public ResponseMessage addUser(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) {
         try {
-            User user = userService.add(person,card);
+            User user = userService.add(realName,phoneNo,cardNo,cardType,fee,ifDiscount,shopId);
             return ResponseMessage.getResponseMessage(user);
         } catch (Exception e) {
             e.printStackTrace();
@@ -333,6 +338,22 @@ public class UserController {
     public ResponseMessage deleteAdmin(int id){
         try {
             userService.deleteAdmin(id);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 删除会员
+     * @param id
+     * @return
+     */
+    @PostMapping("/customer/delete")
+    public ResponseMessage deleteCustomer(int id){
+        try {
+            userService.deleteCustomer(id);
             return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();

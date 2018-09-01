@@ -27,7 +27,7 @@ public class DiscountConfig {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; //主键唯一标识
     private String name;//优惠名称
-    private int shopId=1;
+    private int shopId;
     private float fullMoney; //满
     private float addMoney; //送
     private Date createTime;

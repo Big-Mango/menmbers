@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -40,4 +37,6 @@ public class CardConsume {
     private int paymentWay=0; //默认0，如果充值，10：现金，20：微信静态码，21：微信收款，30：支付宝静态码，31：支付宝收款，90：其他
     private int shopId;//消费店铺
     private String orderId;//消费订单id
+    @Transient
+    private User user;
 }

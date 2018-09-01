@@ -1,8 +1,9 @@
 package com.haffee.menmbers.service.impl;
 
-import com.haffee.menmbers.entity.CardConsume;
-import com.haffee.menmbers.entity.User;
+import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.CardConsumeRepository;
+import com.haffee.menmbers.repository.CardRepository;
+import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CardConsumeService;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -29,8 +31,32 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Resource
     private UserRepository userRepository;
 
+    @Resource
+    private PersonRepository personRepository;
+
+    @Resource
+    private CardRepository cardRepository;
+
     public Page<CardConsume> findAll(Pageable pageable) {
-        return cardConsumeRepository.findAll(pageable);
+        Page<CardConsume> page = cardConsumeRepository.findAll(pageable);
+        if (page != null) {
+            List<CardConsume> list = page.getContent();
+            for (CardConsume cardConsume : list) {
+                User user = userRepository.getUserByCardNo(cardConsume.getCardNo());
+                if(user!=null){
+                    Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
+                    if (optionalPerson.isPresent()) {
+                        user.setPerson(optionalPerson.get());
+                    }
+                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+                    if (optionalCard.isPresent()) {
+                        user.setCard(optionalCard.get());
+                    }
+                    cardConsume.setUser(user);
+                }
+            }
+        }
+        return page;
     }
 
     public Page<CardConsume> findByCardNo(String cardNo, Pageable pageable) {

@@ -1,8 +1,12 @@
 package com.haffee.menmbers.service.impl;
 
+import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.CardRecharge;
+import com.haffee.menmbers.entity.Person;
 import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.CardRechargeRepository;
+import com.haffee.menmbers.repository.CardRepository;
+import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CardRechargeService;
 import org.springframework.data.domain.Page;
@@ -13,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -31,8 +36,32 @@ public class CardRechargeServiceImpl implements CardRechargeService {
     @Resource
     private UserRepository userRepository;
 
+    @Resource
+    private PersonRepository personRepository;
+
+    @Resource
+    private CardRepository cardRepository;
+
     public Page<CardRecharge> findAll(Pageable pageable) {
-        return cardRechargeRepository.findAll(pageable);
+        Page<CardRecharge> page = cardRechargeRepository.findAll(pageable);
+        if (page != null) {
+            List<CardRecharge> list = page.getContent();
+            for (CardRecharge cardRecharge : list) {
+                User user = userRepository.getUserByCardNo(cardRecharge.getCardNo());
+                if(user!=null){
+                    Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
+                    if (optionalPerson.isPresent()) {
+                        user.setPerson(optionalPerson.get());
+                    }
+                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+                    if (optionalCard.isPresent()) {
+                        user.setCard(optionalCard.get());
+                    }
+                    cardRecharge.setUser(user);
+                }
+            }
+        }
+        return page;
     }
 
     public Page<CardRecharge> findByCardNo(String cardNo,Pageable pageable) {
@@ -40,7 +69,25 @@ public class CardRechargeServiceImpl implements CardRechargeService {
     }
 
     public Page<CardRecharge> findByUserPhone(String userPhone,Pageable pageable){
-        return cardRechargeRepository.findByUserPhone(userPhone,pageable);
+        Page<CardRecharge> page = cardRechargeRepository.findByUserPhone(userPhone,pageable);
+        if (page != null) {
+            List<CardRecharge> list = page.getContent();
+            for (CardRecharge cardRecharge : list) {
+                User user = userRepository.getUserByCardNo(cardRecharge.getCardNo());
+                if(user!=null){
+                    Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
+                    if (optionalPerson.isPresent()) {
+                        user.setPerson(optionalPerson.get());
+                    }
+                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+                    if (optionalCard.isPresent()) {
+                        user.setCard(optionalCard.get());
+                    }
+                    cardRecharge.setUser(user);
+                }
+            }
+        }
+        return page;
     }
 
     public CardRecharge add(CardRecharge cardRecharge) {
