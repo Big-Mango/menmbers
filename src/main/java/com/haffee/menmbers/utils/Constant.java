@@ -39,6 +39,16 @@ public class Constant {
 
 	/*****************************短信相关*****************************************/
 	/**
+	 * 短信账户
+	 */
+	public static final String SMS_USER_ID = "sms_user_id";
+
+	/**
+	 * 短信账户密码
+	 */
+	public static final String SMS_PSW = "sms_user_pwd";
+
+	/**
 	 * 管理员账户开通通知模板ID
 	 */
 	public static final String SMS_ADMIN_ACCOUNT_ADD = "admin_account_add";

@@ -16,9 +16,9 @@ import java.util.List;
 public class SmsUtils {
     // 日期格式定义
     private static SimpleDateFormat	sdf						= new SimpleDateFormat("MMddHHmmss");
-    private static String userid = "E102HW";
+    private static String userid = ConfigUtils.getSms_user_id();// "E102HW";
     // 用户密码
-    private static String pwd = "6ZvXzY";
+    private static String pwd = ConfigUtils.getSms_user_pwd();//"6ZvXzY";
 
     //主IP信息  必填
     private static String masterIpAddress="api02.monyun.cn:7901/sms/v2/std/";
