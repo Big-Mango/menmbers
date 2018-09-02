@@ -3,6 +3,7 @@ package com.haffee.menmbers.service.impl;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.UserService;
+import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.Md5Utils;
 import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.UuidUtils;
@@ -152,8 +153,15 @@ public class UserServiceImpl implements UserService {
         a_user_new.setStatus(1);
         adminUserRepository.save(a_user_new);
         //发短信
-        String sms_content = "聚巷客栈会员系统管理员"+userPhone+"您好：您的账户已经创建成功，登录用户名："+userPhone+",密码："+pre_psw+",请妥善保管！";
-        SmsUtils.singleSend(userPhone,sms_content);
+        StringBuffer sms_content = new StringBuffer();
+        String sms_content_template = ConfigUtils.getAdmin_account_add();
+        if(null!=sms_content_template){
+            String [] a = sms_content_template.split("&");
+            sms_content.append(a[0]+userPhone+a[1]+userPhone+a[2]+pre_psw);
+            SmsUtils.singleSend(userPhone,sms_content.toString());
+        }
+        //String sms_content = "聚巷客栈会员系统管理员"+userPhone+"您好：您的账户已经创建成功，登录用户名："+userPhone+",密码："+pre_psw+",请妥善保管！";
+
         return 0;
     }
 
@@ -492,7 +500,7 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public void deleteCustomer(int id) throws Exception {
+    public void deleteCustomer(int id){
         userRepository.deleteById(id);
     }
 
