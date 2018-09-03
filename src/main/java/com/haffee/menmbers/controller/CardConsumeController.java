@@ -56,7 +56,7 @@ public class CardConsumeController {
     * @date        2018/8/6 11:00
     */
     @PostMapping("/add")
-    public ResponseMessage add(@RequestBody CardConsume cardConsume){
+    public ResponseMessage add(CardConsume cardConsume){
         try {
             CardConsume responseCardConsume = cardConsumeService.add(cardConsume);
             return ResponseMessage.getResponseMessage(responseCardConsume);
@@ -100,8 +100,8 @@ public class CardConsumeController {
             if(size==0){
                 size = 10;
             }
-            Page<CardConsume> cardRConsume = cardConsumeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
-            return ResponseMessage.getResponseMessage(cardRConsume);
+            Page<CardConsume> cardConsume = cardConsumeService.findByUserPhone(userPhone,PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            return ResponseMessage.getResponseMessage(cardConsume);
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

@@ -56,7 +56,6 @@ public class DiscountConfigController {
     @PostMapping("/add")
     public ResponseMessage add(DiscountConfig discountConfig){
         try {
-            discountConfig.setCreateTime(new Date());
             DiscountConfig responseDiscountConfig = discountConfigService.add(discountConfig);
             return ResponseMessage.getResponseMessage(responseDiscountConfig);
         }catch (Exception e) {

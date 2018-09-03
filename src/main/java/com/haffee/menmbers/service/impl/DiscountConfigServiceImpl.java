@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Optional;
 
 /**
@@ -36,6 +38,9 @@ public class DiscountConfigServiceImpl implements DiscountConfigService {
         if(discountConfigRepository.exists(Example.of(discountConfig))){
             return null;
         }else{
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(new Date());
+            discountConfig.setCreateTime(createTime);
             return discountConfigRepository.save(discountConfig);
         }
     }

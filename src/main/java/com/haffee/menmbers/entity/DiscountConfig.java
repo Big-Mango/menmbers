@@ -30,9 +30,9 @@ public class DiscountConfig {
     private int shopId;
     private float fullMoney; //满
     private float addMoney; //送
-    private Date createTime;
+    private String createTime;
     private int status=1; //1：生效，-1 不生效
     private int validType=1; //1:一直有效，2：时间段有效
-    private Date startDate; //开始时间
-    private Date endDate; //结束时间
+    private String startDate; //开始时间
+    private String endDate; //结束时间
 }

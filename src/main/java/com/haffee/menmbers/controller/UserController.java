@@ -267,7 +267,12 @@ public class UserController {
     public ResponseMessage findOneByUserPhone(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone) {
         try {
             Page<User> pageUser = userService.findOneUserByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone);
-            return ResponseMessage.getResponseMessage(pageUser);
+            if(pageUser.getContent().size()>0){
+                return ResponseMessage.getResponseMessage(pageUser.getContent().get(0));
+            }else{
+                return null;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

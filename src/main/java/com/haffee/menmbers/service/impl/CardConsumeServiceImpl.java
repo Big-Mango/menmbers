@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,17 +72,22 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     public CardConsume add(CardConsume cardConsume) {
         CardConsume responseCardConsume = null;
         //根据cardNo获取user信息
-        User user = userRepository.getUserByCardNo(cardConsume.getCardNo());
+        User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
         if(user!=null){
             //保存消费记录
             cardConsume.setCardId(user.getCardId());
-//            cardConsume.setShopId(user.getShopId()); 可以在连锁家消费，不一定是开卡家
+            cardConsume.setCardNo(cardConsume.getCardNo());
+            cardConsume.setShopId(user.getShopId());
             cardConsume.setUserId(user.getId());
             cardConsume.setUserPhone(user.getUserPhone());
+            cardConsume.setPayFee(cardConsume.getPayFee());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(new Date());
+            cardConsume.setCreateTime(createTime);
             responseCardConsume = cardConsumeRepository.save(cardConsume);
             //更新用户卡余额
-//            user.setBalance(user.getBalance()-cardConsume.getPayFee());
-//            userRepository.save(user);
+            user.setBalance(user.getBalance()-cardConsume.getPayFee());
+            userRepository.save(user);
         }
         return responseCardConsume;
     }
