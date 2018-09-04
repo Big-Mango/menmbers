@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * create by jacktong
@@ -44,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private DiscountConfigRepository discountConfigRepository;
 
 
     /**
@@ -384,10 +385,29 @@ public class UserServiceImpl implements UserService {
      */
     public User add(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) throws Exception{
         float discountFee = 0;
+        int discountId = 0 ;
+        String discountDesc = "";
+        //有折扣信息
         if("1".equals(ifDiscount)){
-            discountFee = 0;
-        }else{
-            discountFee = 0;
+            //获取最匹配的优惠方案
+            List<DiscountConfig> list = discountConfigRepository.findByFullMoney(fee);
+            HashMap<Float,Integer> map = new HashMap();
+            //将fee与每一个方案的折扣价格做差，取绝对值(其实正常不取绝对值也是个大于等于0的数)
+            for(DiscountConfig discountConfig : list){
+                map.put(Math.abs(fee-discountConfig.getFullMoney()),discountConfig.getId());
+            }
+            if(!map.isEmpty()){
+                //此处用Collections.min方法取集合中的最小值
+                float rightKey = Collections.min(map.keySet()).floatValue();
+                //取最合适方案的id
+                int rightId = map.get(rightKey);
+                Optional<DiscountConfig> discountConfig = discountConfigRepository.findById(rightId);
+                if(discountConfig.isPresent()){
+                    discountId = discountConfig.get().getId();
+                    discountFee = discountConfig.get().getAddMoney();
+                    discountDesc = discountConfig.get().getName();
+                }
+            }
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String createTime = sdf.format(new Date());
@@ -429,15 +449,9 @@ public class UserServiceImpl implements UserService {
                 recharge.setCardNo(cardNo);
                 recharge.setCreateTime(createTime);
                 recharge.setPaymentStatus(1);
-                //有优惠
-                if("1".equals(ifDiscount)){
-                    //此处待讨论
-                    recharge.setDiscountId(0);
-                    recharge.setDiscountFee(discountFee);
-                }else{
-                    recharge.setDiscountId(0);
-                    recharge.setDiscountFee(0);
-                }
+                recharge.setDiscountId(discountId);
+                recharge.setDiscountFee(discountFee);
+                recharge.setDiscountDesc(discountDesc);
                 cardRechargeRepository.save(recharge);
 //                String sms_content = "聚巷客栈会员用户" + person.getPhoneNo() + "您好：您的账户已经创建成功，登录用户名：" + person.getPhoneNo() + ",密码：" + pre_psw + ",请妥善保管！";
 //                SmsUtils.singleSend(person.getPhoneNo(), sms_content);
