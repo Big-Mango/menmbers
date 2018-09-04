@@ -33,5 +33,6 @@ public class Card {
     private int cardType=1;//卡状态 1:储值卡 2:折扣卡
     private String remark;
     private float balance = 0; //余额
+    private int jifen = 0;//积分
     private int userId; //user标识
 }
