@@ -12,5 +12,9 @@ import java.util.List;
 
 public interface BaseService {
 
-    List<SysCode> selectByCode(String code) throws Exception;
+    List<SysCode> selectByCode(String code);
+
+    void sendCheckCode(String phone);
+
+    boolean doCheckCode(String phone,String code);
 }

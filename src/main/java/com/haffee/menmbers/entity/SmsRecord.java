@@ -30,7 +30,7 @@ public class SmsRecord {
     private String validCode; //验证码
     private String phone;
     private String content;
-    private int status; //0:发送中，1：成功
+    private int status; //0:无效效，1：有效
     private Date createTime;
     private Date successTime;
 
