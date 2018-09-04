@@ -48,5 +48,6 @@ public class User {
     private Card card; //废弃
     @Transient
     private List<Card> card_list;
+    private int jifen = 0; //平台积分
 
 }
