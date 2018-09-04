@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * create by jacktong
@@ -36,13 +37,16 @@ public class User {
     private int status = 1; //状态 1：正常 0 冻结 -1 作废
     private String remark; //备注
     private int personId = 0 ;
-    private int cardId = 0; //会员卡ID
-    private int shopId = 0;//商户id
+    private int cardId = 0; //会员卡ID --废弃
+    private int shopId = 0;//商户id --废弃
     private String createTime;//创建时间
     private Date lastLoginTime;
     private String loginKey; //登录时候标识
     @Transient
     private Person person;
     @Transient
-    private Card card;
+    private Card card; //废弃
+    @Transient
+    private List<Card> card_list;
+
 }
