@@ -49,10 +49,10 @@ public class PersonServiceImpl implements PersonService {
             if(o_p.isPresent()){
                 u.setPerson(o_p.get());
             }
-            Optional<Card> o_c = cardRepository.findById(u.getCardId());
-            if(o_c.isPresent()){
-                u.setCard(o_c.get());
-            }
+//            Optional<Card> o_c = cardRepository.findById(u.getCardId());
+//            if(o_c.isPresent()){
+//                u.setCard(o_c.get());
+//            }
             return u;
         }else{
             return null;

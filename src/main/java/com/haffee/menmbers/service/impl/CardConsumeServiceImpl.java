@@ -50,10 +50,10 @@ public class CardConsumeServiceImpl implements CardConsumeService {
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
                     }
-                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-                    if (optionalCard.isPresent()) {
-                        user.setCard(optionalCard.get());
-                    }
+//                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+//                    if (optionalCard.isPresent()) {
+//                        user.setCard(optionalCard.get());
+//                    }
                     cardConsume.setUser(user);
                 }
             }
@@ -77,7 +77,7 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             //保存消费记录
             cardConsume.setCardId(user.getCardId());
             cardConsume.setCardNo(cardConsume.getCardNo());
-            cardConsume.setShopId(user.getShopId());
+            //cardConsume.setShopId(user.getShopId());
             cardConsume.setUserId(user.getId());
             cardConsume.setUserPhone(user.getUserPhone());
             cardConsume.setPayFee(cardConsume.getPayFee());
@@ -86,7 +86,7 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             cardConsume.setCreateTime(createTime);
             responseCardConsume = cardConsumeRepository.save(cardConsume);
             //更新用户卡余额
-            user.setBalance(user.getBalance()-cardConsume.getPayFee());
+            //user.setBalance(user.getBalance()-cardConsume.getPayFee());
             userRepository.save(user);
         }
         return responseCardConsume;

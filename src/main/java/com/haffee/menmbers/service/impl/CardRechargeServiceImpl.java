@@ -53,10 +53,10 @@ public class CardRechargeServiceImpl implements CardRechargeService {
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
                     }
-                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-                    if (optionalCard.isPresent()) {
-                        user.setCard(optionalCard.get());
-                    }
+//                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+//                    if (optionalCard.isPresent()) {
+//                        user.setCard(optionalCard.get());
+//                    }
                     cardRecharge.setUser(user);
                 }
             }
@@ -79,10 +79,10 @@ public class CardRechargeServiceImpl implements CardRechargeService {
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
                     }
-                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-                    if (optionalCard.isPresent()) {
-                        user.setCard(optionalCard.get());
-                    }
+//                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
+//                    if (optionalCard.isPresent()) {
+//                        user.setCard(optionalCard.get());
+//                    }
                     cardRecharge.setUser(user);
                 }
             }
@@ -102,12 +102,12 @@ public class CardRechargeServiceImpl implements CardRechargeService {
             cardRecharge.setPaymentTime(createTime);
             cardRecharge.setCardId(user.getCardId());
             cardRecharge.setUserId(user.getId());
-            cardRecharge.setShopId(user.getShopId());
+//            cardRecharge.setShopId(user.getShopId());
             cardRecharge.setUserPhone(user.getUserPhone());
             responseCardRecharge = cardRechargeRepository.save(cardRecharge);
             //更新用户冻结状态，更新用户卡余额
             user.setStatus(1);
-            user.setBalance(user.getBalance()+cardRecharge.getFee()+cardRecharge.getDiscountFee());
+//            user.setBalance(user.getBalance()+cardRecharge.getFee()+cardRecharge.getDiscountFee());
             userRepository.save(user);
         }
         return responseCardRecharge;
