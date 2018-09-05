@@ -313,10 +313,6 @@ public class UserServiceImpl implements UserService {
                 if (optionalPerson.isPresent()) {
                     user.setPerson(optionalPerson.get());
                 }
-                Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-                if (optionalCard.isPresent()) {
-                    user.setCard(optionalCard.get());
-                }
             }
         }
         return page;
@@ -340,10 +336,6 @@ public class UserServiceImpl implements UserService {
                 if (optionalPerson.isPresent()) {
                     user.setPerson(optionalPerson.get());
                 }
-                Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-                if (optionalCard.isPresent()) {
-                    user.setCard(optionalCard.get());
-                }
             }
         }
         return page;
@@ -363,10 +355,6 @@ public class UserServiceImpl implements UserService {
             Optional<Person> optionalPerson = personRepository.findById(user.get().getPersonId());
             if (optionalPerson.isPresent()) {
                 user.get().setPerson(optionalPerson.get());
-            }
-            Optional<Card> optionalCard = cardRepository.findById(user.get().getCardId());
-            if (optionalCard.isPresent()) {
-                user.get().setCard(optionalCard.get());
             }
         }
         return user.get();
@@ -431,11 +419,11 @@ public class UserServiceImpl implements UserService {
             String password = Md5Utils.getMD5(pre_psw + "");
             user.setPassword(password);
             user.setUserPhone(responsePerson.getPhoneNo());
-            user.setBalance(fee+discountFee);
+            //user.setBalance(fee+discountFee);
             user.setStatus(1);
             user.setPersonId(responsePerson.getId());
             user.setCardId(responseCard.getId());
-            user.setShopId(responseCard.getShopId());
+            //user.setShopId(responseCard.getShopId());
             user.setCreateTime(createTime);
             User responseUser = userRepository.save(user);
             if(responseUser!=null){
@@ -477,7 +465,7 @@ public class UserServiceImpl implements UserService {
         //保存user信息
         if (responsePerson!=null&&responseCard!=null){
             user.setUserPhone(responsePerson.getPhoneNo());
-            user.setShopId(responseCard.getShopId());
+            //user.setShopId(responseCard.getShopId());
             User responseUser = userRepository.save(user);
             return responseUser;
         }else{
