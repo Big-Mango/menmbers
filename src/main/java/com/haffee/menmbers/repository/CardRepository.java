@@ -4,6 +4,8 @@ import com.haffee.menmbers.entity.Card;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
 * @Description:    java类作用描述
 * @Author:         liujia
@@ -12,4 +14,12 @@ import org.springframework.data.jpa.repository.Query;
 */
 public interface CardRepository extends JpaRepository<Card,Integer> {
     Card findByCardNo(String cardNo);
+
+    /**
+     * 根据用户ID查询名下会员卡 --add by jacktong 2018-9-5
+     * @param user_id
+     * @return
+     */
+    @Query(value = "select * from card where user_id = ?1",nativeQuery = true)
+    List<Card> findCardByUserId(int user_id);
 }

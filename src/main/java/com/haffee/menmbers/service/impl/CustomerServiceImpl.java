@@ -1,7 +1,9 @@
 package com.haffee.menmbers.service.impl;
 
+import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.Person;
 import com.haffee.menmbers.entity.User;
+import com.haffee.menmbers.repository.CardRepository;
 import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CustomerService;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -28,6 +31,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     @Override
     public User checkUserPhone(String phone_no, String openid,String access_token){
@@ -84,8 +90,9 @@ public class CustomerServiceImpl implements CustomerService {
                 personRepository.save(p);
 
             }
-
             userServiceRepository.save(user_db); //更新用户信息
+            List<Card> card_list = cardRepository.findCardByUserId(user_db.getId());
+            user_db.setCard_list(card_list);
         }
         return user_db;
     }
