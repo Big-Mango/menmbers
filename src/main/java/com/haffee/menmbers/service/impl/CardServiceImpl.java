@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -79,16 +80,17 @@ public class CardServiceImpl implements CardService {
         cardRepository.save(oldCard);
 
         //保存新卡信息,status为1：正常,shop为老卡的shopId
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = sdf.format(new Date());
         Card newCard = new Card();
         newCard.setCardNo(newCardNo);
         newCard.setCardStatus(1);
-        newCard.setCardCreateTime(new Date());
+        newCard.setCardType(oldCard.getCardType());
+        newCard.setCardCreateTime(createTime);
         newCard.setShopId(oldCard.getShopId());
-        Card finalCard = cardRepository.save(newCard);
-
-        //更新用户的关联卡信息
-        User user = userRepository.getUserByCardNo(oldCardNo);
-        user.setCardId(finalCard.getId());
-        userRepository.save(user);
+        newCard.setUserId(oldCard.getUserId());
+        newCard.setBalance(oldCard.getBalance());
+        newCard.setJifen(oldCard.getJifen());
+        cardRepository.save(newCard);
     }
 }

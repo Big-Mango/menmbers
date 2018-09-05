@@ -22,4 +22,13 @@ public interface CardRepository extends JpaRepository<Card,Integer> {
      */
     @Query(value = "select * from card where user_id = ?1",nativeQuery = true)
     List<Card> findCardByUserId(int user_id);
+
+    /**
+     * 根据userId,shopId查询会员卡信息 --add by liujia 2018-9-5
+     * @param userId
+     * @param shopId
+     * @return
+     */
+    @Query(value = "select * from card where user_id = ?1 and shop_id = ?2 and card_status = 1",nativeQuery = true)
+    Card findCardByUserIdShopId(int userId,int shopId);
 }

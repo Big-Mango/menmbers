@@ -239,7 +239,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/customer/findAllUser")
-    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort) {
+    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort,@RequestParam(defaultValue = "0") int shopId) {
         try {
             if(page>0){
                 page = page -1;
@@ -247,7 +247,7 @@ public class UserController {
             if(size==0){
                 size = 10;
             }
-            Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)));
+            Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),shopId);
             return ResponseMessage.getResponseMessage(pageUser);
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,15 +264,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/customer/findOneByUserPhone")
-    public ResponseMessage findOneByUserPhone(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone) {
+    public ResponseMessage findOneByUserPhone(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone,int shopId) {
         try {
-            Page<User> pageUser = userService.findOneUserByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone);
-            if(pageUser.getContent().size()>0){
-                return ResponseMessage.getResponseMessage(pageUser.getContent().get(0));
-            }else{
-                return null;
-            }
-
+            User user = userService.findOneUserByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone,shopId);
+            return ResponseMessage.getResponseMessage(user);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

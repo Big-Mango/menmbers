@@ -32,7 +32,7 @@ public class CardConsumeController {
     * @date        2018/8/6 10:47
     */
     @PostMapping("/findAll")
-    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
+    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort,int shopId){
         try {
             if(page>0){
                 page = page -1;
@@ -40,7 +40,7 @@ public class CardConsumeController {
             if(size==0){
                 size = 10;
             }
-            Page<CardConsume> pageConsume= cardConsumeService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            Page<CardConsume> pageConsume= cardConsumeService.findAllByShopId(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)),shopId);
             return ResponseMessage.getResponseMessage(pageConsume);
         }catch (Exception e) {
             e.printStackTrace();

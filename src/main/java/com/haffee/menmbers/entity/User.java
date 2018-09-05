@@ -36,14 +36,15 @@ public class User {
     private int status = 1; //状态 1：正常 0 冻结 -1
     private String remark; //备注
     private int personId = 0 ;
-    private int cardId = 0; //会员卡ID --废弃
     private String createTime;//创建时间
     private Date lastLoginTime;
     private String loginKey; //登录时候标识
     @Transient
     private Person person;
     @Transient
-    private List<Card> card_list;
+    private List<Card> card_list;//不区分店铺的情况
+    @Transient
+    private Card card;//此处用于存储固定店铺下的用户的唯一的会员卡信息
     private int jifen = 0; //平台积分
 
 }

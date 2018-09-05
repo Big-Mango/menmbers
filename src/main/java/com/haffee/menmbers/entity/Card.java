@@ -28,7 +28,7 @@ public class Card {
     private int id; //主键唯一标识
     private String cardNo;
     private int shopId;//商户id
-    private Date cardCreateTime; //发卡时间
+    private String cardCreateTime; //发卡时间
     private int cardStatus=1; //卡状态 1：正常，0 冻结，-1：挂失，-2 损坏
     private int cardType=1;//卡状态 1:储值卡 2:折扣卡
     private String remark;

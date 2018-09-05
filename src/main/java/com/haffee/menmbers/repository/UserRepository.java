@@ -42,7 +42,7 @@ public interface UserRepository extends JpaRepository<User,Integer> {
      * @param cardNo
      * @return
      */
-    @Query(value="select u from User u,Card c where u.cardId = c.id and c.cardNo = ?1")
+    @Query(value="select u from User u where exists (select 1 from Card c where u.id = c.userId and c.cardNo = ?1)")
     User getUserByCardNo(String cardNo);
 
     /**
@@ -52,5 +52,15 @@ public interface UserRepository extends JpaRepository<User,Integer> {
      */
     @Query(value="select u from User u where u.userPhone = ?1")
     Page<User> findAllByUserPhone(Pageable pageable,String userPhone);
+
+
+    /**
+     * 查询当前商户的所有用户
+     * @param pageable
+     * @param pageable
+     * @return
+     */
+    @Query(value = "select * from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1)",nativeQuery = true)
+    Page<User> findAllUser(Pageable pageable,int shopId);
 
 }

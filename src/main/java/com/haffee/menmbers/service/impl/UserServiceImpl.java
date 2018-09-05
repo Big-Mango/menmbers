@@ -304,15 +304,20 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public Page<User> findAllUser(Pageable pageable) {
-        Page<User> page = userRepository.findAll(pageable);
+    public Page<User> findAllUser(Pageable pageable,int shopId) {
+        Page<User> page = userRepository.findAllUser(pageable,shopId);
         if (page != null) {
             List<User> list = page.getContent();
             for (User user : list) {
+                //取人员信息
                 Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                 if (optionalPerson.isPresent()) {
                     user.setPerson(optionalPerson.get());
                 }
+                //取卡信息，注意此处加上了shopId的条件，否则会出现本店铺查询出别的店铺会员信息的问题
+                //也就是说固定店铺的每一个用户只有一张对应的会员卡
+                Card card = cardRepository.findCardByUserIdShopId(user.getId(),shopId);
+                user.setCard(card);
             }
         }
         return page;
@@ -327,18 +332,19 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public Page<User> findOneUserByUserPhone(Pageable pageable,String userPhone) {
-        Page<User> page = userRepository.findAllByUserPhone(pageable,userPhone);
-        if (page != null) {
-            List<User> list = page.getContent();
-            for (User user : list) {
+    public User findOneUserByUserPhone(Pageable pageable,String userPhone,int shopId) {
+        User user = userRepository.findByUserPhone(userPhone);
+        if (user != null) {
                 Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                 if (optionalPerson.isPresent()) {
                     user.setPerson(optionalPerson.get());
                 }
-            }
+                Card card = cardRepository.findCardByUserIdShopId(user.getId(),shopId);
+                if (card!=null) {
+                    user.setCard(card);
+                }
         }
-        return page;
+        return user;
     }
 
     /**
@@ -409,8 +415,9 @@ public class UserServiceImpl implements UserService {
         card.setCardStatus(1);
         card.setCardNo(cardNo);
         card.setCardType(cardType);
-        card.setCardCreateTime(new Date());
+        card.setCardCreateTime(createTime);
         card.setShopId(shopId);
+        card.setBalance(fee+discountFee);
         Card responseCard = cardRepository.save(card);
         //保存user信息
         User user = new User();
@@ -419,14 +426,15 @@ public class UserServiceImpl implements UserService {
             String password = Md5Utils.getMD5(pre_psw + "");
             user.setPassword(password);
             user.setUserPhone(responsePerson.getPhoneNo());
-            //user.setBalance(fee+discountFee);
             user.setStatus(1);
             user.setPersonId(responsePerson.getId());
-            user.setCardId(responseCard.getId());
-            //user.setShopId(responseCard.getShopId());
+//            user.setCardId(responseCard.getId());
             user.setCreateTime(createTime);
             User responseUser = userRepository.save(user);
             if(responseUser!=null){
+                //回写card表中的userId字段
+                responseCard.setUserId(responseUser.getId());
+                cardRepository.save(responseCard);
                 //保存充值信息
                 CardRecharge recharge = new CardRecharge();
                 recharge.setCardId(responseCard.getId());
@@ -436,6 +444,7 @@ public class UserServiceImpl implements UserService {
                 recharge.setFee(fee);
                 recharge.setCardNo(cardNo);
                 recharge.setCreateTime(createTime);
+                recharge.setPaymentTime(createTime);
                 recharge.setPaymentStatus(1);
                 recharge.setDiscountId(discountId);
                 recharge.setDiscountFee(discountFee);

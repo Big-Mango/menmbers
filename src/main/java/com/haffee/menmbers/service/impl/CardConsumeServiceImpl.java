@@ -39,21 +39,21 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Resource
     private CardRepository cardRepository;
 
-    public Page<CardConsume> findAll(Pageable pageable) {
-        Page<CardConsume> page = cardConsumeRepository.findAll(pageable);
+    public Page<CardConsume> findAllByShopId(Pageable pageable,int shopId) {
+        Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId,pageable);
         if (page != null) {
             List<CardConsume> list = page.getContent();
             for (CardConsume cardConsume : list) {
-                User user = userRepository.getUserByCardNo(cardConsume.getCardNo());
+                User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
                 if(user!=null){
                     Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
                     }
-//                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-//                    if (optionalCard.isPresent()) {
-//                        user.setCard(optionalCard.get());
-//                    }
+                    Optional<Card> optionalCard = cardRepository.findById(cardConsume.getCardId());
+                    if (optionalCard.isPresent()) {
+                        user.setCard(optionalCard.get());
+                    }
                     cardConsume.setUser(user);
                 }
             }
@@ -71,13 +71,17 @@ public class CardConsumeServiceImpl implements CardConsumeService {
 
     public CardConsume add(CardConsume cardConsume) {
         CardConsume responseCardConsume = null;
-        //根据cardNo获取user信息
+        //根据userPhone获取user信息
         User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
         if(user!=null){
+            //更新用户卡余额
+            Card card = cardRepository.findByCardNo(cardConsume.getCardNo());
+            card.setBalance(card.getBalance()-cardConsume.getPayFee());
+            cardRepository.save(card);
             //保存消费记录
-            cardConsume.setCardId(user.getCardId());
+            cardConsume.setCardId(card.getId());
             cardConsume.setCardNo(cardConsume.getCardNo());
-            //cardConsume.setShopId(user.getShopId());
+            cardConsume.setShopId(cardConsume.getShopId());
             cardConsume.setUserId(user.getId());
             cardConsume.setUserPhone(user.getUserPhone());
             cardConsume.setPayFee(cardConsume.getPayFee());
@@ -85,9 +89,6 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             String createTime = sdf.format(new Date());
             cardConsume.setCreateTime(createTime);
             responseCardConsume = cardConsumeRepository.save(cardConsume);
-            //更新用户卡余额
-            //user.setBalance(user.getBalance()-cardConsume.getPayFee());
-            userRepository.save(user);
         }
         return responseCardConsume;
     }

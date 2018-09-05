@@ -14,4 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface CardRechargeRepository extends JpaRepository<CardRecharge,Integer> {
     Page<CardRecharge> findByCardNo(String cardNo, Pageable pageable);
     Page<CardRecharge> findByUserPhone(String userPhone, Pageable pageable);
+    Page<CardRecharge> findByShopId(int shopId,Pageable pageable);
 }

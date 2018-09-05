@@ -14,7 +14,7 @@ import java.util.Optional;
 * @Version:        1.0
 */
 public interface CardRechargeService {
-    Page<CardRecharge> findAll(Pageable pageable);
+    Page<CardRecharge> findAllByShopId(Pageable pageable,int shopId);
     Page<CardRecharge> findByCardNo(String cardNo,Pageable pageable);
     Page<CardRecharge> findByUserPhone(String userPhone,Pageable pageable);
     CardRecharge add(CardRecharge cardRecharge);
