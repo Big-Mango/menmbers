@@ -44,7 +44,7 @@ public class BaseController {
      * @param phone
      * @return
      */
-    @GetMapping("/sms/sendCheckCode")
+    @PostMapping("/sms/sendCheckCode")
     public ResponseMessage sendCheckCode(String phone){
         try {
             baseService.sendCheckCode(phone);

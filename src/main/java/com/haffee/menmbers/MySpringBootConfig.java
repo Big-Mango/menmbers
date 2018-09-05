@@ -19,6 +19,9 @@ public class MySpringBootConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterception).addPathPatterns("/**").excludePathPatterns("/user/admin/login","/user/customer/login");
+        registry.addInterceptor(loginInterception).
+                addPathPatterns("/**").
+                excludePathPatterns("/user/admin/login",
+                        "/user/customer/login","/base/**");
     }
 }
