@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -35,4 +32,8 @@ public class Card {
     private float balance = 0; //余额
     private int jifen = 0;//积分
     private int userId; //user标识
+    private String qrCode; //二维码地址
+    private String barCode; // 条形码地址
+    @Transient
+    private Shop shop; //add by jacktong 2018-9-6
 }

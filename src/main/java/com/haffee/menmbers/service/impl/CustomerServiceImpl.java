@@ -2,9 +2,11 @@ package com.haffee.menmbers.service.impl;
 
 import com.haffee.menmbers.entity.Card;
 import com.haffee.menmbers.entity.Person;
+import com.haffee.menmbers.entity.Shop;
 import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.CardRepository;
 import com.haffee.menmbers.repository.PersonRepository;
+import com.haffee.menmbers.repository.ShopRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CustomerService;
 import com.haffee.menmbers.utils.HttpClientUtils;
@@ -34,6 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private ShopRepository shopRepository;
 
     @Override
     public User checkUserPhone(String phone_no, String openid,String access_token){
@@ -92,6 +97,12 @@ public class CustomerServiceImpl implements CustomerService {
             }
             userServiceRepository.save(user_db); //更新用户信息
             List<Card> card_list = cardRepository.findCardByUserId(user_db.getId());
+            for (Card card: card_list) {
+                Optional<Shop> optional = shopRepository.findById(card.getShopId());
+                if(optional.isPresent()){
+                    card.setShop(optional.get());
+                }
+            }
             user_db.setCard_list(card_list);
         }
         return user_db;

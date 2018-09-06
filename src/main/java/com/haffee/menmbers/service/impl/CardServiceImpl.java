@@ -1,9 +1,11 @@
 package com.haffee.menmbers.service.impl;
 
 import com.haffee.menmbers.entity.Card;
+import com.haffee.menmbers.entity.Shop;
 import com.haffee.menmbers.entity.SysCode;
 import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.CardRepository;
+import com.haffee.menmbers.repository.ShopRepository;
 import com.haffee.menmbers.repository.SysCodeRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.BaseService;
@@ -35,6 +37,9 @@ public class CardServiceImpl implements CardService {
     @Resource
     private UserRepository userRepository;
 
+    @Autowired
+    private ShopRepository shopRepository;
+
     public Page<Card> findAll(Pageable pageable) {
         return cardRepository.findAll(pageable);
     }
@@ -44,7 +49,14 @@ public class CardServiceImpl implements CardService {
     }
 
     public Optional<Card> findById(int id) {
-        return cardRepository.findById(id);
+        Optional<Card> o = cardRepository.findById(id); //modify by jacktong 2018-9-6 find card by id fill shop info
+        if(o.isPresent()){
+            Optional<Shop> o_s = shopRepository.findById(o.get().getShopId());
+            if(o_s.isPresent()){
+                o.get().setShop(o_s.get());
+            }
+        }
+        return o;
     }
 
     public Card add(Card card) {
