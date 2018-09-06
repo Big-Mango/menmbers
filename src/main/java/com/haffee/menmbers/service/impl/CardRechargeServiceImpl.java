@@ -38,6 +38,9 @@ public class CardRechargeServiceImpl implements CardRechargeService {
     @Resource
     private DiscountConfigRepository discountConfigRepository;
 
+    @Autowired
+    private ShopRepository shopRepository; //add by jacktong
+
     public Page<CardRecharge> findAllByShopId(Pageable pageable,int shopId) {
         Page<CardRecharge> page = cardRechargeRepository.findByShopId(shopId,pageable);
         if (page != null) {
@@ -75,10 +78,16 @@ public class CardRechargeServiceImpl implements CardRechargeService {
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
                     }
-//                    Optional<Card> optionalCard = cardRepository.findById(user.getCardId());
-//                    if (optionalCard.isPresent()) {
-//                        user.setCard(optionalCard.get());
-//                    }
+                    //modify by jacktong 2018-9-6
+                    Optional<Card> optionalCard = cardRepository.findById(cardRecharge.getCardId());
+                    if (optionalCard.isPresent()) {
+                        Card c = optionalCard.get();
+                        Optional<Shop> o = shopRepository.findById(c.getShopId());
+                        if(o.isPresent()){
+                            c.setShop(o.get());
+                        }
+                        user.setCard(c);
+                    }
                     cardRecharge.setUser(user);
                 }
             }
