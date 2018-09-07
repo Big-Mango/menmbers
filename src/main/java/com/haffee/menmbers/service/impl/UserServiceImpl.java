@@ -378,6 +378,11 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     public User add(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) throws Exception{
+        //判断该用户是否是该商户下的会员
+        User u = userRepository.getUserByUserPhoneShopId(phoneNo,shopId);
+        if(u!=null){
+            return null;
+        }
         float discountFee = 0;
         int discountId = 0 ;
         String discountDesc = "";
@@ -422,15 +427,23 @@ public class UserServiceImpl implements UserService {
         //保存user信息
         User user = new User();
         if (responsePerson!=null&&responseCard!=null){
-            int pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
-            String password = Md5Utils.getMD5(pre_psw + "");
-            user.setPassword(password);
-            user.setUserPhone(responsePerson.getPhoneNo());
-            user.setStatus(1);
-            user.setPersonId(responsePerson.getId());
-//            user.setCardId(responseCard.getId());
-            user.setCreateTime(createTime);
-            User responseUser = userRepository.save(user);
+            //看是否有用户信息
+            User ifUser = userRepository.findByUserPhone(phoneNo);
+            User responseUser = null;
+            if(ifUser!=null){
+                //有用户信息就拿过来直接用，此处主要用以解决同一个userPhone在a商户办完会员，还可以在b继续办会员，而不用新建用户，只需再新开一张卡就可以
+                responseUser = ifUser;
+            }else{
+                //没有用户就直接建用户信息
+                int pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
+                String password = Md5Utils.getMD5(pre_psw + "");
+                user.setPassword(password);
+                user.setUserPhone(responsePerson.getPhoneNo());
+                user.setStatus(1);
+                user.setPersonId(responsePerson.getId());
+                user.setCreateTime(createTime);
+                responseUser = userRepository.save(user);
+            }
             if(responseUser!=null){
                 //回写card表中的userId字段
                 responseCard.setUserId(responseUser.getId());

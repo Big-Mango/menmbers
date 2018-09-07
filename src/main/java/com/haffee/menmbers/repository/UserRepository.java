@@ -46,6 +46,15 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     User getUserByCardNo(String cardNo);
 
     /**
+     * 根据手机号判断用户是否已经是该商户下的会员
+     * @param userPhone
+     * @param shopId
+     * @return
+     */
+    @Query(value="select u from User u where userPhone = ?1 and exists (select 1 from Card c where u.id = c.userId and c.shopId = ?2 and c.cardStatus = 1)")
+    User getUserByUserPhoneShopId(String userPhone,int shopId);
+
+    /**
      * 根据手机号查询用户
      * @param userPhone
      * @return

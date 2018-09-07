@@ -305,7 +305,11 @@ public class UserController {
     public ResponseMessage addUser(String realName,String phoneNo,String cardNo,int cardType,float fee,String ifDiscount,int shopId) {
         try {
             User user = userService.add(realName,phoneNo,cardNo,cardType,fee,ifDiscount,shopId);
-            return ResponseMessage.getResponseMessage(user);
+            if(user!=null){
+                return ResponseMessage.success(user);
+            }else{
+                return ResponseMessage.errorWithMsg("已经是该商户下的会员，不用重新创建");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
