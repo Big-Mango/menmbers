@@ -267,7 +267,11 @@ public class UserController {
     public ResponseMessage findOneByUserPhone(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort, String userPhone,int shopId) {
         try {
             User user = userService.findOneUserByUserPhone(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),userPhone,shopId);
-            return ResponseMessage.getResponseMessage(user);
+            if(user!=null){
+                return ResponseMessage.success(user);
+            }else{
+                return ResponseMessage.errorWithMsg("没有查询到会员信息，请核对手机号是否正确");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();
