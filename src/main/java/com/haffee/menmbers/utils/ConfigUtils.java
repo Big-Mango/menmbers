@@ -29,6 +29,10 @@ public class ConfigUtils {
 
     private static String person_account_add;
 
+    private static String person_recharge;//会员充值
+
+    private static String person_consume;//会员消费
+
     private static String check_code;
 
     private static String use_code;
@@ -43,6 +47,8 @@ public class ConfigUtils {
         admin_account_add = getSmsTemplate(Constant.SMS_ADMIN_ACCOUNT_ADD);
         shop_account_add = getSmsTemplate(Constant.SMS_SHOP_ACCOUNT_ADD);
         person_account_add = getSmsTemplate(Constant.SMS_PERSON_ACCOUNT_ADD);
+        person_recharge = getSmsTemplate(Constant.SMS_PERSON_RECHARGE);
+        person_consume = getSmsTemplate(Constant.SMS_PERSON_CONSUME);
         check_code = getSmsTemplate(Constant.SMS_CHECK_CODE);
         use_code = getSmsTemplate(Constant.SMS_USE_CODE);
         sms_user_id = getSysConfig(Constant.SMS_USER_ID);
@@ -91,6 +97,14 @@ public class ConfigUtils {
 
     public static String getPerson_account_add() {
         return person_account_add;
+    }
+
+    public static String getPerson_recharge() {
+        return person_recharge;
+    }
+
+    public static String getPerson_consume() {
+        return person_consume;
     }
 
     public static String getCheck_code() {

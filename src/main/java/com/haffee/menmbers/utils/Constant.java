@@ -64,6 +64,16 @@ public class Constant {
 	public static final String SMS_PERSON_ACCOUNT_ADD = "person_account_add";
 
 	/**
+	 * 个人充值通知模板ID
+	 */
+	public static final String SMS_PERSON_RECHARGE = "person_recharge";
+
+	/**
+	 * 个人消费通知模板ID
+	 */
+	public static final String SMS_PERSON_CONSUME = "person_consume";
+
+	/**
 	 * 校验-验证码通知模板ID
 	 */
 	public static final String SMS_CHECK_CODE = "check_code";

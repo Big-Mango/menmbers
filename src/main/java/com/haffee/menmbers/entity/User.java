@@ -45,6 +45,7 @@ public class User {
     private List<Card> card_list;//不区分店铺的情况
     @Transient
     private Card card;//此处用于存储固定店铺下的用户的唯一的会员卡信息
+    @Transient
     private int jifen = 0; //平台积分
 
 }

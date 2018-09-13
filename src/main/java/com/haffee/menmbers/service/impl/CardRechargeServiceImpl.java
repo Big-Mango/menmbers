@@ -3,6 +3,8 @@ package com.haffee.menmbers.service.impl;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardRechargeService;
+import com.haffee.menmbers.utils.ConfigUtils;
+import com.haffee.menmbers.utils.SmsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -144,7 +146,18 @@ public class CardRechargeServiceImpl implements CardRechargeService {
             userRepository.save(user);
             //更新用户卡余额
             card.setBalance(card.getBalance()+cardRecharge.getFee()+cardRecharge.getDiscountFee());
-            cardRepository.save(card);
+            Card cardResponse = cardRepository.save(card);
+            if(cardResponse!=null) {
+                //发送充值消息通知
+                StringBuffer sms_content = new StringBuffer();
+                String sms_content_template = ConfigUtils.getPerson_recharge();
+                if (null != sms_content_template) {
+                    //拼接短信内容
+                    String[] a = sms_content_template.split("&");
+                    sms_content.append(a[0] + cardRecharge.getFee()+ discountFee + a[1]);
+                    SmsUtils.singleSend(user.getUserPhone(), sms_content.toString());
+                }
+            }
         }
         return responseCardRecharge;
     }

@@ -38,6 +38,9 @@ public class UserServiceImpl implements UserService {
     private CardRepository cardRepository;
 
     @Autowired
+    private GiftCardRepository giftCardRepository;
+
+    @Autowired
     private CardRechargeRepository cardRechargeRepository;
 
     @Autowired
@@ -383,6 +386,7 @@ public class UserServiceImpl implements UserService {
         if(u!=null){
             return null;
         }
+        int pre_psw = 0;
         float discountFee = 0;
         int discountId = 0 ;
         String discountDesc = "";
@@ -435,7 +439,7 @@ public class UserServiceImpl implements UserService {
                 responseUser = ifUser;
             }else{
                 //没有用户就直接建用户信息
-                int pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
+                pre_psw = (int) ((Math.random() * 9 + 1) * 100000);
                 String password = Md5Utils.getMD5(pre_psw + "");
                 user.setPassword(password);
                 user.setUserPhone(responsePerson.getPhoneNo());
@@ -462,9 +466,19 @@ public class UserServiceImpl implements UserService {
                 recharge.setDiscountId(discountId);
                 recharge.setDiscountFee(discountFee);
                 recharge.setDiscountDesc(discountDesc);
-                cardRechargeRepository.save(recharge);
-//                String sms_content = "聚巷客栈会员用户" + person.getPhoneNo() + "您好：您的账户已经创建成功，登录用户名：" + person.getPhoneNo() + ",密码：" + pre_psw + ",请妥善保管！";
-//                SmsUtils.singleSend(person.getPhoneNo(), sms_content);
+                CardRecharge cardRecharge = cardRechargeRepository.save(recharge);
+                if(cardRecharge!=null) {
+                    //发送新增会员消息通知
+                    StringBuffer sms_content = new StringBuffer();
+                    String sms_content_template = ConfigUtils.getPerson_account_add();
+                    if (null != sms_content_template) {
+                        //拼接短信内容
+                        String[] a = sms_content_template.split("&");
+                        //phoneNo为用户名pre_psw为密码
+                        sms_content.append(a[0] + phoneNo + a[1] + pre_psw);
+                        SmsUtils.singleSend(phoneNo, sms_content.toString());
+                    }
+                }
             }
             return responseUser;
         }else{

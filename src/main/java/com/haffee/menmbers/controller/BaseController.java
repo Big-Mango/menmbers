@@ -68,7 +68,7 @@ public class BaseController {
             if(isSuccess){
                 return ResponseMessage.success();
             }else{
-                return ResponseMessage.error();
+                return ResponseMessage.errorWithMsg("验证码校验失败");
             }
 
         } catch (Exception e) {

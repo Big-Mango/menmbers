@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface SmsRecordRepository extends JpaRepository<SmsRecord,Integer> {
 
-    @Query(value = "select * from sms_record where status=1 and phone=?1 and valid_code = ?2 and createTime >= now()-interval 5 minute",nativeQuery = true)
+    @Query(value = "select * from sms_record where status=1 and phone=?1 and valid_code = ?2 and create_time >= now()-interval 5 minute",nativeQuery = true)
     SmsRecord findOne(String phone,String code);
 
     @Query(value = "select * from sms_record where status=1 and phone=?1 ",nativeQuery = true)

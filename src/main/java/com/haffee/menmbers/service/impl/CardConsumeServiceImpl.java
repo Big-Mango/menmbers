@@ -1,11 +1,16 @@
 package com.haffee.menmbers.service.impl;
 
-import com.haffee.menmbers.entity.*;
+import com.haffee.menmbers.entity.Card;
+import com.haffee.menmbers.entity.CardConsume;
+import com.haffee.menmbers.entity.Person;
+import com.haffee.menmbers.entity.User;
 import com.haffee.menmbers.repository.CardConsumeRepository;
 import com.haffee.menmbers.repository.CardRepository;
 import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CardConsumeService;
+import com.haffee.menmbers.utils.ConfigUtils;
+import com.haffee.menmbers.utils.SmsUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -89,6 +94,17 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             String createTime = sdf.format(new Date());
             cardConsume.setCreateTime(createTime);
             responseCardConsume = cardConsumeRepository.save(cardConsume);
+            if(responseCardConsume!=null) {
+                //发送消费消息通知
+                StringBuffer sms_content = new StringBuffer();
+                String sms_content_template = ConfigUtils.getPerson_consume();
+                if (null != sms_content_template) {
+                    //拼接短信内容
+                    String[] a = sms_content_template.split("&");
+                    sms_content.append(a[0] + cardConsume.getPayFee() + a[1]);
+                    SmsUtils.singleSend(cardConsume.getUserPhone(), sms_content.toString());
+                }
+            }
         }
         return responseCardConsume;
     }
