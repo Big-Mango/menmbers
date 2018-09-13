@@ -35,6 +35,21 @@ public class Constant {
 	 */
 	public static final String WECHAT_SECRET = "secret";
 
+	/**
+	 * KEY
+	 */
+	public static final String WECHAT_PAY_KEY = "key";
+
+	/**
+	 * 商户ID
+	 */
+	public static final String WECHAT_PAY_MCH_ID = "mch_id";
+
+	/**
+	 * 回调地址
+	 */
+	public static final String NOTICE_URL = "notice_url";
+
 	/*****************************微信公众号相关*****************************************/
 
 	/*****************************短信相关*****************************************/

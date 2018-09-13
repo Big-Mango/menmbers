@@ -165,4 +165,14 @@ public class CardRechargeServiceImpl implements CardRechargeService {
     public Optional<CardRecharge> findById(int id){
         return cardRechargeRepository.findById(id);
     }
+
+    @Override
+    public CardRecharge findOneByOrderNo(String order_no) {
+        return cardRechargeRepository.findOneByOrderno(order_no);
+    }
+
+    @Override
+    public CardRecharge save(CardRecharge cr) {
+        return cardRechargeRepository.save(cr);
+    }
 }

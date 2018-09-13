@@ -4,6 +4,7 @@ import com.haffee.menmbers.entity.CardRecharge;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 
 /**
@@ -15,4 +16,9 @@ public interface CardRechargeRepository extends JpaRepository<CardRecharge,Integ
     Page<CardRecharge> findByCardNo(String cardNo, Pageable pageable);
     Page<CardRecharge> findByUserPhone(String userPhone, Pageable pageable);
     Page<CardRecharge> findByShopId(int shopId,Pageable pageable);
+
+
+    @Query(value = "select * from card_recharge where order_no = ?1 and payment_status=0",nativeQuery = true)
+    CardRecharge findOneByOrderno(String order_no);
+
 }

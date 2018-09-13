@@ -19,4 +19,6 @@ public interface CardRechargeService {
     Page<CardRecharge> findByUserPhone(String userPhone,Pageable pageable);
     CardRecharge add(CardRecharge cardRecharge);
     Optional<CardRecharge> findById(int id);
+    CardRecharge findOneByOrderNo(String order_no);
+    CardRecharge save(CardRecharge cr);
 }

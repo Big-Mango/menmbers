@@ -23,6 +23,12 @@ public class ConfigUtils {
 
     private static String wechat_secret;
 
+    private static String wechat_pay_key;
+
+    private static String wechat_pay_mch_id;
+
+    private static String wechat_notice_url;
+
     private static String admin_account_add;
 
     private static String shop_account_add;
@@ -44,6 +50,9 @@ public class ConfigUtils {
     public ConfigUtils() {
         wechat_app_id = getSysConfig(Constant.WECHAT_APP_ID);
         wechat_secret = getSysConfig(Constant.WECHAT_SECRET);
+        wechat_pay_key = getSysConfig(Constant.WECHAT_PAY_KEY);
+        wechat_pay_mch_id = getSysConfig(Constant.WECHAT_PAY_MCH_ID);
+        wechat_notice_url = getSysConfig(Constant.NOTICE_URL);
         admin_account_add = getSmsTemplate(Constant.SMS_ADMIN_ACCOUNT_ADD);
         shop_account_add = getSmsTemplate(Constant.SMS_SHOP_ACCOUNT_ADD);
         person_account_add = getSmsTemplate(Constant.SMS_PERSON_ACCOUNT_ADD);
@@ -57,23 +66,24 @@ public class ConfigUtils {
 
     /**
      * 加载系统配置
+     *
      * @param param
      * @return
      */
-    public static String getSysConfig(String param){
+    public static String getSysConfig(String param) {
         SysConfig sc = sysConfigRepository.selectByKeyParam(param);
-        if(null==sc){
+        if (null == sc) {
             return null;
-        }else{
+        } else {
             return sc.getParamValue();
         }
     }
 
-    public static String getSmsTemplate(String code){
+    public static String getSmsTemplate(String code) {
         SmsTemplate st = smsTemplateRespository.findOneByCode(code);
-        if(null==st){
+        if (null == st) {
             return null;
-        }else{
+        } else {
             return st.getTemplate_content();
         }
     }
@@ -121,5 +131,17 @@ public class ConfigUtils {
 
     public static String getSms_user_pwd() {
         return sms_user_pwd;
+    }
+
+    public static String getWechat_pay_key() {
+        return wechat_pay_key;
+    }
+
+    public static String getWechat_pay_mch_id() {
+        return wechat_pay_mch_id;
+    }
+
+    public static String getWechat_notice_url() {
+        return wechat_notice_url;
     }
 }
