@@ -17,7 +17,7 @@ import java.util.Optional;
 public interface GiftCardService {
     Page<GiftCard> findAll(Pageable pageable,int shopId,int status);
     GiftCard findByCardNo(String cardNo);
-    GiftCard add(GiftCard card);
+    int add(GiftCard card);
     GiftCard update(String cardNo,int status);
     void delete(GiftCard card);
 }

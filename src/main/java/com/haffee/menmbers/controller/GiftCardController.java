@@ -77,8 +77,12 @@ public class GiftCardController {
     @PostMapping("/add")
     public ResponseMessage add(GiftCard card){
         try {
-            GiftCard responseCard = giftCardService.add(card);
-            return ResponseMessage.getResponseMessage(responseCard);
+            int flag = giftCardService.add(card);
+            if(flag>0){
+                return ResponseMessage.success();
+            }else{
+                return ResponseMessage.errorWithMsg("已经存在此卡信息，不能重复添加");
+            }
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

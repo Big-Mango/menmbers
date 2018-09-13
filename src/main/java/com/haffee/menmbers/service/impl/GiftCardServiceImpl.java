@@ -63,14 +63,16 @@ public class GiftCardServiceImpl implements GiftCardService {
         return card;
     }
 
-    public GiftCard add(GiftCard card) {
-        if (giftCardRepository.exists(Example.of(card))) {
-            return null;
+    public int add(GiftCard card) {
+        GiftCard giftCard = giftCardRepository.findByCardNo(card.getCardNo());
+        if (giftCard!=null) {
+            return 0;
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String createTime = sdf.format(new Date());
             card.setCreateTime(createTime);
-            return giftCardRepository.save(card);
+            giftCardRepository.save(card);
+            return 1;
         }
     }
 
