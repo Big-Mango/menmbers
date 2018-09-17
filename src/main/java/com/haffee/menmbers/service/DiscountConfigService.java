@@ -14,7 +14,7 @@ import java.util.Optional;
 * @Version:        1.0
 */
 public interface DiscountConfigService {
-    Page<DiscountConfig> findAll(Pageable pageable);
+    Page<DiscountConfig> findAll(Pageable pageable,int shopId);
     DiscountConfig add(DiscountConfig discountConfigiscountConfig);
     DiscountConfig update(DiscountConfig discountConfig);
     void delete(int id);

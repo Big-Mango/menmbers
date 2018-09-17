@@ -30,7 +30,7 @@ public class DiscountConfigController {
     * @date        2018/7/29 10:47
     */
     @PostMapping("/findAll")
-    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort){
+    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort,int shopId){
         try {
             if(page>0){
                 page = page -1;
@@ -38,7 +38,7 @@ public class DiscountConfigController {
             if(size==0){
                 size = 10;
             }
-            Page<DiscountConfig> pageDiscount = discountConfigService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)));
+            Page<DiscountConfig> pageDiscount = discountConfigService.findAll(PageRequest.of(page,size,Sort.by(Sort.Direction.DESC,sort)),shopId);
             return ResponseMessage.getResponseMessage(pageDiscount);
         }catch (Exception e) {
             e.printStackTrace();

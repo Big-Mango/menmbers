@@ -393,7 +393,7 @@ public class UserServiceImpl implements UserService {
         //有折扣信息
         if("1".equals(ifDiscount)){
             //获取最匹配的优惠方案
-            List<DiscountConfig> list = discountConfigRepository.findByFullMoney(fee);
+            List<DiscountConfig> list = discountConfigRepository.findByFullMoney(fee,shopId);
             HashMap<Float,Integer> map = new HashMap();
             //将fee与每一个方案的折扣价格做差，取绝对值(其实正常不取绝对值也是个大于等于0的数)
             for(DiscountConfig discountConfig : list){

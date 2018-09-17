@@ -31,8 +31,8 @@ public class DiscountConfigServiceImpl implements DiscountConfigService {
     @Resource
     private DiscountConfigRepository discountConfigRepository;
 
-    public Page<DiscountConfig> findAll(Pageable pageable){
-        return discountConfigRepository.findAll(pageable);
+    public Page<DiscountConfig> findAll(Pageable pageable,int shopId){
+        return discountConfigRepository.findAll(pageable,shopId);
     }
     public DiscountConfig add(DiscountConfig discountConfig){
         if(discountConfigRepository.exists(Example.of(discountConfig))){
