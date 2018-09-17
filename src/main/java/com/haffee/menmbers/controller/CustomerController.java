@@ -68,9 +68,10 @@ public class CustomerController {
      * @return
      */
     @PostMapping("/wechat/checkPhone")
-    public ResponseMessage checkPhone(String phone_no,String openid,String access_token){
+    public ResponseMessage checkPhone(String phone_no,String openid,String access_token,String refresh_token,String acc_code){
         try {
-            User user = customerService.checkUserPhone(phone_no,openid,access_token);
+            User user = customerService.checkUserPhone(phone_no,openid,access_token,refresh_token,acc_code);
+
             return ResponseMessage.success(user);
         } catch (Exception e) {
             e.printStackTrace();

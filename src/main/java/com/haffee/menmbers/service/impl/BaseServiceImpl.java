@@ -46,6 +46,7 @@ public class BaseServiceImpl implements BaseService {
      */
     @Override
     public void sendCheckCode(String phone) {
+        System.out.println("验证码手机号："+phone);
         StringBuffer sms_content = new StringBuffer();
         String sms_content_template = ConfigUtils.getCheck_code();
         int code = (int)((Math.random()*9+1)*100000);
@@ -68,6 +69,7 @@ public class BaseServiceImpl implements BaseService {
             smsRecordRepository.save(sr);
             //发送
             SmsUtils.singleSend(phone,sms_content.toString());
+            System.out.println("短信内容："+sms_content.toString());
         }
     }
 

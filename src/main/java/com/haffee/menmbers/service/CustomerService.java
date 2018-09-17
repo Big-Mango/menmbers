@@ -9,6 +9,6 @@ import com.haffee.menmbers.entity.User;
 
 public interface CustomerService {
 
-    User checkUserPhone(String phone_no,String openid,String access_token);
+    User checkUserPhone(String phone_no,String openid,String access_token,String refesh_token,String acc_code);
 
 }

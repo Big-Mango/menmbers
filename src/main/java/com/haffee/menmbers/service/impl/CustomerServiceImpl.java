@@ -9,6 +9,7 @@ import com.haffee.menmbers.repository.PersonRepository;
 import com.haffee.menmbers.repository.ShopRepository;
 import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CustomerService;
+import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.HttpClientUtils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
     private ShopRepository shopRepository;
 
     @Override
-    public User checkUserPhone(String phone_no, String openid,String access_token){
+    public User checkUserPhone(String phone_no, String openid,String access_token,String refesh_token,String acc_code){
         //1.判断该手机号是否存在会员账户
         //2.如果存在、关联微信openid
         User user_db = userServiceRepository.findByUserPhone(phone_no);
@@ -49,8 +50,18 @@ public class CustomerServiceImpl implements CustomerService {
             user_db.setWechatId(openid);
             user_db.setAccess_token(access_token);
             //获取微信用户信息
+            System.out.println("openid:"+openid+",access_token:"+access_token);
             String result = getWechatUserInfo(openid,access_token);
+            System.out.println("获取微信个人信息："+result);
             JSONObject jsStr = JSONObject.fromObject(result);
+
+            String errmsg = jsStr.get("errcode")+"";
+            if(null!=errmsg&&errmsg.equals("40001")){
+                result = getWechatUserInfo(openid,getAccessToken(acc_code));
+                System.out.println("再次获取微信个人信息："+result);
+                jsStr = JSONObject.fromObject(result);
+            }
+
             String subscribe = jsStr.get("subscribe")==null?null:jsStr.get("subscribe")+"";
             if(null!=subscribe&&subscribe.equals("1")){ //关注公众号
 
@@ -115,9 +126,37 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     public String getWechatUserInfo(String openid,String access_token){
-        String url = "https;//api.weixin.qq.com/cgi-bin/user/info?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+        String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
         String result = HttpClientUtils.get(url);
         return result;
+    }
+
+    /**
+     * 获取refresh_token
+     * @param refresh_token
+     * @return
+     */
+    public String getRefreshToken(String refresh_token){
+        String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token?appid="+ConfigUtils.getWechat_app_id() +"&grant_type=refresh_token&refresh_token="+refresh_token;
+        String result = HttpClientUtils.get(url);
+        System.out.println("refresh_token："+refresh_token);
+        System.out.println("刷新token结果："+result);
+        JSONObject jsStr = JSONObject.fromObject(result);
+        String access_token = jsStr.get("access_token")+"";
+        return access_token;
+    }
+
+    /**
+     * 获取accesstoken
+     * @param acc_code
+     * @return
+     */
+    public String getAccessToken(String acc_code){
+        String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=" + ConfigUtils.getWechat_app_id() + "&secret=" + ConfigUtils.getWechat_secret() + "&code=" + acc_code + "&grant_type=authorization_code";
+        String result = HttpClientUtils.get(url);
+        JSONObject jsStr = JSONObject.fromObject(result);
+        String access_token = jsStr.get("access_token")+"";
+        return access_token;
     }
 
 }

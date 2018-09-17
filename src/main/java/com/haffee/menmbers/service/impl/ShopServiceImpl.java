@@ -67,7 +67,11 @@ public class ShopServiceImpl implements ShopService {
         int pre_psw = (int)((Math.random()*9+1)*100000);
         String pws = Md5Utils.getMD5(pre_psw+"");
         a_user.setPassword(pws);
+
+
         String msg = "尊敬的商家用户"+a_user.getUserPhone()+"您好，您的账户已创建成功，密码为："+pws+",请妥善保管！";
+
+
         adminUserRepository.save(a_user);
         SmsUtils.singleSend(a_user.getUserPhone(),msg);
 

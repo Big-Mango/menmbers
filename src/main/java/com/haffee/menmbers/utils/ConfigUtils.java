@@ -69,7 +69,7 @@ public class ConfigUtils {
     }
 
     public static String getCheck_code() {
-        return getSmsTemplate(Constant.SMS_CHECK_CODE);
+        return getSysConfig(Constant.SMS_CHECK_CODE);
     }
 
     public static String getUse_code() {
