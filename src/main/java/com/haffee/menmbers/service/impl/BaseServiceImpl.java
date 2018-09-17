@@ -47,12 +47,12 @@ public class BaseServiceImpl implements BaseService {
     @Override
     public void sendCheckCode(String phone) {
         StringBuffer sms_content = new StringBuffer();
-//        String sms_content_template = ConfigUtils.getCheck_code();
+        String sms_content_template = ConfigUtils.getCheck_code();
         int code = (int)((Math.random()*9+1)*100000);
-//        if(null!=sms_content_template){
+        if(null!=sms_content_template){
             //拼接短信内容
-//            String [] a = sms_content_template.split("&");
-//            sms_content.append(a[0]+code+a[1]);
+            String [] a = sms_content_template.split("&");
+            sms_content.append(a[0]+code+a[1]);
             //发送验证码，将之前有效的验证码置无效
             List<SmsRecord> sr_list = smsRecordRepository.findAll(phone);
             for (SmsRecord s:sr_list){
@@ -67,8 +67,8 @@ public class BaseServiceImpl implements BaseService {
             sr.setCreateTime(new Date());
             smsRecordRepository.save(sr);
             //发送
-//            SmsUtils.singleSend(phone,sms_content.toString());
-//        }
+            SmsUtils.singleSend(phone,sms_content.toString());
+        }
     }
 
     /**
