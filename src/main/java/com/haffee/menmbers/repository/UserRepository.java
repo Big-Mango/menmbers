@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -33,9 +35,10 @@ public interface UserRepository extends JpaRepository<User,Integer> {
      * @param id
      * @return
      */
+    @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value="update User set loginKey = ?1 , lastLoginTime = ?2 where id = ?3")
-    int updateUser(String loginKey, Date lastLoginTime, int id);
+    @Query(value="update user set login_key = :loginKey , last_login_time = :lastLoginTime where id = :id",nativeQuery = true)
+    int updateUser(@Param("loginKey")String loginKey, @Param("lastLoginTime")Date lastLoginTime, @Param("id")int id);
 
     /**
      * 根据卡号查询用户

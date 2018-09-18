@@ -34,9 +34,9 @@ public class LoginInterception implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("********************进入权限拦截器******************");
         //待处理
-        String login_key = request.getHeader("key");
-        String id = request.getHeader("id");
-        String user_type = request.getHeader("user_type"); //1:个人，2：商家，9：管理员
+        String login_key = request.getHeader("key")+"";
+        String id = request.getHeader("id")+"";
+        String user_type = request.getHeader("user_type")+""; //1:个人，2：商家，9：管理员
 
         if (StringUtils.isEmpty(login_key) || StringUtils.isEmpty(id) || StringUtils.isEmpty(user_type)) {
             response.setContentType("text/html;charset=utf-8");
@@ -80,7 +80,9 @@ public class LoginInterception implements HandlerInterceptor {
                 }
             } else if (user_type.equals("1")) {
                 Optional<User> c_user = userRepository.findById(Integer.valueOf(id));
-                if (!c_user.isPresent() || !c_user.get().getLoginKey().equals(login_key)) {
+                System.out.println("C端用户登录login_key："+login_key);
+                System.out.println("c_user:"+c_user.toString());
+                if (!c_user.isPresent() ||c_user.get().getLoginKey()==null|| !c_user.get().getLoginKey().equals(login_key)) {
                     response.setContentType("text/html;charset=utf-8");
                     try {
                         response.getWriter().write("1003");
@@ -104,7 +106,9 @@ public class LoginInterception implements HandlerInterceptor {
                         return false;
                     } else {
                         //更新登录时间
-                        userRepository.updateUser(login_key, date, Integer.valueOf(id));
+                        c_user.get().setLastLoginTime(date);
+                        //userRepository.updateUser(login_key, date, Integer.valueOf(id));
+                        userRepository.save(c_user.get());
                         return true;
                     }
                 }

@@ -11,11 +11,13 @@ import com.haffee.menmbers.repository.UserRepository;
 import com.haffee.menmbers.service.CustomerService;
 import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.HttpClientUtils;
+import com.haffee.menmbers.utils.UuidUtils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
         if(null!=user_db){
             user_db.setWechatId(openid);
             user_db.setAccess_token(access_token);
+            String loginKey =UuidUtils.getUUID32();
+            Date now = new Date();
+            user_db.setLoginKey(loginKey);
+            user_db.setLastLoginTime(now);
             //获取微信用户信息
             System.out.println("openid:"+openid+",access_token:"+access_token);
             String result = getWechatUserInfo(openid,access_token);
