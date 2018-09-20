@@ -75,4 +75,12 @@ public interface UserRepository extends JpaRepository<User,Integer> {
     @Query(value = "select * from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1)",nativeQuery = true)
     Page<User> findAllUser(Pageable pageable,int shopId);
 
+
+    /**
+     * 查询当前商户的用户总数
+     * @param shopId
+     * @return
+     */
+    @Query(value = "select count(1) count from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1) and u.status = 1",nativeQuery = true)
+    String getUserTotal(int shopId);
 }

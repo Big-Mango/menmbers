@@ -21,4 +21,6 @@ public interface CardRechargeRepository extends JpaRepository<CardRecharge,Integ
     @Query(value = "select * from card_recharge where order_no = ?1 and payment_status=0",nativeQuery = true)
     CardRecharge findOneByOrderno(String order_no);
 
+    @Query(value = "select sum(fee)fee from card_recharge where shop_id = ?1",nativeQuery = true)
+    float getRechargeFeeTotal(int shopId);
 }
