@@ -1,16 +1,11 @@
 package com.haffee.menmbers.service.impl;
 
-import com.haffee.menmbers.entity.Card;
-import com.haffee.menmbers.entity.CardConsume;
-import com.haffee.menmbers.entity.Person;
-import com.haffee.menmbers.entity.User;
-import com.haffee.menmbers.repository.CardConsumeRepository;
-import com.haffee.menmbers.repository.CardRepository;
-import com.haffee.menmbers.repository.PersonRepository;
-import com.haffee.menmbers.repository.UserRepository;
+import com.haffee.menmbers.entity.*;
+import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardConsumeService;
 import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.SmsUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -44,6 +39,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Resource
     private CardRepository cardRepository;
 
+    @Autowired
+    private ShopRepository shopRepository;
+
     public Page<CardConsume> findAllByShopId(Pageable pageable,int shopId) {
         Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId,pageable);
         if (page != null) {
@@ -71,7 +69,17 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     }
 
     public Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable){
-        return cardConsumeRepository.findByUserPhone(userPhone,pageable);
+        Page<CardConsume> page = cardConsumeRepository.findByUserPhone(userPhone,pageable);
+        if(null!=page){
+            List<CardConsume> list = page.getContent();
+            for(CardConsume cc : list){
+                Optional<Shop> o = shopRepository.findById(cc.getShopId());
+                if(o.isPresent()){
+                    cc.setShop(o.get());
+                }
+            }
+        }
+        return page;
     }
 
     public CardConsume add(CardConsume cardConsume) {
