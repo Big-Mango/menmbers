@@ -3,6 +3,7 @@ package com.haffee.menmbers.service;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.vo.ConsumeCountStatistics;
 import com.haffee.menmbers.vo.ConsumeFeeStatistics;
+import com.haffee.menmbers.vo.RechargeFeeStatistics;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -24,5 +25,5 @@ public interface StatisticsService {
 
     List<ConsumeCountStatistics> getConsumeCountList(int shopId, Pageable pageable);
 
-//    Page<CardRecharge> getRechargeFeeList(int shopId);
+    List<RechargeFeeStatistics> getRechargeFeeList(int shopId, Pageable pageable);
 }
