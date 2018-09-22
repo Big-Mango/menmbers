@@ -107,7 +107,7 @@ public class CustomerController {
                 String nonce_str = UUID.randomUUID().toString().replace("-", "");
                 String body = "会员卡充值";
                 String out_trade_no = cr.getOrderNo();
-                int total_fee = (int)cr.getFee()*100;
+                int total_fee = (int)(cr.getFee()*100);
                 String spbill_create_ip = "127.0.0.1";
                 String notify_url = ConfigUtils.getWechat_notice_url(); //"http://47.92.66.33/heygay/wechat/shoporder/callback";
                 String trade_type = "JSAPI"; //公众号支付
