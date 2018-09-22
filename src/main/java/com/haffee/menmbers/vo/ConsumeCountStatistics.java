@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class ConsumeCountStatistics {
     private String realName;
     private String userPhone;
-    private int count;
+    private String count;
 }

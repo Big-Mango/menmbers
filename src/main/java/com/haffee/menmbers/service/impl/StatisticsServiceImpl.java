@@ -10,6 +10,7 @@ import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.UuidUtils;
 import com.haffee.menmbers.vo.ConsumeCountStatistics;
 import com.haffee.menmbers.vo.ConsumeFeeStatistics;
+import com.haffee.menmbers.vo.RechargeFeeStatistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -100,21 +101,31 @@ public class StatisticsServiceImpl implements StatisticsService {
         for(Object obj : dataList){
             Object[] bean = (Object[]) obj;
             ConsumeCountStatistics consumeCountStatistics = new ConsumeCountStatistics();
-            consumeCountStatistics.setCount((int)bean[0]);
+            consumeCountStatistics.setCount(bean[0].toString());
             consumeCountStatistics.setUserPhone(bean[1].toString());
             consumeCountStatistics.setRealName(bean[2].toString());
             list.add(consumeCountStatistics);
         }
         return list;
     }
-//    /**
-//     * 获取充值金额列表
-//     * @param shopId
-//     * @return
-//     */
-//    @Override
-//    Page<CardRecharge> getRechargeFeeList(int shopId){
-//        return cardConsumeRepository.getRechargeFeeList(shopId);
-//    }
+    /**
+     * 获取充值金额列表
+     * @param shopId
+     * @return
+     */
+    @Override
+    public List<RechargeFeeStatistics> getRechargeFeeList(int shopId, Pageable pageable){
+        List<RechargeFeeStatistics> list = new ArrayList();
+        List<Object> dataList = cardRechargeRepository.getRechargeFeeList(shopId,pageable);
+        for(Object obj : dataList){
+            Object[] bean = (Object[]) obj;
+            RechargeFeeStatistics rechargeFeeStatistics = new RechargeFeeStatistics();
+            rechargeFeeStatistics.setPayFee((Double)bean[0]);
+            rechargeFeeStatistics.setUserPhone(bean[1].toString());
+            rechargeFeeStatistics.setRealName(bean[2].toString());
+            list.add(rechargeFeeStatistics);
+        }
+        return list;
+    }
 
 }

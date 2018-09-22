@@ -106,9 +106,9 @@ public class StatisticsController {
             if(size==0){
                 size = 10;
             }
-            List<ConsumeFeeStatistics> pageBack = statisticsService.getConsumeFeeList(shopId,PageRequest.of(page,size));
-            if (pageBack!=null) {
-                return ResponseMessage.success(pageBack);
+            List<ConsumeFeeStatistics> list = statisticsService.getConsumeFeeList(shopId,PageRequest.of(page,size));
+            if (list!=null) {
+                return ResponseMessage.success(list);
             } else {
                 return ResponseMessage.error();
             }
@@ -131,9 +131,9 @@ public class StatisticsController {
             if(size==0){
                 size = 10;
             }
-            List<ConsumeCountStatistics> pageBack = statisticsService.getConsumeCountList(shopId,PageRequest.of(page,size));
-            if (pageBack!=null) {
-                return ResponseMessage.success(pageBack);
+            List<ConsumeCountStatistics> list = statisticsService.getConsumeCountList(shopId,PageRequest.of(page,size));
+            if (list!=null) {
+                return ResponseMessage.success(list);
             } else {
                 return ResponseMessage.error();
             }
@@ -142,25 +142,23 @@ public class StatisticsController {
             return ResponseMessage.error();
         }
     }
-//    /**
-//     * 获取当日消费
-//     * @param shopId
-//     * @return
-//     */
-//    @PostMapping("/getConsumeFeeToday")
-//    public ResponseMessage getConsumeFeeToday(int shopId) {
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        String today = sdf.format(new Date());
-//        try {
-//            float fee = statisticsService.getConsumeFeeToday(shopId,today);
-//            if (!"".equals(fee)) {
-//                return ResponseMessage.success(fee);
-//            } else {
-//                return ResponseMessage.error();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseMessage.error();
-//        }
-//    }
+    /**
+     * 获取充值金额排行列表
+     * @param shopId
+     * @return
+     */
+    @PostMapping("/getRechargeFeeList")
+    public ResponseMessage getRechargeFeeList(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,int shopId){
+        try {
+            List list = statisticsService.getRechargeFeeList(shopId,PageRequest.of(page,size));
+            if (!"".equals(list)) {
+                return ResponseMessage.success(list);
+            } else {
+                return ResponseMessage.error();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
 }

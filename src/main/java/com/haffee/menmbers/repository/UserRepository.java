@@ -81,6 +81,6 @@ public interface UserRepository extends JpaRepository<User,Integer> {
      * @param shopId
      * @return
      */
-    @Query(value = "select count(1) count from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1) and u.status = 1",nativeQuery = true)
+    @Query(value = "select count(1) count from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1)",nativeQuery = true)
     String getUserTotal(int shopId);
 }
