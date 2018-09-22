@@ -39,4 +39,6 @@ public class CardConsume {
     private String orderId;//消费订单id
     @Transient
     private User user;
+    @Transient
+    private Shop shop;
 }
