@@ -69,7 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             String subscribe = jsStr.get("subscribe")==null?null:jsStr.get("subscribe")+"";
-            if(null!=subscribe&&subscribe.equals("1")){ //关注公众号
+//            if(null!=subscribe&&subscribe.equals("1")){ //关注公众号
 
                 String nickname = jsStr.get("nickname")+"";
                 String sex = jsStr.get("sex")==null?"0":jsStr.get("sex")+"";
@@ -78,13 +78,13 @@ public class CustomerServiceImpl implements CustomerService {
                 String province = jsStr.get("province")+"";
                 String country = jsStr.get("country")+"";
                 String headimgurl = jsStr.get("headimgurl")+"";
-                String subscribe_time = jsStr.get("subscribe_time")+"";
-                String remark = jsStr.get("remark")+"";
-                String groupid = jsStr.get("groupid")+"";
-                String tagid_list = jsStr.get("tagid_list")+"";
-                String subscribe_scene = jsStr.get("subscribe_scene")+"";
-                String qr_scene = jsStr.get("qr_scene")+"";
-                String qr_scene_str = jsStr.get("qr_scene_str")+"";
+//                String subscribe_time = jsStr.get("subscribe_time")+"";
+//                String remark = jsStr.get("remark")+"";
+//                String groupid = jsStr.get("groupid")+"";
+//                String tagid_list = jsStr.get("tagid_list")+"";
+//                String subscribe_scene = jsStr.get("subscribe_scene")+"";
+//                String qr_scene = jsStr.get("qr_scene")+"";
+//                String qr_scene_str = jsStr.get("qr_scene_str")+"";
                 Person p;
                 Optional<Person> o =  personRepository.findById(user_db.getPersonId());
                 if(o.isPresent()){
@@ -101,17 +101,21 @@ public class CustomerServiceImpl implements CustomerService {
                 p.setProvince(province);
                 p.setCountry(country);
                 p.setHeadimgurl(headimgurl);
-                p.setSubscribe_time(subscribe_time);
-                p.setRemark(remark);
-                p.setGroupid(groupid);
-                p.setTagid_list(tagid_list);
-                p.setSubscribe_scene(subscribe_scene);
-                p.setQr_scene(qr_scene);
-                p.setQr_scene_str(qr_scene_str);
+//                p.setSubscribe_time(subscribe_time);
+//                p.setRemark(remark);
+//                p.setGroupid(groupid);
+//                p.setTagid_list(tagid_list);
+//                p.setSubscribe_scene(subscribe_scene);
+//                p.setQr_scene(qr_scene);
+//                p.setQr_scene_str(qr_scene_str);
 
-                personRepository.save(p);
+                Person person = personRepository.save(p);
+                if(!o.isPresent()){
+                    user_db.setPersonId(person.getId());
+                }
+                user_db.setPerson(person);
 
-            }
+//            }
             userServiceRepository.save(user_db); //更新用户信息
             List<Card> card_list = cardRepository.findCardByUserId(user_db.getId());
             for (Card card: card_list) {
@@ -132,7 +136,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     public String getWechatUserInfo(String openid,String access_token){
-        String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+        String url = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
         String result = HttpClientUtils.get(url);
         return result;
     }

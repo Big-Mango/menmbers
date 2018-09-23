@@ -220,8 +220,8 @@ public class CustomerController {
                         CardRecharge cr_db = cardRechargeService.findOneByOrderNo(order_num);
                         if(null!=cr_db){
                             cr_db.setPaymentStatus(1);
-                            Format format = new SimpleDateFormat("yyyyMMddHHmmss");
-                            cr_db.setPaymentTime((Date) format.parseObject(payment_time)+"");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                            cr_db.setPaymentTime(sdf.format(payment_time)+"");
                             cardRechargeService.save(cr_db);
 
                             String return_str = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
