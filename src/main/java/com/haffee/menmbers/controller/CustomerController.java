@@ -219,7 +219,7 @@ public class CustomerController {
                             cr_db.setPaymentStatus(1);
 //                            SimpleDateFormat  cstFormater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
 //                            Date gpsUTCDate = cstFormater.parse(payment_time);
-                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             SimpleDateFormat sdf_b = new SimpleDateFormat("yyyyMMddHHmmss");
                             cr_db.setPaymentTime(sdf.format(sdf_b.parse(payment_time)));
                             cardRechargeService.save(cr_db);
