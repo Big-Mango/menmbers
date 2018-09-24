@@ -23,10 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * create by jacktong
@@ -220,8 +217,10 @@ public class CustomerController {
                         CardRecharge cr_db = cardRechargeService.findOneByOrderNo(order_num);
                         if(null!=cr_db){
                             cr_db.setPaymentStatus(1);
+                            SimpleDateFormat  cstFormater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+                            Date gpsUTCDate = cstFormater.parse(payment_time);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-                            cr_db.setPaymentTime(sdf.format(payment_time)+"");
+                            cr_db.setPaymentTime(sdf.format(gpsUTCDate));
                             cardRechargeService.save(cr_db);
 
                             String return_str = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
