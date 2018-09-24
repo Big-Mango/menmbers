@@ -217,10 +217,11 @@ public class CustomerController {
                         CardRecharge cr_db = cardRechargeService.findOneByOrderNo(order_num);
                         if(null!=cr_db){
                             cr_db.setPaymentStatus(1);
-                            SimpleDateFormat  cstFormater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
-                            Date gpsUTCDate = cstFormater.parse(payment_time);
+//                            SimpleDateFormat  cstFormater = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US);
+//                            Date gpsUTCDate = cstFormater.parse(payment_time);
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
-                            cr_db.setPaymentTime(sdf.format(gpsUTCDate));
+                            SimpleDateFormat sdf_b = new SimpleDateFormat("yyyyMMddHHmmss");
+                            cr_db.setPaymentTime(sdf.format(sdf_b.parse(payment_time)));
                             cardRechargeService.save(cr_db);
 
                             String return_str = "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";

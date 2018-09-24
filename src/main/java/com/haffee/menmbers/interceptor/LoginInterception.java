@@ -93,24 +93,28 @@ public class LoginInterception implements HandlerInterceptor {
                     return false;
                 } else {
                     Date date = new Date();
-                    long ms = date.getTime() - c_user.get().getLastLoginTime().getTime();
-                    long min = ms / (1000 * 60);
-                    if (min > 30) {
-                        response.setContentType("text/html;charset=utf-8");
-                        try {
-                            response.getWriter().write("1004");
-                        } catch (IOException e) {
-                            response.getWriter().write("1004");
-                            e.printStackTrace();
-                        }
-                        return false;
-                    } else {
-                        //更新登录时间
-                        c_user.get().setLastLoginTime(date);
-                        //userRepository.updateUser(login_key, date, Integer.valueOf(id));
-                        userRepository.save(c_user.get());
-                        return true;
-                    }
+//                    long ms = date.getTime() - c_user.get().getLastLoginTime().getTime();
+//                    long min = ms / (1000 * 60);
+//                    if (min > 30) {
+//                        response.setContentType("text/html;charset=utf-8");
+//                        try {
+//                            response.getWriter().write("1004");
+//                        } catch (IOException e) {
+//                            response.getWriter().write("1004");
+//                            e.printStackTrace();
+//                        }
+//                        return false;
+//                    } else {
+//                        //更新登录时间
+//                        c_user.get().setLastLoginTime(date);
+//                        //userRepository.updateUser(login_key, date, Integer.valueOf(id));
+//                        userRepository.save(c_user.get());
+//                        return true;
+//                    }
+                    c_user.get().setLastLoginTime(date);
+                    //userRepository.updateUser(login_key, date, Integer.valueOf(id));
+                    userRepository.save(c_user.get());
+                    return true;
                 }
 
             } else {
