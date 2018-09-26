@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CardRepository cardRepository;
 
-    @Autowired
-    private GiftCardRepository giftCardRepository;
+//    @Autowired
+//    private GiftCardRepository giftCardRepository;
 
     @Autowired
     private CardRechargeRepository cardRechargeRepository;
@@ -70,6 +70,12 @@ public class UserServiceImpl implements UserService {
             a_user.setLastLoginTime(now);
             adminUserRepository.updateAdminUser(loginKey,now,a_user.getId());
             a_user.setPassword(null);
+            if(a_user.getType()==2){
+                Optional<Shop> s = shopRepository.findById(a_user.getShopId());
+                if(s.isPresent()){
+                    a_user.setShop(s.get());
+                }
+            }
             return a_user;
         }
         return null;

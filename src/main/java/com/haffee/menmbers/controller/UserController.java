@@ -1,17 +1,16 @@
 package com.haffee.menmbers.controller;
 
-import com.haffee.menmbers.entity.AdminUser;
-import com.haffee.menmbers.entity.Card;
-import com.haffee.menmbers.entity.Person;
-import com.haffee.menmbers.entity.User;
+import com.haffee.menmbers.entity.*;
+import com.haffee.menmbers.repository.SessionValidCodeRepository;
 import com.haffee.menmbers.service.UserService;
 import com.haffee.menmbers.utils.ResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 /**
@@ -26,6 +25,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SessionValidCodeRepository sessionValidCodeRepository;
+
     /**
      * 后台管理登录
      *
@@ -35,12 +37,18 @@ public class UserController {
      * @return
      */
     @PostMapping("/admin/login")
-    public ResponseMessage doLoginForA(String user_phone, String password, String type) {
+    public ResponseMessage doLoginForA(String user_phone, String password, String type, String valid_code, HttpServletRequest request) {
         try {
-            AdminUser a_user = userService.doLoginForAdmin(user_phone, password, type);
-            if (null != a_user) {
-                return ResponseMessage.success(a_user);
-            } else {
+            System.out.println("sessionid:"+request.getSession().getId());
+            SessionValidCode svc = sessionValidCodeRepository.findBySessionID(request.getSession().getId());
+            if(null!=svc&&svc.getValidCode().equals(valid_code)){
+                AdminUser a_user = userService.doLoginForAdmin(user_phone, password, type);
+                if (null != a_user) {
+                    return ResponseMessage.success(a_user);
+                } else {
+                    return ResponseMessage.error();
+                }
+            }else{
                 return ResponseMessage.error();
             }
         } catch (Exception e) {
