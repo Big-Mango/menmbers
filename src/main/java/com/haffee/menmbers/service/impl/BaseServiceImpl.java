@@ -85,6 +85,8 @@ public class BaseServiceImpl implements BaseService {
         SmsRecord sr = smsRecordRepository.findOne(phone,code);
         if(null!=sr){
             isSuccess = true;
+            sr.setStatus(0);
+            smsRecordRepository.save(sr);
         }
         return isSuccess;
     }
