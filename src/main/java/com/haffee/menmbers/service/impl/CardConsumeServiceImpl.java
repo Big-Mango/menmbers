@@ -146,7 +146,12 @@ public class CardConsumeServiceImpl implements CardConsumeService {
                 if (null != sms_content_template) {
                     //拼接短信内容
                     String[] a = sms_content_template.split("&");
-                    sms_content.append(a[0] + cardConsume.getUserPhone() + a[1]+cardConsume.getPayFee()+a[2]+card.getBalance());
+                    Optional<Person> o = personRepository.findById(user.getId());
+                    String real_name = "";
+                    if(o.isPresent()){
+                        real_name = o.get().getRealName();
+                    }
+                    sms_content.append(a[0] + real_name + a[1]+cardConsume.getPayFee()+a[2]+card.getBalance()+a[3]);
                     SmsUtils.singleSend(cardConsume.getUserPhone(), sms_content.toString());
                 }
             }

@@ -150,6 +150,8 @@ public class SmsUtils {
 
                 System.out.println(msgId.toString());
 
+                System.out.println("短信内容："+content);
+
             }
             else
             {

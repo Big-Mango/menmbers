@@ -359,7 +359,7 @@ public class UserServiceImpl implements UserService {
                     user.setCard(card);
                 }
                 //查询优惠券
-                List<Coupons> list = couponsRepository.findAllCouponsByUser(user.getId());
+                List<Coupons> list = couponsRepository.findCouponsByUser(user.getId(),shopId);
                 if(list.size()>0){
                     user.setCoupons_list(list);
                 }

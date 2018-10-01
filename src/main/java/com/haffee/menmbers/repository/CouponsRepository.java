@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface CouponsRepository extends JpaRepository<Coupons, Integer> {
 
-    @Query(value = "select * from coupons where user_id=?1 and shop_id=?2 and " +
+    @Query(value = "select * from coupons where user_id=?1 and shop_id=?2 and use_staus=0 and " +
             "(type=0 or (now() >= begin_time and now() <= end_time)) and " +
             "(min_use_fee=0 or min_use_fee<=?3)", nativeQuery = true)
     List<Coupons> findEnableCouponsByUserAndShop(int user_id, int shop_id, float order_fee);
@@ -21,8 +21,11 @@ public interface CouponsRepository extends JpaRepository<Coupons, Integer> {
     @Query(value="select * from coupons where user_id = ?1 order by create_time desc",nativeQuery = true)
     List<Coupons> findAllCouponsByUser(int user_id);
 
-    @Query(value = "select * from coupons where id=?1 and user_id=?2 and shop_id=?3 and " +
+    @Query(value = "select * from coupons where id=?1 and user_id=?2 and shop_id=?3 and use_staus=0 and " +
             "(type=0 or (now() >= begin_time and now() <= end_time)) and " +
             "(min_use_fee=0 or min_use_fee<=?4)", nativeQuery = true)
     Coupons findEnableCouponsByUserAndShopAndId(int coupons_id,int user_id, int shop_id, float order_fee);
+
+    @Query(value="select * from coupons where user_id = ?1 and shop_id=?2 and use_staus=0 and (type=0 or (now() >= begin_time and now() <= end_time)) order by create_time desc",nativeQuery = true)
+    List<Coupons> findCouponsByUser(int user_id,int shop_id);
 }

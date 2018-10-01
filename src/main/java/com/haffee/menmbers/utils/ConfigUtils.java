@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  **/
 public class ConfigUtils {
     private static SysConfigRepository sysConfigRepository;
-    private static SmsTemplateRespository smsTemplateRespository;
+//    private static SmsTemplateRespository smsTemplateRespository;
     /**
      * 加载系统配置
      *
@@ -30,15 +30,15 @@ public class ConfigUtils {
         }
     }
 
-    public static String getSmsTemplate(String code) {
-        smsTemplateRespository = SpringUtil.getBean(SmsTemplateRespository.class);
-        SmsTemplate st = smsTemplateRespository.findOneByCode(code);
-        if (null == st) {
-            return null;
-        } else {
-            return st.getTemplate_content();
-        }
-    }
+//    public static String getSmsTemplate(String code) {
+//        smsTemplateRespository = SpringUtil.getBean(SmsTemplateRespository.class);
+//        SmsTemplate st = smsTemplateRespository.findOneByCode(code);
+//        if (null == st) {
+//            return null;
+//        } else {
+//            return st.getTemplate_content();
+//        }
+//    }
 
     public static String getWechat_app_id() {
         return getSysConfig(Constant.WECHAT_APP_ID);
@@ -49,23 +49,23 @@ public class ConfigUtils {
     }
 
     public static String getAdmin_account_add() {
-        return getSmsTemplate(Constant.SMS_ADMIN_ACCOUNT_ADD);
+        return getSysConfig(Constant.SMS_ADMIN_ACCOUNT_ADD);
     }
 
     public static String getShop_account_add() {
-        return getSmsTemplate(Constant.SMS_SHOP_ACCOUNT_ADD);
+        return getSysConfig(Constant.SMS_SHOP_ACCOUNT_ADD);
     }
 
     public static String getPerson_account_add() {
-        return getSmsTemplate(Constant.SMS_PERSON_ACCOUNT_ADD);
+        return getSysConfig(Constant.SMS_PERSON_ACCOUNT_ADD);
     }
 
     public static String getPerson_recharge() {
-        return getSmsTemplate(Constant.SMS_PERSON_RECHARGE);
+        return getSysConfig(Constant.SMS_PERSON_RECHARGE);
     }
 
     public static String getPerson_consume() {
-        return getSmsTemplate(Constant.SMS_PERSON_CONSUME);
+        return getSysConfig(Constant.SMS_PERSON_CONSUME);
     }
 
     public static String getCheck_code() {
@@ -73,7 +73,7 @@ public class ConfigUtils {
     }
 
     public static String getUse_code() {
-        return getSmsTemplate(Constant.SMS_USE_CODE);
+        return getSysConfig(Constant.SMS_USE_CODE);
     }
 
     public static String getSms_user_id() {
