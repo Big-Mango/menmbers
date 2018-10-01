@@ -175,4 +175,70 @@ public class CardRechargeServiceImpl implements CardRechargeService {
     public CardRecharge save(CardRecharge cr) {
         return cardRechargeRepository.save(cr);
     }
+
+    @Override
+    public CardRecharge genRechargeOrder(CardRecharge cardRecharge) {
+        CardRecharge responseCardRecharge = null;
+        //根据cardNo获取user信息
+        User user = userRepository.getUserByCardNo(cardRecharge.getCardNo());
+        Card card = cardRepository.findByCardNo(cardRecharge.getCardNo());
+        if(user!=null){
+            //取折扣信息
+            float discountFee = 0;
+            int discountId = 0 ;
+            String discountDesc = "";
+
+            //获取最匹配的优惠方案
+            List<DiscountConfig> list = discountConfigRepository.findByFullMoney(cardRecharge.getFee(),cardRecharge.getShopId());
+            HashMap<Float,Integer> map = new HashMap();
+            //将fee与每一个方案的折扣价格做差，取绝对值(其实正常不取绝对值也是个大于等于0的数)
+            for(DiscountConfig discountConfig : list){
+                map.put(Math.abs(cardRecharge.getFee()-discountConfig.getFullMoney()),discountConfig.getId());
+            }
+            if(!map.isEmpty()){
+                //此处用Collections.min方法取集合中的最小值
+                float rightKey = Collections.min(map.keySet()).floatValue();
+                //取最合适方案的id
+                int rightId = map.get(rightKey);
+                Optional<DiscountConfig> discountConfig = discountConfigRepository.findById(rightId);
+                if(discountConfig.isPresent()){
+                    discountId = discountConfig.get().getId();
+                    discountFee = discountConfig.get().getAddMoney();
+                    discountDesc = discountConfig.get().getName();
+                }
+            }
+
+            //保存充值记录
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String createTime = sdf.format(new Date());
+            cardRecharge.setCreateTime(createTime);
+            cardRecharge.setPaymentTime(createTime);
+            cardRecharge.setCardId(card.getId());
+            cardRecharge.setUserId(user.getId());
+            cardRecharge.setShopId(card.getShopId());
+            cardRecharge.setUserPhone(user.getUserPhone());
+            cardRecharge.setDiscountDesc(discountDesc);
+            cardRecharge.setDiscountId(discountId);
+            cardRecharge.setDiscountFee(discountFee);
+            responseCardRecharge = cardRechargeRepository.save(cardRecharge);
+            //更新用户冻结状态，
+//            user.setStatus(1);
+//            userRepository.save(user);
+            //更新用户卡余额
+//            card.setBalance(card.getBalance()+cardRecharge.getFee()+cardRecharge.getDiscountFee());
+//            Card cardResponse = cardRepository.save(card);
+//            if(cardResponse!=null) {
+//                //发送充值消息通知
+//                StringBuffer sms_content = new StringBuffer();
+//                String sms_content_template = ConfigUtils.getPerson_recharge();
+//                if (null != sms_content_template) {
+//                    //拼接短信内容
+//                    String[] a = sms_content_template.split("&");
+//                    sms_content.append(a[0] + cardRecharge.getFee()+ discountFee + a[1]);
+//                    SmsUtils.singleSend(user.getUserPhone(), sms_content.toString());
+//                }
+//            }
+        }
+        return responseCardRecharge;
+    }
 }

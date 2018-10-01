@@ -52,6 +52,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CouponsRepository couponsRepository;
 
+    @Autowired
+    private CouponsConfigRepository couponsConfigRepository;
+
 
     /**
      * 登录 --后台管理
@@ -467,6 +470,29 @@ public class UserServiceImpl implements UserService {
                 //回写card表中的userId字段
                 responseCard.setUserId(responseUser.getId());
                 cardRepository.save(responseCard);
+                //新增优惠券判断 add by jacktong 2018-10-1
+                //1.判断是否有新开卡送优惠券活动
+                List<CouponsConfig> list = couponsConfigRepository.findByShopAndFirstSent(card.getShopId());
+                //2.如果有，给客户账户新增优惠券
+                if(list.size()>0){
+                    for (CouponsConfig config:list) {
+                        Coupons coupons = new Coupons();
+                        coupons.setUserId(card.getUserId());
+                        coupons.setShopId(config.getShopId());
+                        coupons.setBeginTime(config.getBeginTime());
+                        coupons.setEndTime(config.getEndTime());
+                        coupons.setCoupon_value(config.getCoupon_value());
+                        coupons.setIf_over(config.getIf_over());
+                        coupons.setMin_use_fee(config.getMin_use_fee());
+                        coupons.setSentStatus(1);
+                        coupons.setUseStaus(0);
+                        coupons.setType(config.getType());
+                        coupons.setCreateTime(new Date());
+                        couponsRepository.save(coupons);
+                    }
+                }
+
+
                 //保存充值信息
                 CardRecharge recharge = new CardRecharge();
                 recharge.setCardId(responseCard.getId());

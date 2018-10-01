@@ -100,7 +100,7 @@ public class CustomerController {
             cr.setCharge_way(1);
             cr.setFee(money);
             cr.setOrderNo(OrderNumUtils.genOrderNum());
-            CardRecharge res_cr = cardRechargeService.add(cr);
+            CardRecharge res_cr = cardRechargeService.genRechargeOrder(cr);
             //2.
             if(null!=res_cr){
                 String appid = ConfigUtils.getWechat_app_id(); //"wx882b32d466df9071";
