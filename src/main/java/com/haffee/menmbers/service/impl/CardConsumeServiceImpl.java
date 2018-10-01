@@ -5,6 +5,7 @@ import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardConsumeService;
 import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.SmsUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,13 +43,16 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Autowired
     private ShopRepository shopRepository;
 
-    public Page<CardConsume> findAllByShopId(Pageable pageable,int shopId) {
-        Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId,pageable);
+    @Autowired
+    private CouponsRepository couponsRepository;
+
+    public Page<CardConsume> findAllByShopId(Pageable pageable, int shopId) {
+        Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId, pageable);
         if (page != null) {
             List<CardConsume> list = page.getContent();
             for (CardConsume cardConsume : list) {
                 User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
-                if(user!=null){
+                if (user != null) {
                     Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                     if (optionalPerson.isPresent()) {
                         user.setPerson(optionalPerson.get());
@@ -65,16 +69,16 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     }
 
     public Page<CardConsume> findByCardNo(String cardNo, Pageable pageable) {
-        return cardConsumeRepository.findByCardNo(cardNo,pageable);
+        return cardConsumeRepository.findByCardNo(cardNo, pageable);
     }
 
-    public Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable){
-        Page<CardConsume> page = cardConsumeRepository.findByUserPhone(userPhone,pageable);
-        if(null!=page){
+    public Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable) {
+        Page<CardConsume> page = cardConsumeRepository.findByUserPhone(userPhone, pageable);
+        if (null != page) {
             List<CardConsume> list = page.getContent();
-            for(CardConsume cc : list){
+            for (CardConsume cc : list) {
                 Optional<Shop> o = shopRepository.findById(cc.getShopId());
-                if(o.isPresent()){
+                if (o.isPresent()) {
                     cc.setShop(o.get());
                 }
             }
@@ -82,14 +86,46 @@ public class CardConsumeServiceImpl implements CardConsumeService {
         return page;
     }
 
+    /**
+     * 1.校验余额
+     * 2.校验优惠券
+     * 3.更新账户
+     *
+     * @param cardConsume
+     * @return
+     */
     public CardConsume add(CardConsume cardConsume) {
         CardConsume responseCardConsume = null;
         //根据userPhone获取user信息
         User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
-        if(user!=null){
-            //更新用户卡余额
+        if (user != null) {
+
             Card card = cardRepository.findByCardNo(cardConsume.getCardNo());
-            card.setBalance(card.getBalance()-cardConsume.getPayFee());
+            //1.校验余额
+            if (card.getBalance() < cardConsume.getPayFee()) {
+                return null;
+            }
+            //2.校验优惠券
+            if (StringUtils.isNotEmpty(cardConsume.getUser_coupons_id())) {
+                Coupons c = couponsRepository.findEnableCouponsByUserAndShopAndId(Integer.valueOf(cardConsume.getUser_coupons_id()), user.getId(), cardConsume.getShopId(), cardConsume.getShould_pay());
+                if(null!=c){
+                    if(cardConsume.getShould_pay()!=(cardConsume.getPayFee()+c.getCoupon_value())){ //优惠券金额+实际支付金额 不等于 应收金额
+                        return null;
+                    }
+                    cardConsume.setDiscountFee(c.getCoupon_value());
+                    cardConsume.setDiscountId(c.getId());
+                    cardConsume.setIfDiscount(1);
+                    cardConsume.setDiscountDesc("使用"+c.getCoupon_value()+"元优惠券");
+                    c.setUseStaus(1);
+                    couponsRepository.save(c);
+                }else{
+                    return null;
+                }
+
+            }
+
+            //更新用户卡余额
+            card.setBalance(card.getBalance() - cardConsume.getPayFee());
             cardRepository.save(card);
             //保存消费记录
             cardConsume.setCardId(card.getId());
@@ -98,11 +134,12 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             cardConsume.setUserId(user.getId());
             cardConsume.setUserPhone(user.getUserPhone());
             cardConsume.setPayFee(cardConsume.getPayFee());
+
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String createTime = sdf.format(new Date());
             cardConsume.setCreateTime(createTime);
             responseCardConsume = cardConsumeRepository.save(cardConsume);
-            if(responseCardConsume!=null) {
+            if (responseCardConsume != null) {
                 //发送消费消息通知
                 StringBuffer sms_content = new StringBuffer();
                 String sms_content_template = ConfigUtils.getPerson_consume();
@@ -117,7 +154,7 @@ public class CardConsumeServiceImpl implements CardConsumeService {
         return responseCardConsume;
     }
 
-    public Optional<CardConsume> findById(int id){
+    public Optional<CardConsume> findById(int id) {
         return cardConsumeRepository.findById(id);
     }
 }

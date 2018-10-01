@@ -68,8 +68,12 @@ public class CustomerController {
     public ResponseMessage checkPhone(String phone_no,String openid,String access_token,String refresh_token,String acc_code){
         try {
             User user = customerService.checkUserPhone(phone_no,openid,access_token,refresh_token,acc_code);
+            if(null!=user){
+                return ResponseMessage.success(user);
+            }else{
+                return ResponseMessage.errorWithMsg("无此账户信息");
+            }
 
-            return ResponseMessage.success(user);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

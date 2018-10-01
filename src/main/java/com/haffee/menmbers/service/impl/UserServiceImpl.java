@@ -49,6 +49,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private DiscountConfigRepository discountConfigRepository;
 
+    @Autowired
+    private CouponsRepository couponsRepository;
+
 
     /**
      * 登录 --后台管理
@@ -342,7 +345,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User findOneUserByUserPhone(Pageable pageable,String userPhone,int shopId) {
-        User user = userRepository.findByUserPhone(userPhone);
+        User user = userRepository.findByUserPhoneOrCardNo(userPhone,shopId);
         if (user != null) {
                 Optional<Person> optionalPerson = personRepository.findById(user.getPersonId());
                 if (optionalPerson.isPresent()) {
@@ -352,6 +355,12 @@ public class UserServiceImpl implements UserService {
                 if (card!=null) {
                     user.setCard(card);
                 }
+                //查询优惠券
+                List<Coupons> list = couponsRepository.findAllCouponsByUser(user.getId());
+                if(list.size()>0){
+                    user.setCoupons_list(list);
+                }
+
         }
         return user;
     }

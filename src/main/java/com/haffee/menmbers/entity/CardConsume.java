@@ -29,10 +29,11 @@ public class CardConsume {
     private int cardId; //充值卡ID
     private String cardNo; //卡号
     private float payFee; //实际支付金额
+    private float should_pay; //应收金额 ，==实际支付金额+折扣金额
     private int ifDiscount=0; //是否有折扣 1：有，0 无  暂时不记录值
     private int discountId=0;//折扣方案 关联config  暂时不记录值
-    private float discountFee=0; //折扣金额  暂时不记录值
-    private String discountDesc; //折扣描述  暂时不记录值
+    private float discountFee=0; //折扣金额
+    private String discountDesc; //折扣描述
     private String createTime;
     private int paymentWay=0; //默认0，如果充值，10：现金，20：微信静态码，21：微信收款，30：支付宝静态码，31：支付宝收款，90：其他
     private int shopId;//消费店铺
@@ -41,4 +42,6 @@ public class CardConsume {
     private User user;
     @Transient
     private Shop shop;
+    @Transient
+    private String user_coupons_id;
 }

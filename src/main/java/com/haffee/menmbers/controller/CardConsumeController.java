@@ -59,7 +59,11 @@ public class CardConsumeController {
     public ResponseMessage add(CardConsume cardConsume){
         try {
             CardConsume responseCardConsume = cardConsumeService.add(cardConsume);
-            return ResponseMessage.getResponseMessage(responseCardConsume);
+            if(null==responseCardConsume){
+                return ResponseMessage.errorWithMsg("此账户信息消费异常，请检查账户状态及余额");
+            }else{
+                return ResponseMessage.getResponseMessage(responseCardConsume);
+            }
         }catch (Exception e) {
             e.printStackTrace();
             return ResponseMessage.error();

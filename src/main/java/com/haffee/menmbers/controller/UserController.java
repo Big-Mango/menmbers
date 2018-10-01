@@ -264,7 +264,7 @@ public class UserController {
     }
 
     /**
-     * 查询所有会员用户
+     * 查询单个会员用户
      * @param page
      * @param size
      * @param sort
@@ -278,7 +278,7 @@ public class UserController {
             if(user!=null){
                 return ResponseMessage.success(user);
             }else{
-                return ResponseMessage.errorWithMsg("没有查询到会员信息，请核对手机号是否正确");
+                return ResponseMessage.errorWithMsg("没有查询到会员信息，请核对手机号或者卡号是否正确");
             }
         } catch (Exception e) {
             e.printStackTrace();

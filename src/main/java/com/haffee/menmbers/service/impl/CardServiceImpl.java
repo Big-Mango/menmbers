@@ -1,13 +1,7 @@
 package com.haffee.menmbers.service.impl;
 
-import com.haffee.menmbers.entity.Card;
-import com.haffee.menmbers.entity.Shop;
-import com.haffee.menmbers.entity.SysCode;
-import com.haffee.menmbers.entity.User;
-import com.haffee.menmbers.repository.CardRepository;
-import com.haffee.menmbers.repository.ShopRepository;
-import com.haffee.menmbers.repository.SysCodeRepository;
-import com.haffee.menmbers.repository.UserRepository;
+import com.haffee.menmbers.entity.*;
+import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.BaseService;
 import com.haffee.menmbers.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +28,14 @@ public class CardServiceImpl implements CardService {
     @Resource
     private CardRepository cardRepository;
 
-    @Resource
-    private UserRepository userRepository;
-
     @Autowired
     private ShopRepository shopRepository;
+
+    @Autowired
+    private CouponsConfigRepository couponsConfigRepository;
+
+    @Autowired
+    private CouponsRepository couponsRepository;
 
     public Page<Card> findAll(Pageable pageable) {
         return cardRepository.findAll(pageable);
@@ -63,6 +60,27 @@ public class CardServiceImpl implements CardService {
         if (cardRepository.exists(Example.of(card))) {
             return null;
         } else {
+            //1.判断是否有新开卡送优惠券活动
+            List<CouponsConfig> list = couponsConfigRepository.findByShopAndFirstSent(card.getShopId());
+            //2.如果有，给客户账户新增优惠券
+            if(list.size()>0){
+                for (CouponsConfig config:list) {
+                    Coupons coupons = new Coupons();
+                    coupons.setUserId(card.getUserId());
+                    coupons.setShopId(config.getShopId());
+                    coupons.setBeginTime(config.getBeginTime());
+                    coupons.setEndTime(config.getEndTime());
+                    coupons.setCoupon_value(config.getCoupon_value());
+                    coupons.setIf_over(config.getIf_over());
+                    coupons.setMin_use_fee(config.getMin_use_fee());
+                    coupons.setSentStatus(1);
+                    coupons.setUseStaus(0);
+                    coupons.setType(config.getType());
+                    coupons.setCreateTime(new Date());
+                    couponsRepository.save(coupons);
+                }
+            }
+
             return cardRepository.save(card);
         }
     }
