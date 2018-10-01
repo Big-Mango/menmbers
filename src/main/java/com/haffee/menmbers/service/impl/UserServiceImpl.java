@@ -516,7 +516,7 @@ public class UserServiceImpl implements UserService {
                         //拼接短信内容
                         String[] a = sms_content_template.split("&");
                         //phoneNo为用户名pre_psw为密码
-                        sms_content.append(a[0] + phoneNo + a[1] + pre_psw);
+                        sms_content.append(a[0] + phoneNo + a[1] );
                         SmsUtils.singleSend(phoneNo, sms_content.toString());
                     }
                 }
