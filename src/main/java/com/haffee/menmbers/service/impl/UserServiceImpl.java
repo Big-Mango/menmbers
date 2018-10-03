@@ -3,10 +3,10 @@ package com.haffee.menmbers.service.impl;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.UserService;
-import com.haffee.menmbers.utils.ConfigUtils;
-import com.haffee.menmbers.utils.Md5Utils;
-import com.haffee.menmbers.utils.SmsUtils;
-import com.haffee.menmbers.utils.UuidUtils;
+import com.haffee.menmbers.utils.*;
+import com.haffee.menmbers.utils.wxpay.WXAccessToken;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -519,6 +519,59 @@ public class UserServiceImpl implements UserService {
                         sms_content.append(a[0] + phoneNo + a[1] );
                         SmsUtils.singleSend(phoneNo, sms_content.toString());
                     }
+
+                    //微信通知
+                    Optional<Shop> o = shopRepository.findById(shopId);
+                    if(o.isPresent()&&StringUtils.isNotEmpty(responseUser.getWechatId())){
+                        //发送微信通知
+                        Shop s = o.get();
+                        Map<String,NoticeItem> map = new HashMap<>();
+
+                        NoticeItem item1 = new NoticeItem(); //标题
+                        item1.setValue("恭喜您成为"+s.getShopName()+"会员！");
+                        item1.setColor("#173177");
+                        map.put("first",item1);
+
+                        NoticeItem item2 = new NoticeItem();
+                        item2.setValue(card.getCardNo());
+                        item2.setColor("#173177");
+                        map.put("cardNumber",item2);
+
+                        NoticeItem item3 = new NoticeItem();
+                        item3.setValue(s.getShopAddr());
+                        item3.setColor("#173177");
+                        map.put("address",item3);
+
+                        NoticeItem item4 = new NoticeItem();
+                        item4.setValue(realName);
+                        item4.setColor("#173177");
+                        map.put("VIPName",item4);
+
+                        NoticeItem item5 = new NoticeItem();
+                        item5.setValue(responseUser.getUserPhone());
+                        item5.setColor("#173177");
+                        map.put("VIPPhone",item5);
+
+                        NoticeItem item6 = new NoticeItem();
+                        item6.setValue("长期");
+                        item6.setColor("#173177");
+                        map.put("expDate",item6);
+
+                        NoticeItem item7 = new NoticeItem();
+                        item7.setValue("备注：如有疑问，请咨询商家。");
+                        item7.setColor("#173177");
+                        map.put("remark",item6);
+
+                        WechatNoticeForm form = new WechatNoticeForm();
+                        form.setTouser(responseUser.getWechatId()); //openid
+                        form.setTemplate_id(ConfigUtils.getSysConfig("wn_temp_id_create_card")); //模板ID
+                        form.setUrl(ConfigUtils.getSysConfig("wn_temp_url_create_card")); // 详情URL
+                        form.setData(map);
+                        String access_token = WXAccessToken.getAccessToken();
+                        String result = HttpClientUtils.doPost("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+access_token,JSONObject.fromObject(form).toString());
+                        System.out.println("微信通知结果："+result);
+                    }
+
                 }
             }
             return responseUser;

@@ -4,7 +4,11 @@ import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardRechargeService;
 import com.haffee.menmbers.utils.ConfigUtils;
+import com.haffee.menmbers.utils.HttpClientUtils;
 import com.haffee.menmbers.utils.SmsUtils;
+import com.haffee.menmbers.utils.wxpay.WXAccessToken;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -157,6 +161,55 @@ public class CardRechargeServiceImpl implements CardRechargeService {
                     sms_content.append(a[0] + cardRecharge.getFee()+ discountFee + a[1]);
                     SmsUtils.singleSend(user.getUserPhone(), sms_content.toString());
                 }
+
+                //微信通知
+                Optional<Shop> o = shopRepository.findById(card.getShopId());
+                if(o.isPresent()&&StringUtils.isNotEmpty(user.getWechatId())){
+                    //发送微信通知
+                    Shop s = o.get();
+                    Map<String,NoticeItem> map_param = new HashMap<>();
+
+                    NoticeItem item1 = new NoticeItem(); //标题
+                    item1.setValue("您有一笔"+s.getShopName()+"会员卡充值！");
+                    item1.setColor("#173177");
+                    map_param.put("first",item1);
+
+
+                    NoticeItem item2 = new NoticeItem(); //店铺名称
+                    item2.setValue("会员卡号");
+                    item2.setColor("#173177");
+                    map_param.put("accountType",item2);
+
+                    NoticeItem item3 = new NoticeItem();
+                    item3.setValue(card.getCardNo());
+                    item3.setColor("#173177");
+                    map_param.put("account",item3);
+
+                    NoticeItem item4 = new NoticeItem();
+                    item4.setValue(cardRecharge.getFee()+"");
+                    item4.setColor("#173177");
+                    map_param.put("amount",item4);
+
+                    NoticeItem item5 = new NoticeItem();
+                    item5.setValue("充值成功");
+                    item5.setColor("#173177");
+                    map_param.put("result",item5);
+
+                    NoticeItem item7 = new NoticeItem();
+                    item7.setValue("欢迎再次光临！");
+                    item7.setColor("#173177");
+                    map_param.put("remark",item7);
+
+                    WechatNoticeForm form = new WechatNoticeForm();
+                    form.setTouser(user.getWechatId()); //openid
+                    form.setTemplate_id(ConfigUtils.getSysConfig("wn_temp_id_recharge")); //模板ID
+                    form.setUrl(ConfigUtils.getSysConfig("wn_temp_url_recharge")); // 详情URL
+                    form.setData(map_param);
+                    String access_token = WXAccessToken.getAccessToken();
+                    String result = HttpClientUtils.doPost("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+access_token,JSONObject.fromObject(form).toString());
+                    System.out.println("微信通知结果："+result);
+                }
+
             }
         }
         return responseCardRecharge;

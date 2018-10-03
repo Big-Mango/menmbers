@@ -50,6 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
         User user_db = userServiceRepository.findByUserPhone(phone_no);
         if(null!=user_db){
             user_db.setWechatId(openid);
+            user_db.setWechatAccCode(acc_code);
             user_db.setAccess_token(access_token);
             String loginKey =UuidUtils.getUUID32();
             Date now = new Date();

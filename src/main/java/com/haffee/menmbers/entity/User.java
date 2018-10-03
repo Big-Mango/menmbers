@@ -30,7 +30,7 @@ public class User {
     private String wechatId; //微信唯一标识
     private String wechatNickname; //微信昵称
     private String wechatIcon; //微信头像
-    @Transient
+    private String wechatAccCode; //获取token 所需Code
     private String access_token; //微信授权凭证
     private String paymentWay; //支付方式 多个字符串逗号拼接 1:手机验证，2：指纹，3：人脸，4：声波，5：其他
     private int status = 1; //状态 1：正常 0 冻结 -1
