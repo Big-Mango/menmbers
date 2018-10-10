@@ -8,7 +8,6 @@ import com.haffee.menmbers.utils.HttpClientUtils;
 import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.wxpay.WXAccessToken;
 import net.sf.json.JSONObject;
-import org.apache.commons.collections.map.HashedMap;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,6 +46,12 @@ public class CardConsumeServiceImpl implements CardConsumeService {
 
     @Autowired
     private CouponsRepository couponsRepository;
+
+    @Autowired
+    private RealDiscountRepository realDiscountRepository;
+
+    @Autowired
+    private ManjianConfigRepository manjianConfigRepository;
 
     public Page<CardConsume> findAllByShopId(Pageable pageable, int shopId) {
         Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId, pageable);
@@ -90,13 +95,14 @@ public class CardConsumeServiceImpl implements CardConsumeService {
 
     /**
      * 1.校验余额
-     * 2.校验优惠券
-     * 3.更新账户
+     * 2.校验优惠
+     * 3.校验优惠券
+     * 4.更新账户
      *
      * @param cardConsume
      * @return
      */
-    public CardConsume add(CardConsume cardConsume) {
+    public CardConsume add(CardConsume cardConsume,String yh_id) {
         CardConsume responseCardConsume = null;
         //根据userPhone获取user信息
         User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
@@ -107,17 +113,47 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             if (card.getBalance() < cardConsume.getPayFee()) {
                 return null;
             }
-            //2.校验优惠券
+
+            //2.校验优惠
+            if(StringUtils.isNotEmpty(yh_id)){
+                if(yh_id.split("_")[0].equals("manjian")){
+                    ManjianConfig manjian = manjianConfigRepository.findOneEnableByShopId(cardConsume.getShopId()+"");
+                    if(null!=manjian&&manjian.getId()==Integer.valueOf(yh_id.split("_")[1])){
+                        if(cardConsume.getShould_pay()>=manjian.getMan()){
+                            cardConsume.setDiscountFee(cardConsume.getShould_pay()-cardConsume.getPayFee());
+                            cardConsume.setIfDiscount(1);
+                            cardConsume.setDiscountDesc((cardConsume.getDiscountDesc()==null?"":cardConsume.getDiscountDesc())+" "+"参与满减优惠"+manjian.getJian()+"元");
+                            cardConsume.setDiscountId((cardConsume.getDiscountId()==null?"":cardConsume.getDiscountId())+" "+"manjian_"+manjian.getId());
+                        }else{
+                            return null;
+                        }
+                    }else{
+                        return null;
+                    }
+                }
+                if(yh_id.split("_")[0].equals("realdiscount")){
+                    RealDiscountConfig rdc = realDiscountRepository.findOneByShop(cardConsume.getShopId()+"");
+                    if(null!=rdc&&rdc.getId()==Integer.valueOf(yh_id.split("_")[1])){
+                        cardConsume.setDiscountFee(cardConsume.getShould_pay()-cardConsume.getPayFee());
+                        cardConsume.setIfDiscount(1);
+                        cardConsume.setDiscountDesc((cardConsume.getDiscountDesc()==null?"":cardConsume.getDiscountDesc())+" "+"打"+rdc.getDiscountValue()+"%折");
+                        cardConsume.setDiscountId((cardConsume.getDiscountId()==null?"":cardConsume.getDiscountId())+" "+"discount_"+rdc.getId());
+                    }
+                }
+            }
+
+
+            //3.校验优惠券
             if (StringUtils.isNotEmpty(cardConsume.getUser_coupons_id())) {
                 Coupons c = couponsRepository.findEnableCouponsByUserAndShopAndId(Integer.valueOf(cardConsume.getUser_coupons_id()), user.getId(), cardConsume.getShopId(), cardConsume.getShould_pay());
                 if(null!=c){
                     if(cardConsume.getShould_pay()!=(cardConsume.getPayFee()+c.getCoupon_value())){ //优惠券金额+实际支付金额 不等于 应收金额
                         return null;
                     }
-                    cardConsume.setDiscountFee(c.getCoupon_value());
-                    cardConsume.setDiscountId(c.getId());
+                    cardConsume.setDiscountFee(cardConsume.getShould_pay()-cardConsume.getPayFee());
+                    cardConsume.setDiscountId(cardConsume.getDiscountId()+" "+"coupons_"+c.getId());
                     cardConsume.setIfDiscount(1);
-                    cardConsume.setDiscountDesc("使用"+c.getCoupon_value()+"元优惠券");
+                    cardConsume.setDiscountDesc(cardConsume.getDiscountDesc()+" 使用"+c.getCoupon_value()+"元优惠券");
                     c.setUseStaus(1);
                     couponsRepository.save(c);
                 }else{

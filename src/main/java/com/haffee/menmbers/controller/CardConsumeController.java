@@ -56,9 +56,9 @@ public class CardConsumeController {
     * @date        2018/8/6 11:00
     */
     @PostMapping("/add")
-    public ResponseMessage add(CardConsume cardConsume){
+    public ResponseMessage add(CardConsume cardConsume,String yh_id){
         try {
-            CardConsume responseCardConsume = cardConsumeService.add(cardConsume);
+            CardConsume responseCardConsume = cardConsumeService.add(cardConsume,yh_id);
             if(null==responseCardConsume){
                 return ResponseMessage.errorWithMsg("此账户信息消费异常，请检查账户状态及余额");
             }else{

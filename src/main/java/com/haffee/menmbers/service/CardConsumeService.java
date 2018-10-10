@@ -17,6 +17,6 @@ public interface CardConsumeService {
     Page<CardConsume> findAllByShopId(Pageable pageable,int shopId);
     Page<CardConsume> findByCardNo(String cardNo, Pageable pageable);
     Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable);
-    CardConsume add(CardConsume cardConsume);
+    CardConsume add(CardConsume cardConsume,String yh_id);
     Optional<CardConsume> findById(int id);
 }

@@ -31,7 +31,7 @@ public class CardConsume {
     private float payFee; //实际支付金额
     private float should_pay; //应收金额 ，==实际支付金额+折扣金额
     private int ifDiscount=0; //是否有折扣 1：有，0 无  暂时不记录值
-    private int discountId=0;//折扣方案 关联config  暂时不记录值
+    private String discountId;//折扣方案 关联config  暂时不记录值
     private float discountFee=0; //折扣金额
     private String discountDesc; //折扣描述
     private String createTime;
