@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -52,6 +53,20 @@ public interface AdminUserRepository extends JpaRepository<AdminUser,Integer> {
             countQuery = "SELECT count(*) FROM admin_user WHERE type = ?1",
             nativeQuery = true)
     Page<AdminUser> findAllByType(int type, Pageable pageable);
+
+
+    /**
+     * 根据关键字查询
+     * @param name_or_phone
+     * @return
+     */
+    @Query(value = "select * from admin_user where type=2 and status=1 " +
+            "and (user_phone like CONCAT('%',?1,'%') or " +
+            "exists (select 1 from shop where shop_name like CONCAT('%',?1,'%')))",nativeQuery = true)
+    List<AdminUser> findShopUserByPhoneOrName(String name_or_phone);
+
+    @Query(value = "select * from admin_user where type=2 and status=1 and shop_id = ?1",nativeQuery = true)
+    AdminUser findByShopId(String shop_id);
 
 
 }

@@ -8,10 +8,13 @@ import com.haffee.menmbers.service.ShopService;
 import com.haffee.menmbers.utils.CopyProperties;
 import com.haffee.menmbers.utils.Md5Utils;
 import com.haffee.menmbers.utils.SmsUtils;
+import com.haffee.menmbers.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -92,5 +95,49 @@ public class ShopServiceImpl implements ShopService {
             AdminUser a = new AdminUser();
             a.setId(a_user_id);
             adminUserRepository.delete(a);
+    }
+
+    /**
+     * 查询所有店铺信息
+     * @param phone_or_name
+     * @return
+     */
+    @Override
+    public List<AdminUser> findAllShop(String phone_or_name) {
+        List<AdminUser> list = adminUserRepository.findShopUserByPhoneOrName(phone_or_name);
+        for (AdminUser u:list) {
+            Optional<Shop> o = shopRepository.findById(u.getShopId());
+            if(o.isPresent()){
+                u.setShop(o.get());
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 联合登录
+     * @param
+     * @return
+     */
+    @Override
+    public AdminUser combineLogin(String vip_shop_id) {
+        AdminUser a_user = adminUserRepository.findByShopId(vip_shop_id);
+        if(null!=a_user){
+            String loginKey =UuidUtils.getUUID32();
+            a_user.setLoginKey(loginKey);
+            Date now = new Date();
+            a_user.setLastLoginTime(now);
+            adminUserRepository.updateAdminUser(loginKey,now,a_user.getId());
+            a_user.setPassword(null);
+            if(a_user.getType()==2){
+                Optional<Shop> s = shopRepository.findById(a_user.getShopId());
+                if(s.isPresent()){
+                    a_user.setShop(s.get());
+                }
+            }
+            return a_user;
+        }else{
+            return null;
+        }
     }
 }

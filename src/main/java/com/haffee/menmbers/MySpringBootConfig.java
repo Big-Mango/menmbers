@@ -22,6 +22,15 @@ public class MySpringBootConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterception).
                 addPathPatterns("/**").
                 excludePathPatterns("/user/admin/login",
-                        "/user/customer/login","/base/**","/2c/**","/2c/wechat/callback");
+                        "/user/customer/login",
+                        "/base/**",
+                        "/2c/**",
+                        "/2c/wechat/callback",
+                        "/user/customer/findOneByUserPhone",
+                        "/consume/add",
+                        "/manjian/findEnable",
+                        "/realdiscount/findOneEnable",
+                        "/shop/findByPhoneName",
+                        "/shop//combineLogin");
     }
 }

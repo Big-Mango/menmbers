@@ -147,9 +147,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             if (StringUtils.isNotEmpty(cardConsume.getUser_coupons_id())) {
                 Coupons c = couponsRepository.findEnableCouponsByUserAndShopAndId(Integer.valueOf(cardConsume.getUser_coupons_id()), user.getId(), cardConsume.getShopId(), cardConsume.getShould_pay());
                 if(null!=c){
-                    if(cardConsume.getShould_pay()!=(cardConsume.getPayFee()+c.getCoupon_value())){ //优惠券金额+实际支付金额 不等于 应收金额
-                        return null;
-                    }
+//                    if(cardConsume.getShould_pay()!=(cardConsume.getPayFee()+c.getCoupon_value())){ //优惠券金额+实际支付金额 不等于 应收金额
+//                        return null;
+//                    }
                     cardConsume.setDiscountFee(cardConsume.getShould_pay()-cardConsume.getPayFee());
                     cardConsume.setDiscountId(cardConsume.getDiscountId()+" "+"coupons_"+c.getId());
                     cardConsume.setIfDiscount(1);

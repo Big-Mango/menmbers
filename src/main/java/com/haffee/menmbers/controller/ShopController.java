@@ -2,14 +2,25 @@ package com.haffee.menmbers.controller;
 
 import com.haffee.menmbers.entity.AdminUser;
 import com.haffee.menmbers.entity.Shop;
+import com.haffee.menmbers.repository.AdminUserRepository;
 import com.haffee.menmbers.service.ShopService;
 import com.haffee.menmbers.service.UserService;
+import com.haffee.menmbers.utils.HttpClientUtils;
+import com.haffee.menmbers.utils.Md5Utils;
 import com.haffee.menmbers.utils.ResponseMessage;
+import com.haffee.menmbers.utils.UuidUtils;
+import net.sf.json.JSON;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * create by jacktong
@@ -25,6 +36,9 @@ public class ShopController {
 
     @Autowired
     private ShopService shopService;
+
+    @Autowired
+    private AdminUserRepository adminUserRepository;
 
 
     /**
@@ -124,6 +138,48 @@ public class ShopController {
             return ResponseMessage.error();
         }
     }
+
+    /**
+     * 供外部查询使用
+     * @param phone_or_name
+     * @return
+     */
+    @GetMapping("/findByPhoneName")
+    public ResponseMessage findAllByPhoneOrName(String phone_or_name){
+        try {
+            List<AdminUser> list = shopService.findAllShop(phone_or_name);
+            return ResponseMessage.success(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 联合登录
+     * @param vip_shop_id
+     * @param meixinag_shop_id
+     * @param meixiang_login_key
+     * @return
+     */
+    @PostMapping("/combineLogin")
+    public ResponseMessage combineLogin(String vip_shop_id,String meixinag_shop_id,String meixiang_login_key){
+        String result = HttpClientUtils.get("http://47.92.66.33/heygay/userservice/checkLogin?login_key="+meixiang_login_key+"&id="+meixinag_shop_id);
+        JSONObject j = JSONObject.fromObject(result);
+        String r = j.get("result")+"";
+        if(r.equals("success")){
+            AdminUser au = shopService.combineLogin(vip_shop_id);
+            if(null!=au){
+                return ResponseMessage.success(au);
+            }else{
+                return ResponseMessage.error();
+            }
+        }else{
+            return ResponseMessage.error();
+        }
+    }
+
+
 
 
 
