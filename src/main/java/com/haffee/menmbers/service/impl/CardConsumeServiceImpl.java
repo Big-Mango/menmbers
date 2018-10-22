@@ -53,6 +53,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Autowired
     private ManjianConfigRepository manjianConfigRepository;
 
+    @Autowired
+    private JifenConfigRepository jifenConfigRepository;
+
     public Page<CardConsume> findAllByShopId(Pageable pageable, int shopId) {
         Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId, pageable);
         if (page != null) {
@@ -160,6 +163,12 @@ public class CardConsumeServiceImpl implements CardConsumeService {
                     return null;
                 }
 
+            }
+
+            //4.校验积分配置
+            JifenConfig jifen_config = jifenConfigRepository.findOneEnableByShopId(cardConsume.getShopId()+"");
+            if(null!=jifen_config){
+                card.setJifen(card.getJifen()+((int)cardConsume.getPayFee())*jifen_config.getJifen());
             }
 
             //更新用户卡余额

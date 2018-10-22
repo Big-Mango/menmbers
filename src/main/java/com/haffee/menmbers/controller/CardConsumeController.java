@@ -49,8 +49,8 @@ public class CardConsumeController {
     }
     
     /**
-    * 方法实现说明 充值卡新增
-    * @author      liujia
+    * 方法实现说明 消费
+    * @author      liujia modify by jacktong
     * @return  ResponseMessage
     * @exception   
     * @date        2018/8/6 11:00
