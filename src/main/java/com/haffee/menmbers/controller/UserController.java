@@ -247,7 +247,10 @@ public class UserController {
      * @return
      */
     @PostMapping("/customer/findAllUser")
-    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sort,@RequestParam(defaultValue = "0") int shopId) {
+    public ResponseMessage findAllUser(@RequestParam(defaultValue = "0") int page,
+                                       @RequestParam(defaultValue = "10") int size,
+                                       @RequestParam(defaultValue = "id") String sort,
+                                       @RequestParam(defaultValue = "0") int shopId,String userPhone,String userRealName) {
         try {
             if(page>0){
                 page = page -1;
@@ -255,7 +258,8 @@ public class UserController {
             if(size==0){
                 size = 10;
             }
-            Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort)),shopId);
+            Page<User> pageUser = userService.findAllUser(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sort))
+                    ,shopId,userPhone,userRealName);
             return ResponseMessage.getResponseMessage(pageUser);
         } catch (Exception e) {
             e.printStackTrace();

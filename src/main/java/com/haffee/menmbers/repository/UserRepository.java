@@ -91,6 +91,19 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "select * from user u where exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1)", nativeQuery = true)
     Page<User> findAllUser(Pageable pageable, int shopId);
 
+    @Query(value = "select * from user u where u.user_phone like CONCAT('%',?2,'%') and exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1)", nativeQuery = true)
+    Page<User> findAllUserByPhone(Pageable pageable, int shopId, String userPhone);
+
+    @Query(value = "select * from user u where " +
+            "exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1) and " +
+            "exists(select 1 from person p where p.id = u.person_id and p.real_name like CONCAT('%',?2,'%'))", nativeQuery = true)
+    Page<User> findAllUserByRealName(Pageable pageable, int shopId, String realName);
+
+    @Query(value = "select * from user u where u.user_phone like CONCAT('%',?2,'%') and " +
+            "exists (select 1 from card c where u.id = c.user_id and c.shop_id = ?1 and c.card_status = 1) and " +
+            "exists(select 1 from person p where p.id = u.person_id and p.real_name like CONCAT('%',?3,'%'))", nativeQuery = true)
+    Page<User> findAllUserByUserPhoneAndRealName(Pageable pageable, int shopId,String userPhone, String realName);
+
 
     /**
      * 查询当前商户的用户总数

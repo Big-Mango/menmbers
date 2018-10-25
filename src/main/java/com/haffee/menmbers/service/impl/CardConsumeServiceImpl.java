@@ -56,6 +56,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
     @Autowired
     private JifenConfigRepository jifenConfigRepository;
 
+    @Autowired
+    private RealDiscountLogRepository realDiscountLogRepository;
+
     public Page<CardConsume> findAllByShopId(Pageable pageable, int shopId) {
         Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId, pageable);
         if (page != null) {
@@ -141,6 +144,13 @@ public class CardConsumeServiceImpl implements CardConsumeService {
                         cardConsume.setIfDiscount(1);
                         cardConsume.setDiscountDesc((cardConsume.getDiscountDesc()==null?"":cardConsume.getDiscountDesc())+" "+"打"+rdc.getDiscountValue()+"%折");
                         cardConsume.setDiscountId((cardConsume.getDiscountId()==null?"":cardConsume.getDiscountId())+" "+"discount_"+rdc.getId());
+                        //记录打折次数
+                        RealDiscountLog log = new RealDiscountLog();
+                        log.setCard_no(cardConsume.getCardNo());
+                        log.setShop_id(cardConsume.getShopId()+"");
+                        log.setUser_id(user.getId()+"");
+                        log.setUse_time(new Date());
+                        realDiscountLogRepository.save(log);
                     }
                 }
             }

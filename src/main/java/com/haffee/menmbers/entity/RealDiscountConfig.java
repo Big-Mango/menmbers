@@ -37,6 +37,8 @@ public class RealDiscountConfig {
     private Date endDate;
     private int if_over = 0;//是否与其他优惠共享 0：否，1：是
     private int status = 1;//状态：0：未生效，1：生效
+    private int man = 0; //最低消费触发
+    private int use_time_month = 0; //每月使用次数
     private Date createTime;
 
 }

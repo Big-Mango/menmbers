@@ -49,5 +49,7 @@ public class User {
     private int jifen = 0; //平台积分
     @Transient
     private List<Coupons> coupons_list;
+    @Transient
+    private int discount_use_time_month;
 
 }

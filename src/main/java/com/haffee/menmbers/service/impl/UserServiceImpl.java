@@ -55,6 +55,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private CouponsConfigRepository couponsConfigRepository;
 
+    @Autowired
+    private RealDiscountLogRepository realDiscountLogRepository;
+
 
     /**
      * 登录 --后台管理
@@ -319,8 +322,17 @@ public class UserServiceImpl implements UserService {
      * @throws Exception
      */
     @Override
-    public Page<User> findAllUser(Pageable pageable,int shopId) {
-        Page<User> page = userRepository.findAllUser(pageable,shopId);
+    public Page<User> findAllUser(Pageable pageable,int shopId,String userPhone,String userRealName) {
+        Page<User> page;
+        if(StringUtils.isNotEmpty(userPhone)&&StringUtils.isNotEmpty(userRealName)){
+            page = userRepository.findAllUserByUserPhoneAndRealName(pageable,shopId,userPhone,userRealName);
+        }else if(StringUtils.isNotEmpty(userPhone)){
+            page = userRepository.findAllUserByPhone(pageable,shopId,userPhone);
+        }else if(StringUtils.isNotEmpty(userRealName)){
+            page = userRepository.findAllUserByRealName(pageable,shopId,userRealName);
+        }else{
+            page = userRepository.findAllUser(pageable,shopId);
+        }
         if (page != null) {
             List<User> list = page.getContent();
             for (User user : list) {
@@ -363,6 +375,11 @@ public class UserServiceImpl implements UserService {
                 if(list.size()>0){
                     user.setCoupons_list(list);
                 }
+                //查询用户本月折扣使用次数
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+                Date date = new Date();
+                int times = realDiscountLogRepository.selectDiscountUseTimesMonth(user.getId()+"",sdf.format(date));
+                user.setDiscount_use_time_month(times);
 
         }
         return user;

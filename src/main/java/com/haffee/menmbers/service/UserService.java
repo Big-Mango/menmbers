@@ -37,7 +37,7 @@ public interface UserService {
 
     Page<AdminUser> findAdminUser(Pageable pageable,int type) throws Exception;
 
-    Page<User> findAllUser(Pageable pageable,int shopId) throws Exception;
+    Page<User> findAllUser(Pageable pageable,int shopId,String userPhone,String userRealName) throws Exception;
 
     User findOneUserByUserPhone(Pageable pageable,String userPhone,int shopId) throws Exception;
 
