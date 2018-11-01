@@ -5,6 +5,7 @@ import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardConsumeService;
 import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.HttpClientUtils;
+import com.haffee.menmbers.utils.OrderNumUtils;
 import com.haffee.menmbers.utils.SmsUtils;
 import com.haffee.menmbers.utils.wxpay.WXAccessToken;
 import net.sf.json.JSONObject;
@@ -58,6 +59,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
 
     @Autowired
     private RealDiscountLogRepository realDiscountLogRepository;
+
+    @Autowired
+    private PaymentOrderRepository paymentOrderRepository;
 
     public Page<CardConsume> findAllByShopId(Pageable pageable, int shopId) {
         Page<CardConsume> page = cardConsumeRepository.findByShopId(shopId, pageable);
@@ -261,6 +265,74 @@ public class CardConsumeServiceImpl implements CardConsumeService {
 
     public Optional<CardConsume> findById(int id) {
         return cardConsumeRepository.findById(id);
+    }
+
+    /**
+     * 发送微信订单通知
+     * @param cardConsume
+     * @param yh_id
+     */
+    @Override
+    public void sendOrderNotice(CardConsume cardConsume, String yh_id) {
+        User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
+        if(null!=user){
+            PaymentOrder order = new PaymentOrder();
+            order.setOrder_no(OrderNumUtils.genOrderNum());
+            order.setUser_id(user.getId()+"");
+            order.setShop_id(cardConsume.getShopId()+"");
+            order.setCard_no(cardConsume.getCardNo());
+            order.setStatus(0);
+            order.setPayment(cardConsume.getPayFee()); //计算优惠
+            order.setYouhui_content(""); //拼接优惠内容
+            order.setOrder_content("会员卡消费"+order.getPayment()+"元");
+            order.setCreate_time(new Date());
+
+
+            //发送通知
+            Map<String,NoticeItem> map = new HashMap<>();
+
+            NoticeItem item1 = new NoticeItem(); //标题
+            item1.setValue("您有一笔待支付订单！");
+            item1.setColor("#173177");
+            map.put("first",item1);
+
+            NoticeItem item2 = new NoticeItem();
+            item2.setValue(order.getOrder_no());
+            item2.setColor("#173177");
+            map.put("keyword1",item2);
+
+            NoticeItem item3 = new NoticeItem();
+            item3.setValue("待支付");
+            item3.setColor("#173177");
+            map.put("keyword2",item3);
+
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            NoticeItem item4 = new NoticeItem();
+            item4.setValue(sdf.format(order.getCreate_time()));
+            item4.setColor("#173177");
+            map.put("keyword3",item4);
+
+            NoticeItem item5 = new NoticeItem();
+            item5.setValue(order.getOrder_content());
+            item5.setColor("#173177");
+            map.put("keyword4",item5);
+
+            NoticeItem item6 = new NoticeItem();
+            item6.setValue("点击支付，祝您生活愉快！");
+            item6.setColor("#173177");
+            map.put("remark",item6);
+
+            WechatNoticeForm form = new WechatNoticeForm();
+            form.setTouser(user.getWechatId()); //openid
+            form.setTemplate_id(ConfigUtils.getSysConfig("wn_temp_id_order")); //模板ID
+            form.setUrl(ConfigUtils.getSysConfig("wn_temp_url_order")); // 详情URL
+            form.setData(map);
+            String access_token = WXAccessToken.getAccessToken();
+            HttpClientUtils.doPost("https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+access_token,JSONObject.fromObject(form).toString());
+            paymentOrderRepository.save(order);
+        }
+
     }
 
 

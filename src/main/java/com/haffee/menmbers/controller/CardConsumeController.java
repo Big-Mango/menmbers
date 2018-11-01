@@ -132,4 +132,20 @@ public class CardConsumeController {
             return ResponseMessage.error();
         }
     }
+
+    /**
+     * 发送微信订单通知
+     * @return
+     */
+    @PostMapping("/sendOrderNotice")
+    public ResponseMessage sendOrder(CardConsume cardConsume,String yh_id){
+        try {
+            cardConsumeService.sendOrderNotice(cardConsume,yh_id);
+            return ResponseMessage.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
 }
