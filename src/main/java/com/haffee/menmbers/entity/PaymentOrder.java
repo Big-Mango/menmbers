@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -33,10 +30,13 @@ public class PaymentOrder {
     private String order_content;//订单内容
     private int status = 0; //0:待支付，1：已支付，-1：取消
     private float payment;//订单金额
+    private float real_payment = 0; //实付金额
     private String diancai_order_id; //点菜系统ID
     private String youhui_content;
     private Date payment_time;
     private Date create_time;
+    @Transient
+    Shop shop;
 
 
 }
