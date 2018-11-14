@@ -19,5 +19,5 @@ public interface CardConsumeService {
     Page<CardConsume> findByUserPhone(String userPhone, Pageable pageable);
     CardConsume add(CardConsume cardConsume,String yh_id);
     Optional<CardConsume> findById(int id);
-    void sendOrderNotice(CardConsume cardConsume,String yh_id);
+    void sendOrderNotice(CardConsume cardConsume,String yh_id,String diancai_order_id);
 }

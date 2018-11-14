@@ -273,7 +273,7 @@ public class CardConsumeServiceImpl implements CardConsumeService {
      * @param yh_id
      */
     @Override
-    public void sendOrderNotice(CardConsume cardConsume, String yh_id) {
+    public void sendOrderNotice(CardConsume cardConsume, String yh_id,String diancai_order_id) {
         User user = userRepository.findByUserPhone(cardConsume.getUserPhone());
         if(null!=user){
             PaymentOrder order = new PaymentOrder();
@@ -286,6 +286,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             order.setYouhui_content(""); //拼接优惠内容
             order.setOrder_content("会员卡消费"+order.getPayment()+"元");
             order.setCreate_time(new Date());
+            if(StringUtils.isNotEmpty(diancai_order_id)){
+                order.setDiancai_order_id(diancai_order_id);
+            }
 
 
             //发送通知

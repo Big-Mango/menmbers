@@ -13,4 +13,8 @@ public class UuidUtils {
         String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         return uuid;
     }
+
+    public static void main(String []args){
+        System.out.println(getUUID32());
+    }
 }

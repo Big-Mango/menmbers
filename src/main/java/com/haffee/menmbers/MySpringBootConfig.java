@@ -31,6 +31,7 @@ public class MySpringBootConfig implements WebMvcConfigurer {
                         "/manjian/findEnable",
                         "/realdiscount/findOneEnable",
                         "/shop/findByPhoneName",
-                        "/shop//combineLogin");
+                        "/shop//combineLogin",
+                        "/consume/sendOrderNotice");
     }
 }

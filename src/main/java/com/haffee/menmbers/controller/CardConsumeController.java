@@ -138,9 +138,9 @@ public class CardConsumeController {
      * @return
      */
     @PostMapping("/sendOrderNotice")
-    public ResponseMessage sendOrder(CardConsume cardConsume,String yh_id){
+    public ResponseMessage sendOrder(CardConsume cardConsume,String yh_id,String diancai_order_id){
         try {
-            cardConsumeService.sendOrderNotice(cardConsume,yh_id);
+            cardConsumeService.sendOrderNotice(cardConsume,yh_id,diancai_order_id);
             return ResponseMessage.success();
         } catch (Exception e) {
             e.printStackTrace();
