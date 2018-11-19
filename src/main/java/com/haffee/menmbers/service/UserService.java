@@ -52,4 +52,6 @@ public interface UserService {
     void deleteAdmin(int id) throws Exception;
 
     void deleteCustomer(int id) throws Exception;
+
+    AdminUser findAdminUserForShop(String userPhone);
 }

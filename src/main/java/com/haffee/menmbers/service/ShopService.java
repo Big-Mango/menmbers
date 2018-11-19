@@ -22,4 +22,6 @@ public interface ShopService {
 
     AdminUser combineLogin(String vip_shop_id);
 
+    List<Shop> findByName(String shop_name);
+
 }

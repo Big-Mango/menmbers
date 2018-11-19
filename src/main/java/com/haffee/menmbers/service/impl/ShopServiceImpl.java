@@ -5,10 +5,7 @@ import com.haffee.menmbers.entity.Shop;
 import com.haffee.menmbers.repository.AdminUserRepository;
 import com.haffee.menmbers.repository.ShopRepository;
 import com.haffee.menmbers.service.ShopService;
-import com.haffee.menmbers.utils.CopyProperties;
-import com.haffee.menmbers.utils.Md5Utils;
-import com.haffee.menmbers.utils.SmsUtils;
-import com.haffee.menmbers.utils.UuidUtils;
+import com.haffee.menmbers.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,13 +67,17 @@ public class ShopServiceImpl implements ShopService {
         int pre_psw = (int)((Math.random()*9+1)*100000);
         String pws = Md5Utils.getMD5(pre_psw+"");
         a_user.setPassword(pws);
-
-
-        String msg = "尊敬的商家用户"+a_user.getUserPhone()+"您好，您的账户已创建成功，密码为："+pws+",请妥善保管！";
-
-
         adminUserRepository.save(a_user);
-        SmsUtils.singleSend(a_user.getUserPhone(),msg);
+
+        String sms_content_template = ConfigUtils.getShop_account_add();
+        if (null != sms_content_template) {
+            //拼接短信内容
+            StringBuffer sms_content = new StringBuffer();
+            String[] a = sms_content_template.split("&");
+            sms_content.append(a[0] + a_user.getUserPhone() + a[1]+pre_psw + a[2]);
+            SmsUtils.singleSend(a_user.getUserPhone(), sms_content.toString());
+        }
+
 
     }
 
@@ -139,5 +140,11 @@ public class ShopServiceImpl implements ShopService {
         }else{
             return null;
         }
+    }
+
+
+    @Override
+    public List<Shop> findByName(String shop_name) {
+        return shopRepository.findByName(shop_name);
     }
 }

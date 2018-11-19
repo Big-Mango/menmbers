@@ -654,4 +654,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    public AdminUser findAdminUserForShop(String userPhone) {
+        return adminUserRepository.findAdminUser(userPhone,"2");
+    }
+
+
 }

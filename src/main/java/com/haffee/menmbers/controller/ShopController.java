@@ -90,6 +90,14 @@ public class ShopController {
     @PostMapping("/add")
     public ResponseMessage addShop( Shop shop,  AdminUser a_user) {
         try {
+            AdminUser a_user_db = userService.findAdminUserForShop(a_user.getUserPhone());
+            if(null!=a_user_db){
+                return ResponseMessage.errorWithMsg("用户手机号码已存在");
+            }
+            List<Shop> shop_list = shopService.findByName(shop.getShopName());
+            if(shop_list.size()>0){
+                return ResponseMessage.errorWithMsg("店铺名称已存在");
+            }
             shopService.addShop(a_user, shop);
             return ResponseMessage.success();
         } catch (Exception e) {
