@@ -38,6 +38,7 @@ public class Coupons {
     private int sentStatus=0;//0:未领取，1：已领取
     private int useStaus=0;//0:未使用，1：已使用，-1：已过期
     private Date createTime;
+    private String cardType; //字符串，逗号分隔 试用卡类型
     @Transient
     private Shop shop;
 }

@@ -27,7 +27,7 @@ public class Card {
     private int shopId;//商户id
     private String cardCreateTime; //发卡时间
     private int cardStatus=1; //卡状态 1：正常，0 冻结，-1：挂失，-2 损坏
-    private int cardType=1;//卡状态 1:储值卡 2:折扣卡
+    private int cardType;//卡状态 1:储值卡 2:折扣卡
     private String remark;
     private float balance = 0; //余额
     private int jifen = 0;//积分
@@ -36,4 +36,6 @@ public class Card {
     private String barCode; // 条形码地址
     @Transient
     private Shop shop; //add by jacktong 2018-9-6
+    @Transient
+    private String cardTypeName;
 }

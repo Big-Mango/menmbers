@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -40,5 +37,8 @@ public class CouponsConfig {
     private Date createTime;
     private int first_user_give=0;//0:否，1：是 首次开卡用户送券
     private int status = 1;//1:生效，0：不生效
+    private String cardType; //字符串，逗号分隔，试用卡类型
+    @Transient
+    private String card_type_name;
 
 }

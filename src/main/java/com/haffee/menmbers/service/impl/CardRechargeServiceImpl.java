@@ -3,6 +3,7 @@ package com.haffee.menmbers.service.impl;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardRechargeService;
+import com.haffee.menmbers.utils.CardTypeUtils;
 import com.haffee.menmbers.utils.ConfigUtils;
 import com.haffee.menmbers.utils.HttpClientUtils;
 import com.haffee.menmbers.utils.SmsUtils;
@@ -117,7 +118,11 @@ public class CardRechargeServiceImpl implements CardRechargeService {
             HashMap<Float,Integer> map = new HashMap();
             //将fee与每一个方案的折扣价格做差，取绝对值(其实正常不取绝对值也是个大于等于0的数)
             for(DiscountConfig discountConfig : list){
-                map.put(Math.abs(cardRecharge.getFee()-discountConfig.getFullMoney()),discountConfig.getId());
+                //判断是否符合卡类型
+                if(CardTypeUtils.if_card_type_contain(card.getCardType()+"",discountConfig.getCardType())){
+                    map.put(Math.abs(cardRecharge.getFee()-discountConfig.getFullMoney()),discountConfig.getId());
+                }
+
             }
             if(!map.isEmpty()){
                 //此处用Collections.min方法取集合中的最小值
@@ -294,4 +299,6 @@ public class CardRechargeServiceImpl implements CardRechargeService {
         }
         return responseCardRecharge;
     }
+
+
 }

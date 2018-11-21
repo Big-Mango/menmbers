@@ -58,6 +58,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RealDiscountLogRepository realDiscountLogRepository;
 
+    @Autowired
+    private CardTypeRepository cardTypeRepository;
+
 
     /**
      * 登录 --后台管理
@@ -344,7 +347,14 @@ public class UserServiceImpl implements UserService {
                 //取卡信息，注意此处加上了shopId的条件，否则会出现本店铺查询出别的店铺会员信息的问题
                 //也就是说固定店铺的每一个用户只有一张对应的会员卡
                 Card card = cardRepository.findCardByUserIdShopId(user.getId(),shopId);
-                user.setCard(card);
+                if(null!=card){
+                    user.setCard(card);
+                    Optional<CardType> o = cardTypeRepository.findById(card.getCardType());
+                    if(o.isPresent()){
+                        card.setCardTypeName(o.get().getCard_name());
+                    }
+                }
+
             }
         }
         return page;
@@ -369,6 +379,10 @@ public class UserServiceImpl implements UserService {
                 Card card = cardRepository.findCardByUserIdShopId(user.getId(),shopId);
                 if (card!=null) {
                     user.setCard(card);
+                    Optional<CardType> o = cardTypeRepository.findById(card.getCardType());
+                    if(o.isPresent()){
+                        card.setCardTypeName(o.get().getCard_name());
+                    }
                 }
                 //查询优惠券
                 List<Coupons> list = couponsRepository.findCouponsByUser(user.getId(),shopId);
@@ -432,7 +446,9 @@ public class UserServiceImpl implements UserService {
             HashMap<Float,Integer> map = new HashMap();
             //将fee与每一个方案的折扣价格做差，取绝对值(其实正常不取绝对值也是个大于等于0的数)
             for(DiscountConfig discountConfig : list){
-                map.put(Math.abs(fee-discountConfig.getFullMoney()),discountConfig.getId());
+                if(CardTypeUtils.if_card_type_contain(cardType+"",discountConfig.getCardType())){
+                    map.put(Math.abs(fee-discountConfig.getFullMoney()),discountConfig.getId());
+                }
             }
             if(!map.isEmpty()){
                 //此处用Collections.min方法取集合中的最小值
@@ -493,23 +509,23 @@ public class UserServiceImpl implements UserService {
                 //2.如果有，给客户账户新增优惠券
                 if(list.size()>0){
                     for (CouponsConfig config:list) {
-                        Coupons coupons = new Coupons();
-                        coupons.setUserId(card.getUserId());
-                        coupons.setShopId(config.getShopId());
-                        coupons.setBeginTime(config.getBeginTime());
-                        coupons.setEndTime(config.getEndTime());
-                        coupons.setCoupon_value(config.getCoupon_value());
-                        coupons.setIf_over(config.getIf_over());
-                        coupons.setMin_use_fee(config.getMin_use_fee());
-                        coupons.setSentStatus(1);
-                        coupons.setUseStaus(0);
-                        coupons.setType(config.getType());
-                        coupons.setCreateTime(new Date());
-                        couponsRepository.save(coupons);
+                        if(CardTypeUtils.if_card_type_contain(cardType+"",config.getCardType())){
+                            Coupons coupons = new Coupons();
+                            coupons.setUserId(card.getUserId());
+                            coupons.setShopId(config.getShopId());
+                            coupons.setBeginTime(config.getBeginTime());
+                            coupons.setEndTime(config.getEndTime());
+                            coupons.setCoupon_value(config.getCoupon_value());
+                            coupons.setIf_over(config.getIf_over());
+                            coupons.setMin_use_fee(config.getMin_use_fee());
+                            coupons.setSentStatus(1);
+                            coupons.setUseStaus(0);
+                            coupons.setType(config.getType());
+                            coupons.setCreateTime(new Date());
+                            couponsRepository.save(coupons);
+                        }
                     }
                 }
-
-
                 //保存充值信息
                 CardRecharge recharge = new CardRecharge();
                 recharge.setCardId(responseCard.getId());

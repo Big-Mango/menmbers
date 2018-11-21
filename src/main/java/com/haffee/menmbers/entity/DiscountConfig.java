@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -35,4 +32,7 @@ public class DiscountConfig {
     private int validType=1; //1:一直有效，2：时间段有效
     private String startDate; //开始时间
     private String endDate; //结束时间
+    private String cardType; //字符串，逗号分隔
+    @Transient
+    private String card_type_name;
 }

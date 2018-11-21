@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -40,5 +37,8 @@ public class RealDiscountConfig {
     private int man = 0; //最低消费触发
     private int use_time_month = 0; //每月使用次数
     private Date createTime;
+    private String cardType; //字符串，逗号分隔 适用卡类型
+    @Transient
+    private String card_type_name;
 
 }

@@ -3,10 +3,7 @@ package com.haffee.menmbers.service.impl;
 import com.haffee.menmbers.entity.*;
 import com.haffee.menmbers.repository.*;
 import com.haffee.menmbers.service.CardConsumeService;
-import com.haffee.menmbers.utils.ConfigUtils;
-import com.haffee.menmbers.utils.HttpClientUtils;
-import com.haffee.menmbers.utils.OrderNumUtils;
-import com.haffee.menmbers.utils.SmsUtils;
+import com.haffee.menmbers.utils.*;
 import com.haffee.menmbers.utils.wxpay.WXAccessToken;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
@@ -182,7 +179,9 @@ public class CardConsumeServiceImpl implements CardConsumeService {
             //4.校验积分配置
             JifenConfig jifen_config = jifenConfigRepository.findOneEnableByShopId(cardConsume.getShopId()+"");
             if(null!=jifen_config){
-                card.setJifen(card.getJifen()+((int)cardConsume.getPayFee())*jifen_config.getJifen());
+                if(CardTypeUtils.if_card_type_contain(card.getCardType()+"",jifen_config.getCardType())){
+                    card.setJifen(card.getJifen()+((int)cardConsume.getPayFee())*jifen_config.getJifen());
+                }
             }
 
             //更新用户卡余额

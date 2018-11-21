@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -39,5 +36,8 @@ public class ManjianConfig {
     private int if_over = 0;//是否与其他优惠共享 0：否，1：是
     private int status = 1;//状态：0：未生效，1：生效
     private Date createTime;
+    private String cardType; //字符串，逗号分隔 适用卡类型
+    @Transient
+    private String card_type_name;
 
 }
