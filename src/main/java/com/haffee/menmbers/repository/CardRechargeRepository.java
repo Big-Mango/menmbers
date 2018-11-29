@@ -17,6 +17,8 @@ import java.util.List;
 public interface CardRechargeRepository extends JpaRepository<CardRecharge,Integer> {
     Page<CardRecharge> findByCardNo(String cardNo, Pageable pageable);
     Page<CardRecharge> findByUserPhone(String userPhone, Pageable pageable);
+
+    @Query(value="select * from card_recharge where shop_id = ?1 and payment_status=1",nativeQuery = true)
     Page<CardRecharge> findByShopId(int shopId,Pageable pageable);
 
     @Query(value = "select * from card_recharge where order_no = ?1 and payment_status=0",nativeQuery = true)

@@ -32,7 +32,7 @@ public class CardRechargeController {
     * @date        2018/7/29 10:47
     */
     @PostMapping("/findAll")
-    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "createTime") String sort,@RequestParam(defaultValue = "0") int shopId){
+    public ResponseMessage findAll(@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "10") int size,@RequestParam(defaultValue = "create_time") String sort,@RequestParam(defaultValue = "0") int shopId){
         try {
             if(page>0){
                 page = page -1;
