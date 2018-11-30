@@ -54,6 +54,17 @@ public interface AdminUserRepository extends JpaRepository<AdminUser,Integer> {
             nativeQuery = true)
     Page<AdminUser> findAllByType(int type, Pageable pageable);
 
+    /**
+     * 分页查询系统管理账户(连锁店)
+     * @param user_id
+     * @param pageable
+     * @return
+     */
+    @Query(value = "SELECT * FROM admin_user WHERE type = 2 and parent_user_id = ?1 and if_chain = 1",
+            countQuery = "SELECT count(*) FROM admin_user WHERE type = 2 and parent_user_id = ?1 and if_chain = 1",
+            nativeQuery = true)
+    Page<AdminUser> findAllByTypeChain(String user_id, Pageable pageable);
+
 
     /**
      * 根据关键字查询

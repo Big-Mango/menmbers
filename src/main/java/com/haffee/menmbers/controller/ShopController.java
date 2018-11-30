@@ -68,6 +68,10 @@ public class ShopController {
     @PostMapping("/update")
     public ResponseMessage updateShop(Shop shop, AdminUser a_user, int a_user_id, int shop_id) {
         try {
+            List<Shop> shop_list = shopService.findByName(shop.getShopName());
+            if(shop_list.size()>0){
+                return ResponseMessage.errorWithMsg("店铺名称已存在");
+            }
             shop.setId(shop_id);
             a_user.setId(a_user_id);
             a_user.setType(2);
@@ -123,6 +127,29 @@ public class ShopController {
                 size = 10;
             }
             Page<AdminUser> p = userService.findAdminUser(PageRequest.of(page, size), 2);
+            return ResponseMessage.success(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseMessage.error();
+        }
+    }
+
+    /**
+     * 查询所有店铺
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping("/findAllChain")
+    public ResponseMessage findAllChain(int page, int size,String user_id){
+        try {
+            if(page>0){
+                page = page -1;
+            }
+            if(size==0){
+                size = 10;
+            }
+            Page<AdminUser> p = userService.findAdminUserChain(PageRequest.of(page, size), user_id);
             return ResponseMessage.success(p);
         } catch (Exception e) {
             e.printStackTrace();

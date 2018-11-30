@@ -318,6 +318,26 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 查询管理用户分页
+     * @param pageable
+     * @param user_id
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public Page<AdminUser> findAdminUserChain(Pageable pageable, String user_id){
+        Page<AdminUser> page = adminUserRepository.findAllByTypeChain(user_id,pageable);
+        List<AdminUser> list = page.getContent();
+        for(AdminUser a_u : list){
+            Optional<Shop> o = shopRepository.findById(Integer.valueOf(a_u.getShopId()));
+            if(o.isPresent()){
+                a_u.setShop(o.get());
+            }
+        }
+        return page;
+    }
+
+    /**
      * 查询会员用户分页
      *
      * @param pageable
